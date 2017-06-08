@@ -1,6 +1,7 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Status;
+import com.hiddenite.repository.HearthbeatRepository;
 import com.hiddenite.service.StatusService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CurrencyRestController {
   @Autowired
   StatusService statusService;
+
+  @Autowired
+  HearthbeatRepository hearthbeatRepository;
 
   @GetMapping("/hearthbeat")
   public Status getStatus() {

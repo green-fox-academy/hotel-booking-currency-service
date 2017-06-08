@@ -9,10 +9,15 @@ import javax.persistence.Id;
 public class Hearthbeat {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  long id;
   boolean status;
 
 
   public Hearthbeat() {
+  }
+
+  public Hearthbeat(boolean status) {
+    this.status = status;
   }
 
   public boolean isStatus() {

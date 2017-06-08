@@ -1,7 +1,7 @@
 package com.hiddenite.service;
 
-import com.hiddenite.repository.HearthbeatRepository;
 import com.hiddenite.model.Status;
+import com.hiddenite.repository.HearthbeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
