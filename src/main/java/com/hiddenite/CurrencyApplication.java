@@ -18,6 +18,6 @@ public class CurrencyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		hearthbeatRepository.save(new Hearthbeat());
+//		hearthbeatRepository.save(new Hearthbeat());
 	}
 }
