@@ -3,7 +3,9 @@ package com.hiddenite.service;
 import com.hiddenite.repository.HearthbeatRepository;
 import com.hiddenite.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class StatusService {
   @Autowired
   Status status;
