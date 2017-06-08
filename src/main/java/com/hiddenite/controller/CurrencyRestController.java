@@ -9,11 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CurrencyRestController {
-  @Autowired
-  StatusService statusService;
+
+  private HearthbeatRepository hearthbeatRepository;
 
   @Autowired
-  HearthbeatRepository hearthbeatRepository;
+  public CurrencyRestController(HearthbeatRepository hearthbeatRepository) {
+    this.hearthbeatRepository = hearthbeatRepository;
+  }
+
+  @Autowired
+  StatusService statusService;
 
   @GetMapping("/hearthbeat")
   public Status getStatus() {

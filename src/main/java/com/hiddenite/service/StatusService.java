@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class StatusService {
-  @Autowired
-  Status status;
 
   @Autowired
+  public StatusService(HearthbeatRepository hearthbeatRepository) {
+    this.hearthbeatRepository = hearthbeatRepository;
+  }
+
   HearthbeatRepository hearthbeatRepository;
 
   public Status checkDatabaseIsEmpty() {
+    Status status = new Status();
     if (hearthbeatRepository.count() == 0) {
       status.setDatabase("error");
     } else {
