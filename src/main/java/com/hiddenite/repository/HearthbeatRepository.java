@@ -1,4 +1,4 @@
-package com.hiddenite;
+package com.hiddenite.repository;
 
 import com.hiddenite.model.Hearthbeat;
 import org.springframework.data.repository.CrudRepository;
