@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Status {
   String status;
-
+  String database;
 
   public Status() {
     status = "ok";
@@ -17,5 +17,14 @@ public class Status {
 
   public void setStatus(String status) {
     this.status = status;
+  }
+
+
+  public String getDatabase() {
+    return database;
+  }
+
+  public void setDatabase(String database) {
+    this.database = database;
   }
 }
