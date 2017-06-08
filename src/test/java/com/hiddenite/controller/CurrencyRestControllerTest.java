@@ -19,9 +19,11 @@ import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -43,6 +45,9 @@ public class CurrencyRestControllerTest {
 
   private MockMvc mockMvc;
   private String statusIsOk = "{\"status\": \"ok\"}";
+  @MockBean
+  private HearthbeatRepository hearthbeatRepository;
+
 
   @Autowired
   private WebApplicationContext webApplicationContext;
@@ -56,12 +61,22 @@ public class CurrencyRestControllerTest {
   }
 
   @Test
-  public void testHearthBeatIsOk() throws Exception {
+  public void testHearthBeatStatus() throws Exception {
     mockMvc.perform(get("/hearthbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(statusIsOk));
   }
+
+  @Test
+  public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
+    BDDMockito.given(hearthbeatRepository.count()).willReturn(1L);
+    mockMvc.perform(get("/hearthbeat")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(contentType))
+            .andExpect(content().json("{\"database\": \"ok\"}"));  }
+
 
   @Test
   public void testHeartBeatEmpty() throws Exception {
