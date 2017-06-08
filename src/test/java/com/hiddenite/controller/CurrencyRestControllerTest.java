@@ -36,7 +36,7 @@ public class CurrencyRestControllerTest {
           Charset.forName("utf8"));
 
   private MockMvc mockMvc;
-  private String statusIsOk = "{\"status\": \"ok\", \"database\": \"ok\"}";
+  private String statusIsOk = "{\"status\": \"ok\", \"database\": \"okasdsadsa\"}";
 
   @Autowired
   private WebApplicationContext webApplicationContext;
