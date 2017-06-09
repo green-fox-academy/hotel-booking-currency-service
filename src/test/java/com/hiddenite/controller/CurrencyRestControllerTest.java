@@ -8,13 +8,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.hiddenite.CurrencyApplication;
-import com.hiddenite.model.Hearthbeat;
 import com.hiddenite.model.Status;
 import com.hiddenite.repository.HearthbeatRepository;
 import com.hiddenite.service.StatusService;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -48,7 +46,6 @@ public class CurrencyRestControllerTest {
   @MockBean
   private HearthbeatRepository hearthbeatRepository;
 
-
   @Autowired
   private WebApplicationContext webApplicationContext;
   private HearthbeatRepository mockHearthBeatRepo;
@@ -57,7 +54,6 @@ public class CurrencyRestControllerTest {
   public void setup() throws Exception {
     this.mockMvc = webAppContextSetup(webApplicationContext).build();
     mockHearthBeatRepo = Mockito.mock(HearthbeatRepository.class);
-
   }
 
   @Test
@@ -70,7 +66,7 @@ public class CurrencyRestControllerTest {
 
   @Test
   public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
-    Mockito.when(hearthbeatRepository.count()).thenReturn(1L);
+    BDDMockito.given(hearthbeatRepository.count()).willReturn(1L);
     mockMvc.perform(get("/hearthbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -87,7 +83,6 @@ public class CurrencyRestControllerTest {
             .andExpect(content().contentType(contentType))
             .andExpect(content().json("{\"database\": \"error\"}"));
   }
-
 
   @Test
   public void testHeartBeatEmpty() throws Exception {
