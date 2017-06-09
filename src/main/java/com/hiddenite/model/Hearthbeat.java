@@ -11,6 +11,8 @@ public class Hearthbeat {
   @GeneratedValue(strategy = GenerationType.AUTO)
   long id;
   boolean status;
+  long id2;
+  long id7;
 
 
   public Hearthbeat() {

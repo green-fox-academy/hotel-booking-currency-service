@@ -70,7 +70,7 @@ public class CurrencyRestControllerTest {
 
   @Test
   public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
-    BDDMockito.given(hearthbeatRepository.count()).willReturn(1L);
+    Mockito.when(hearthbeatRepository.count()).thenReturn(1L);
     mockMvc.perform(get("/hearthbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())

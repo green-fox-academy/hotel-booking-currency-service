@@ -1,0 +1,1 @@
+ALTER TABLE hearthbeat ADD id2 VARCHAR(20) NULL;
