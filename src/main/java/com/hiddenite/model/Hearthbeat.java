@@ -12,8 +12,6 @@ public class Hearthbeat {
   long id;
   boolean status;
 
-
-
   public Hearthbeat() {
   }
 
