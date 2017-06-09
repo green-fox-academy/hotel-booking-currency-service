@@ -75,7 +75,7 @@ public class CurrencyRestControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
-            .andExpect(content().json("{\"database\": \"ok\"}"));
+            .andExpect(content().json("{\"database\": \"okassa\"}"));
   }
 
   @Test
@@ -104,6 +104,5 @@ public class CurrencyRestControllerTest {
     Status status = statusService.checkDatabaseIsEmpty();
     assertEquals("ok", status.getDatabase());
   }
-
 
 }
