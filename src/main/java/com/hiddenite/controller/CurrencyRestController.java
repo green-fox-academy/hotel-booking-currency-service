@@ -1,32 +1,34 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Status;
-import com.hiddenite.repository.HearthbeatRepository;
+import com.hiddenite.repository.HeartbeatRepository;
 import com.hiddenite.service.StatusService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.invoke.MethodHandles;
+
 @RestController
 public class CurrencyRestController {
 
-  private HearthbeatRepository hearthbeatRepository;
-  static Logger log = Logger.getLogger(CurrencyRestController.class.getName());
+  private HeartbeatRepository heartbeatRepository;
+  static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
 
   @Autowired
-  public CurrencyRestController(HearthbeatRepository hearthbeatRepository) {
-    this.hearthbeatRepository = hearthbeatRepository;
+  public CurrencyRestController(HeartbeatRepository heartbeatRepository) {
+    this.heartbeatRepository = heartbeatRepository;
   }
 
   @Autowired
   StatusService statusService;
 
-  @GetMapping("/hearthbeat")
+  @GetMapping("/heartbeat")
   public Status getStatus() {
     Status status = statusService.checkDatabaseIsEmpty();
-    log.info("alma");
+    log.info("LOGGING TEST MESSAGE");
     return status;
   }
 }

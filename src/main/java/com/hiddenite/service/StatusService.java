@@ -1,7 +1,7 @@
 package com.hiddenite.service;
 
 import com.hiddenite.model.Status;
-import com.hiddenite.repository.HearthbeatRepository;
+import com.hiddenite.repository.HeartbeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +9,15 @@ import org.springframework.stereotype.Service;
 public class StatusService {
 
   @Autowired
-  public StatusService(HearthbeatRepository hearthbeatRepository) {
-    this.hearthbeatRepository = hearthbeatRepository;
+  public StatusService(HeartbeatRepository heartbeatRepository) {
+    this.heartbeatRepository = heartbeatRepository;
   }
 
-  HearthbeatRepository hearthbeatRepository;
+  HeartbeatRepository heartbeatRepository;
 
   public Status checkDatabaseIsEmpty() {
     Status status = new Status();
-    if (hearthbeatRepository.count() == 0) {
+    if (heartbeatRepository.count() == 0) {
       status.setDatabase("error");
     } else {
       status.setDatabase("ok");

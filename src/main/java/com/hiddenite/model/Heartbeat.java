@@ -6,17 +6,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Hearthbeat {
+public class Heartbeat {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   long id;
   boolean status;
 
 
-  public Hearthbeat() {
+  public Heartbeat() {
   }
 
-  public Hearthbeat(boolean status) {
+  public Heartbeat(boolean status) {
     this.status = status;
   }
 

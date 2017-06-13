@@ -1,18 +1,10 @@
 package com.hiddenite.controller;
 
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.hiddenite.CurrencyApplication;
 import com.hiddenite.model.Status;
-import com.hiddenite.repository.HearthbeatRepository;
+import com.hiddenite.repository.HeartbeatRepository;
 import com.hiddenite.service.StatusService;
-
-import java.nio.charset.Charset;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,7 +20,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static org.junit.Assert.*;
+import java.nio.charset.Charset;
+
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CurrencyApplication.class)
@@ -43,21 +41,21 @@ public class CurrencyRestControllerTest {
   private MockMvc mockMvc;
   private String statusIsOk = "{\"status\": \"ok\"}";
   @MockBean
-  private HearthbeatRepository hearthbeatRepository;
+  private HeartbeatRepository heartbeatRepository;
 
   @Autowired
   private WebApplicationContext webApplicationContext;
-  private HearthbeatRepository mockHearthBeatRepo;
+  private HeartbeatRepository mockHeartBeatRepo;
 
   @Before
   public void setup() throws Exception {
     this.mockMvc = webAppContextSetup(webApplicationContext).build();
-    mockHearthBeatRepo = Mockito.mock(HearthbeatRepository.class);
+    mockHeartBeatRepo = Mockito.mock(HeartbeatRepository.class);
   }
 
   @Test
   public void testHearthBeatStatus() throws Exception {
-    mockMvc.perform(get("/hearthbeat")
+    mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().json(statusIsOk));
@@ -65,8 +63,8 @@ public class CurrencyRestControllerTest {
 
   @Test
   public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
-    BDDMockito.given(hearthbeatRepository.count()).willReturn(1L);
-    mockMvc.perform(get("/hearthbeat")
+    BDDMockito.given(heartbeatRepository.count()).willReturn(1L);
+    mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
@@ -75,8 +73,8 @@ public class CurrencyRestControllerTest {
 
   @Test
   public void testHearthBeatWithEmptyDataBase() throws Exception {
-    Mockito.when(hearthbeatRepository.count()).thenReturn(0L);
-    mockMvc.perform(get("/hearthbeat")
+    Mockito.when(heartbeatRepository.count()).thenReturn(0L);
+    mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
@@ -85,16 +83,16 @@ public class CurrencyRestControllerTest {
 
   @Test
   public void testHeartBeatEmpty() throws Exception {
-    Mockito.when(mockHearthBeatRepo.count()).thenReturn(0L);
-    StatusService statusService = new StatusService(mockHearthBeatRepo);
+    Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
+    StatusService statusService = new StatusService(mockHeartBeatRepo);
     Status status = statusService.checkDatabaseIsEmpty();
     assertEquals("error", status.getDatabase());
   }
 
   @Test
   public void testHeartBeartIsNotEmpty() throws Exception {
-    Mockito.when(mockHearthBeatRepo.count()).thenReturn(1L);
-    StatusService statusService = new StatusService(mockHearthBeatRepo);
+    Mockito.when(mockHeartBeatRepo.count()).thenReturn(1L);
+    StatusService statusService = new StatusService(mockHeartBeatRepo);
     Status status = statusService.checkDatabaseIsEmpty();
     assertEquals("ok", status.getDatabase());
   }
