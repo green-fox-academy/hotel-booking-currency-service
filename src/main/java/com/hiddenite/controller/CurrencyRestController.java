@@ -28,7 +28,7 @@ public class CurrencyRestController {
   @GetMapping("/heartbeat")
   public Status getStatus() {
     Status status = statusService.checkDatabaseIsEmpty();
-    log.info("LOGGING TEST MESSAGE");
+    log.info("-----------------------------------------------------------------LOGGING TEST MESSAGE------------------------------------------------------------------------------------");
     return status;
   }
 }
