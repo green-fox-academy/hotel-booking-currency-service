@@ -1,9 +1,9 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Status;
-import com.hiddenite.repository.HeartbeatRepository;
+/*import com.hiddenite.repository.HeartbeatRepository;
 import com.hiddenite.service.MQService;
-import com.hiddenite.service.StatusService;
+import com.hiddenite.service.StatusService;*/
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
