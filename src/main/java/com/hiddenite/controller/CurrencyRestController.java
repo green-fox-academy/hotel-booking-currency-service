@@ -44,7 +44,8 @@ public class CurrencyRestController {
   @GetMapping("/heartbeat")
   public Status getStatus() throws IOException, TimeoutException {
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
-    Status status = statusService.checkStatusCondition(mqService.getQueueMessageCount("heartbeat"), mqService.isConnected());
+    Status status = statusService
+        .checkStatusCondition(mqService.getQueueMessageCount("heartbeat"), mqService.isConnected());
     if (status.everythingIsOk()) {
       log.info("HTTP-REQUEST ");
     } else {
@@ -53,8 +54,8 @@ public class CurrencyRestController {
     return status;
   }
 
-//  @GetMapping("/test")
-//  public String gettest() throws IOException, TimeoutException {
-//    return "test";
-//  }
+  @GetMapping("/test")
+  public String getTest() {
+    return "test";
+  }
 }
