@@ -41,17 +41,17 @@ public class CurrencyRestControllerTest {
 
   private MockMvc mockMvc;
   private String statusIsOk = "{\"status\": \"ok\"}";
-  @Autowired
+  @MockBean
   private HeartbeatRepository heartbeatRepository;
 
   @Autowired
   private WebApplicationContext webApplicationContext;
-//  private HeartbeatRepository mockHeartBeatRepo;
+  private HeartbeatRepository mockHeartBeatRepo;
 
   @Before
   public void setup() throws Exception {
     this.mockMvc = webAppContextSetup(webApplicationContext).build();
-//    mockHeartBeatRepo = Mockito.mock(HeartbeatRepository.class);
+    mockHeartBeatRepo = Mockito.mock(HeartbeatRepository.class);
   }
 
   @Test
@@ -61,20 +61,20 @@ public class CurrencyRestControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().json(statusIsOk));
   }
-//
-//  @Test
-//  public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
-//    BDDMockito.given(heartbeatRepository.count()).willReturn(1L);
-//    mockMvc.perform(get("/heartbeat")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType(contentType))
-//            .andExpect(content().json("{\"database\": \"ok\"}"));
-//  }
-//
+
+  @Test
+  public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
+    BDDMockito.given(heartbeatRepository.count()).willReturn(1L);
+    mockMvc.perform(get("/heartbeat")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(contentType))
+            .andExpect(content().json("{\"database\": \"ok\"}"));
+  }
+
   @Test
   public void testHearthBeatWithEmptyDataBase() throws Exception {
-//    Mockito.when(heartbeatRepository.count()).thenReturn(0L);
+    Mockito.when(heartbeatRepository.count()).thenReturn(0L);
     mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
@@ -82,20 +82,20 @@ public class CurrencyRestControllerTest {
             .andExpect(content().json("{\"database\": \"error\"}"));
   }
 
-//  @Test
-//  public void testHeartBeatEmpty() throws Exception {
-//    Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
-//    StatusService statusService = new StatusService(mockHeartBeatRepo);
-//    Status status = statusService.checkStatusCondition(0);
-//    assertEquals("error", status.getDatabase());
-//  }
+  @Test
+  public void testHeartBeatEmpty() throws Exception {
+    Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
+    StatusService statusService = new StatusService(mockHeartBeatRepo);
+    Status status = statusService.checkStatusCondition(0);
+    assertEquals("error", status.getDatabase());
+  }
 
-//  @Test
-//  public void testHeartBeartIsNotEmpty() throws Exception {
-//    Mockito.when(mockHeartBeatRepo.count()).thenReturn(1L);
-//    StatusService statusService = new StatusService(mockHeartBeatRepo);
-//    Status status = statusService.checkStatusCondition(0);
-//    assertEquals("ok", status.getDatabase());
-//  }
+  @Test
+  public void testHeartBeartIsNotEmpty() throws Exception {
+    Mockito.when(mockHeartBeatRepo.count()).thenReturn(1L);
+    StatusService statusService = new StatusService(mockHeartBeatRepo);
+    Status status = statusService.checkStatusCondition(0);
+    assertEquals("ok", status.getDatabase());
+  }
 
 }
