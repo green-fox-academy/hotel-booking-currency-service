@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -46,6 +47,9 @@ public class CurrencyRestControllerTest {
     heartbeatRepositoryMock = Mockito.mock(HeartbeatRepository.class);
   }
 
+  @MockBean
+  private HeartbeatRepository heartbeatRepository;
+
 
 
   @Test
@@ -66,8 +70,18 @@ public class CurrencyRestControllerTest {
   }
 
   @Test
+  public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
+    when(heartbeatRepository.count()).thenReturn(1L);
+    mockMvc.perform(get("/heartbeat")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(contentType))
+        .andExpect(content().json("{\"database\": \"ok\"}"));
+  }
+
+  @Test
   public void testHearthBeatWithEmptyDataBase() throws Exception {
-    when(heartbeatRepositoryMock.count()).thenReturn(0L);
+    when(heartbeatRepository.count()).thenReturn(0L);
     mockMvc.perform(get("/heartbeat")
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
