@@ -4,6 +4,8 @@ deployment:
     heroku:
       appname: hiddenite
 
-dependencies:
-  override:
-    - chmod +x gradlew
+machine:
+  java:
+    version: oraclejdk8
+  environment:
+    JDBC_DATABASE_URL: jdbc:mysql://localhost:3306/circle_test?user=ubuntu&password=

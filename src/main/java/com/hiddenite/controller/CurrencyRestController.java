@@ -39,14 +39,14 @@ public class CurrencyRestController {
   StatusService statusService;
 
   @GetMapping("/heartbeat")
-  public Status getStatus(HttpServletRequest httpServletRequest) throws IOException, TimeoutException {
+  public Status getStatus() throws IOException, TimeoutException {
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService.checkStatusCondition(mqService.getQueueMessageCount("heartbeat"));
-    if (status.everythingIsOk()) {
-      log.info("HTTP-REQUEST " + httpServletRequest.getRequestURI());
-    } else {
-      log.error("HTTP-ERROR " + httpServletRequest.getRequestURI());
-    }
+//    if (status.everythingIsOk()) {
+//      log.info("HTTP-REQUEST " + httpServletRequest.getRequestURI());
+//    } else {
+//      log.error("HTTP-ERROR " + httpServletRequest.getRequestURI());
+//    }
     return status;
   }
 }
