@@ -27,30 +27,30 @@ public class CurrencyRestController {
 
   private HeartbeatRepository heartbeatRepository;
   static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
-
-  @Autowired
-  MQService mqService;
-
-
-  @Autowired
-  public CurrencyRestController(HeartbeatRepository heartbeatRepository) {
-    this.heartbeatRepository = heartbeatRepository;
-  }
-
-  @Autowired
-  StatusService statusService;
-
-  @GetMapping("/heartbeat")
-  public Status getStatus() throws IOException, TimeoutException {
-    mqService.sendMessageToQueue("heartbeat", "Hello World!");
-    Status status = statusService.checkStatusCondition(mqService.getQueueMessageCount("heartbeat"));
-//    if (status.everythingIsOk()) {
-//      log.info("HTTP-REQUEST " + httpServletRequest.getRequestURI());
-//    } else {
-//      log.error("HTTP-ERROR " + httpServletRequest.getRequestURI());
-//    }
-    return status;
-  }
+//
+//  @Autowired
+//  MQService mqService;
+//
+//
+//  @Autowired
+//  public CurrencyRestController(HeartbeatRepository heartbeatRepository) {
+//    this.heartbeatRepository = heartbeatRepository;
+//  }
+//
+//  @Autowired
+//  StatusService statusService;
+//
+//  @GetMapping("/heartbeat")
+//  public Status getStatus() throws IOException, TimeoutException {
+//    mqService.sendMessageToQueue("heartbeat", "Hello World!");
+//    Status status = statusService.checkStatusCondition(mqService.getQueueMessageCount("heartbeat"));
+////    if (status.everythingIsOk()) {
+////      log.info("HTTP-REQUEST " + httpServletRequest.getRequestURI());
+////    } else {
+////      log.error("HTTP-ERROR " + httpServletRequest.getRequestURI());
+////    }
+//    return status;
+//  }
 
   @GetMapping("/test")
   public String gettest() throws IOException, TimeoutException {
