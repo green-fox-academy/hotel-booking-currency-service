@@ -46,12 +46,12 @@ public class CurrencyRestControllerTest {
 
   @Autowired
   private WebApplicationContext webApplicationContext;
-  private HeartbeatRepository mockHeartBeatRepo;
+//  private HeartbeatRepository mockHeartBeatRepo;
 
   @Before
   public void setup() throws Exception {
     this.mockMvc = webAppContextSetup(webApplicationContext).build();
-    mockHeartBeatRepo = Mockito.mock(HeartbeatRepository.class);
+//    mockHeartBeatRepo = Mockito.mock(HeartbeatRepository.class);
   }
 
   @Test
@@ -72,23 +72,23 @@ public class CurrencyRestControllerTest {
 //            .andExpect(content().json("{\"database\": \"ok\"}"));
 //  }
 //
-//  @Test
-//  public void testHearthBeatWithEmptyDataBase() throws Exception {
-//    Mockito.when(heartbeatRepository.count()).thenReturn(0L);
-//    mockMvc.perform(get("/heartbeat")
-//            .contentType(MediaType.APPLICATION_JSON))
-//            .andExpect(status().isOk())
-//            .andExpect(content().contentType(contentType))
-//            .andExpect(content().json("{\"database\": \"error\"}"));
-//  }
-
   @Test
-  public void testHeartBeatEmpty() throws Exception {
-    Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
-    StatusService statusService = new StatusService(mockHeartBeatRepo);
-    Status status = statusService.checkStatusCondition(0);
-    assertEquals("error", status.getDatabase());
+  public void testHearthBeatWithEmptyDataBase() throws Exception {
+//    Mockito.when(heartbeatRepository.count()).thenReturn(0L);
+    mockMvc.perform(get("/heartbeat")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(contentType))
+            .andExpect(content().json("{\"database\": \"error\"}"));
   }
+
+//  @Test
+//  public void testHeartBeatEmpty() throws Exception {
+//    Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
+//    StatusService statusService = new StatusService(mockHeartBeatRepo);
+//    Status status = statusService.checkStatusCondition(0);
+//    assertEquals("error", status.getDatabase());
+//  }
 
 //  @Test
 //  public void testHeartBeartIsNotEmpty() throws Exception {
