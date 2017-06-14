@@ -49,4 +49,9 @@ public class CurrencyRestController {
 //    }
     return status;
   }
+
+  @GetMapping("/test")
+  public Status gettest() throws IOException, TimeoutException {
+    return new Status();
+  }
 }
