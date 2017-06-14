@@ -22,6 +22,8 @@ import java.lang.invoke.MethodHandles;
 
 @RestController
 public class CurrencyRestController {
+  public CurrencyRestController() {
+  }
 
   private HeartbeatRepository heartbeatRepository;
   static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
