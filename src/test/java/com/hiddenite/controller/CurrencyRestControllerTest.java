@@ -93,7 +93,7 @@ public class CurrencyRestControllerTest {
   public void testHeartBeatEmpty() throws Exception {
     Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
     StatusService statusService = new StatusService(mockHeartBeatRepo);
-    Status status = statusService.checkStatusCondition(0);
+    Status status = statusService.checkStatusCondition(0, true);
     assertEquals("error", status.getDatabase());
   }
 
@@ -101,7 +101,7 @@ public class CurrencyRestControllerTest {
   public void testHeartBeartIsNotEmpty() throws Exception {
     Mockito.when(mockHeartBeatRepo.count()).thenReturn(1L);
     StatusService statusService = new StatusService(mockHeartBeatRepo);
-    Status status = statusService.checkStatusCondition(0);
+    Status status = statusService.checkStatusCondition(0, true);
     assertEquals("ok", status.getDatabase());
   }
 

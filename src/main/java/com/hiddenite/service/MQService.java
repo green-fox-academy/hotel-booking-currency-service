@@ -36,4 +36,9 @@ public class MQService {
     return ok.getMessageCount();
   }
 
+  public boolean isConnected() {
+    return channel.isOpen();
+
+  }
+
 }

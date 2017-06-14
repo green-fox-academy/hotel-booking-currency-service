@@ -19,15 +19,16 @@ public class StatusService {
 
   HeartbeatRepository heartbeatRepository;
 
-  public Status checkStatusCondition(int queueDepth) {
+  public Status checkStatusCondition(int queueDepth, boolean isConnected) {
     Status status = new Status();
     if (heartbeatRepository.count() == 0) {
       status.setDatabase("error");
     }
-    if (queueDepth > 1) {
+    if (queueDepth > 1 || !isConnected) {
       status.setQueue("error");
     }
     System.out.println(queueDepth);
+    System.out.println(isConnected);
     return status;
   }
 }
