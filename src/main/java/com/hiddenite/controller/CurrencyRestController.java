@@ -4,6 +4,7 @@ import com.hiddenite.model.Status;
 /*import com.hiddenite.repository.HeartbeatRepository;
 import com.hiddenite.service.MQService;
 import com.hiddenite.service.StatusService;*/
+import com.hiddenite.service.StatusService;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
@@ -40,8 +41,8 @@ public class CurrencyRestController {
   }
 */
 
-/*  @Autowired
-  StatusService statusService;*/
+  @Autowired
+  StatusService statusService;
 
   /*@GetMapping("/heartbeat")
   public Status getStatus() throws IOException, TimeoutException {
@@ -58,6 +59,7 @@ public class CurrencyRestController {
 
   @GetMapping("/test")
   public Status getTest() {
-    return new Status();
+
+    return statusService.checkStatusCondition(1,true);
   }
 }
