@@ -1,3 +1,4 @@
+/*
 package com.hiddenite.service;
 
 import com.hiddenite.model.Status;
@@ -32,3 +33,4 @@ public class StatusService {
     return status;
   }
 }
+*/

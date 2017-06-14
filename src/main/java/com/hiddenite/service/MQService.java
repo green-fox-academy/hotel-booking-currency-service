@@ -1,3 +1,4 @@
+/*
 package com.hiddenite.service;
 
 import java.io.IOException;
@@ -27,8 +28,8 @@ public class MQService {
     channel.queueDeclare(queue, false, false, true, null);
     channel.basicPublish("", queue, null, message.getBytes());
     System.out.println(" [x] Sent '" + message + "'");
-//    channel.close();
-//    connection.close();
+    channel.close();
+    connection.close();
   }
 
   public int getQueueMessageCount(String queue) throws IOException {
@@ -42,3 +43,4 @@ public class MQService {
   }
 
 }
+*/

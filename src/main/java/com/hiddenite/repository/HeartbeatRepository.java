@@ -1,3 +1,4 @@
+/*
 package com.hiddenite.repository;
 
 import com.hiddenite.model.Heartbeat;
@@ -11,3 +12,4 @@ public interface HeartbeatRepository extends CrudRepository<Heartbeat, Long> {
 
   public ArrayList<Heartbeat> findAll();
 }
+*/
