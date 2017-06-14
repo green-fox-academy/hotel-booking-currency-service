@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class StatusService {
 
+
+  public StatusService() {
+  }
+
   @Autowired
   public StatusService(HeartbeatRepository heartbeatRepository) {
     this.heartbeatRepository = heartbeatRepository;
