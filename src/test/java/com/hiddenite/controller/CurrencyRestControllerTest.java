@@ -54,14 +54,12 @@ public class CurrencyRestControllerTest {
 //    mockHeartBeatRepo = Mockito.mock(HeartbeatRepository.class);
   }
 
-    @Test
+  @Test
   public void testHearthBeatStatus() throws Exception {
     mockMvc.perform(get("/test")
             .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().json(statusIsOk));
+            .andExpect(status().isOk());
   }
-
 
 
 //  @Test

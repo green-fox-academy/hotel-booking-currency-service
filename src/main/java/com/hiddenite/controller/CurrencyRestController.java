@@ -51,7 +51,7 @@ public class CurrencyRestController {
   }
 
   @GetMapping("/test")
-  public Status gettest() throws IOException, TimeoutException {
-    return new Status();
+  public String gettest() throws IOException, TimeoutException {
+    return "test";
   }
 }
