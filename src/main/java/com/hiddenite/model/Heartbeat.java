@@ -1,4 +1,3 @@
-/*
 package com.hiddenite.model;
 
 import javax.persistence.Entity;
@@ -29,4 +28,3 @@ public class Heartbeat {
     this.status = status;
   }
 }
-*/
