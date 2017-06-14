@@ -22,26 +22,28 @@ import java.lang.invoke.MethodHandles;
 
 @RestController
 public class CurrencyRestController {
-
+/*
   public CurrencyRestController() {
   }
 
   private HeartbeatRepository heartbeatRepository;
-  static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
+  static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());*/
 
-  @Autowired
-  MQService mqService;
+/*  @Autowired
+  MQService mqService;*/
 
+/*
 
   @Autowired
   public CurrencyRestController(HeartbeatRepository heartbeatRepository) {
     this.heartbeatRepository = heartbeatRepository;
   }
+*/
 
-  @Autowired
-  StatusService statusService;
+/*  @Autowired
+  StatusService statusService;*/
 
-  @GetMapping("/heartbeat")
+  /*@GetMapping("/heartbeat")
   public Status getStatus() throws IOException, TimeoutException {
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
@@ -52,7 +54,7 @@ public class CurrencyRestController {
       log.error("HTTP-ERROR ");
     }
     return status;
-  }
+  }*/
 
   @GetMapping("/test")
   public String getTest() {
