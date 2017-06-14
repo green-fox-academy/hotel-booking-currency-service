@@ -1,5 +1,6 @@
 package com.hiddenite.controller;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -8,10 +9,12 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 
 import com.hiddenite.CurrencyApplication;
+import com.hiddenite.repository.HeartbeatRepository;
 import java.nio.charset.Charset;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -32,16 +35,22 @@ public class CurrencyRestControllerTest {
       Charset.forName("utf8"));
   private MockMvc mockMvc;
 
+  private HeartbeatRepository heartbeatRepositoryMock;
+
   @Autowired
   private WebApplicationContext webApplicationContext;
 
   @Before
   public void setup() throws Exception {
     mockMvc = webAppContextSetup(webApplicationContext).build();
+    heartbeatRepositoryMock = Mockito.mock(HeartbeatRepository.class);
   }
+
+
 
   @Test
   public void basicTestCase() throws Exception {
+    when(heartbeatRepositoryMock.count()).thenReturn(0L);
     mockMvc.perform(get("/test"))
         .andExpect(status().isOk());
   }
