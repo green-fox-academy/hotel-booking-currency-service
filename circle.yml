@@ -3,8 +3,3 @@ deployment:
     branch: master
     heroku:
       appname: hiddenite
-
-dependencies:
-  override:
-    - chmod +x gradlew
-    - ./gradlew dependencies
