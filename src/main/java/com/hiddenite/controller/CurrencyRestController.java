@@ -7,8 +7,11 @@ import com.hiddenite.service.StatusService;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,11 +39,14 @@ public class CurrencyRestController {
   StatusService statusService;
 
   @GetMapping("/heartbeat")
-  public Status getStatus() throws IOException, TimeoutException {
-
-    mqService.sendMessageToQueue("HEARTBEAT", "Hello World!");
-    Status status = statusService.checkDatabaseIsEmpty();
-    log.debug("-----------------------------------------------------------------LOGGING TEST MESSAGE------------------------------------------------------------------------------------");
+  public Status getStatus(HttpServletRequest httpServletRequest) throws IOException, TimeoutException {
+    mqService.sendMessageToQueue("heartbeat", "Hello World!");
+    Status status = statusService.checkStatusCondition(mqService.getQueueMessageCount("heartbeat"));
+    if (status.everythingIsOk()) {
+      log.info("HTTP-REQUEST " + httpServletRequest.getRequestURI());
+    } else {
+      log.error("HTTP-ERROR " + httpServletRequest.getRequestURI());
+    }
     return status;
   }
 }

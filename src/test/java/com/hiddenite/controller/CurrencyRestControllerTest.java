@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -86,7 +85,7 @@ public class CurrencyRestControllerTest {
   public void testHeartBeatEmpty() throws Exception {
     Mockito.when(mockHeartBeatRepo.count()).thenReturn(0L);
     StatusService statusService = new StatusService(mockHeartBeatRepo);
-    Status status = statusService.checkDatabaseIsEmpty();
+    Status status = statusService.checkStatusCondition(0);
     assertEquals("error", status.getDatabase());
   }
 
@@ -94,7 +93,7 @@ public class CurrencyRestControllerTest {
   public void testHeartBeartIsNotEmpty() throws Exception {
     Mockito.when(mockHeartBeatRepo.count()).thenReturn(1L);
     StatusService statusService = new StatusService(mockHeartBeatRepo);
-    Status status = statusService.checkDatabaseIsEmpty();
+    Status status = statusService.checkStatusCondition(0);
     assertEquals("ok", status.getDatabase());
   }
 

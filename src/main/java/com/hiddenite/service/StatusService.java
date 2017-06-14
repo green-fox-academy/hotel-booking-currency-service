@@ -15,13 +15,15 @@ public class StatusService {
 
   HeartbeatRepository heartbeatRepository;
 
-  public Status checkDatabaseIsEmpty() {
+  public Status checkStatusCondition(int queueDepth) {
     Status status = new Status();
     if (heartbeatRepository.count() == 0) {
       status.setDatabase("error");
-    } else {
-      status.setDatabase("ok");
     }
+    if (queueDepth > 1) {
+      status.setQueue("error");
+    }
+    System.out.println(queueDepth);
     return status;
   }
 }
