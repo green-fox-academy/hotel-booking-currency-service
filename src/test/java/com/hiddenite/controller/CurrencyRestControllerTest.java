@@ -55,4 +55,14 @@ public class CurrencyRestControllerTest {
         .andExpect(status().isOk());
   }
 
+  @Test
+  public void testHearthBeatWithEmptyDataBase() throws Exception {
+    when(heartbeatRepositoryMock.count()).thenReturn(0L);
+    mockMvc.perform(get("/test")
+        .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(contentType))
+        .andExpect(content().json("{\"database\": \"error\"}"));
+  }
+
 }
