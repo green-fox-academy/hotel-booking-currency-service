@@ -57,7 +57,7 @@ public class CurrencyRestController {
   }*/
 
   @GetMapping("/test")
-  public String getTest() {
-    return "test";
+  public Status getTest() {
+    return new Status();
   }
 }
