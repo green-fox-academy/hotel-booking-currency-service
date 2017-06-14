@@ -8,6 +8,5 @@ import java.util.ArrayList;
 
 @Repository
 public interface HeartbeatRepository extends CrudRepository<Heartbeat, Long> {
-
   public ArrayList<Heartbeat> findAll();
 }
