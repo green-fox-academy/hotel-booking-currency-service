@@ -1,0 +1,9 @@
+deployment:
+  staging:
+    branch: master
+    heroku:
+      appname: hiddenite
+
+dependencies:
+  override:
+    - chmod +x gradlew
