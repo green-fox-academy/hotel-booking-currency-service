@@ -25,7 +25,7 @@ public class MQService {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setUsername("dmyuipta");
     factory.setPassword("WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO");
-    factory.setHost("\tamqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta");
+    factory.setHost("amqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta");
 //    factory.setHost("localhost");
     connection = factory.newConnection();
     channel = connection.createChannel();
