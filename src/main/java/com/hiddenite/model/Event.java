@@ -1,21 +1,17 @@
 package com.hiddenite.model;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
-/**
- * Created by Levente on 2017. 06. 15..
- */
 public class Event {
-
-  private LocalDateTime time;
-  private final String hostname = "hotel-booking-payment.herokuapp.com";
-  private String message;
+  LocalDateTime time;
+  final String HOST = "hotel-booking-payment";
+  String message;
 
   public Event(String message) {
-    time  = LocalDateTime.now();
     this.message = message;
+    time = LocalDateTime.now();
   }
 
   public LocalDateTime getTime() {
@@ -26,8 +22,8 @@ public class Event {
     this.time = time;
   }
 
-  public String getHostname() {
-    return hostname;
+  public String getHOST() {
+    return HOST;
   }
 
   public String getMessage() {
@@ -46,4 +42,5 @@ public class Event {
       throw new RuntimeException(e);
     }
   }
+
 }

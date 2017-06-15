@@ -1,6 +1,5 @@
 package com.hiddenite.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hiddenite.model.Event;
 import com.rabbitmq.client.*;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class MQService {
           throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
     channel = connection.createChannel();
     Event event = new Event(message);
-    channel.basicPublish("", queue, null, Event.asJsonString(event).getBytes()  );
+    channel.basicPublish("", queue, null, Event.asJsonString(event).getBytes());
     System.out.println(" [x] Sent '" + Event.asJsonString(event) + "'");
   }
 
@@ -57,8 +56,6 @@ public class MQService {
   public boolean isConnected() {
     return channel.isOpen();
   }
-
-
 
 }
 
