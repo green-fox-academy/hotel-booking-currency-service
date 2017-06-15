@@ -34,33 +34,25 @@ public class CurrencyRestController {
   /*@Autowired
   MQService mqService;*/
 
-
-
   /*@Autowired
   public CurrencyRestController(HeartbeatRepository heartbeatRepository) {
     this.heartbeatRepository = heartbeatRepository;
   }*/
 
-
   @Autowired
   StatusService statusService;
 
   @GetMapping("/heartbeat")
-  public Status getStatus(HttpServletRequest request) throws IOException, TimeoutException {
+  public Status getStatus() throws IOException, TimeoutException {
     //mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
-        .checkStatusCondition(1,true);
+            .checkStatusCondition(1, true);
     if (status.everythingIsOk()) {
-      log.info("HTTP-REQUEST " + request.getRequestURI());
+      log.info("HTTP-REQUEST /heartbeat");
     } else {
-      log.error("HTTP-ERROR " + request.getRequestURI());
+      log.error("HTTP-ERROR /heartbeat");
     }
     return status;
   }
 
-  @GetMapping("/test")
-  public Status getTest() {
-
-    return statusService.checkStatusCondition(1,true);
-  }
 }
