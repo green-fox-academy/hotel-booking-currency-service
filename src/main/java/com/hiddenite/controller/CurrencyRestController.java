@@ -1,7 +1,7 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Status;
-import com.hiddenite.service.MQService;
+//import com.hiddenite.service.MQService;
 import com.hiddenite.service.StatusService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ public class CurrencyRestController {
 
   static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-  @Autowired
-  MQService mqService;
+//  @Autowired
+//  MQService mqService;
 
   @Autowired
   StatusService statusService;
@@ -28,7 +28,7 @@ public class CurrencyRestController {
   public Status getStatus() throws IOException, TimeoutException {
 //    mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
-            .checkStatusCondition(mqService.getQueueMessageCount("heartbeat"), mqService.isConnected());
+            .checkStatusCondition(1, true);
     if (status.everythingIsOk()) {
       log.info("HTTP-REQUEST /heartbeat");
     } else {
