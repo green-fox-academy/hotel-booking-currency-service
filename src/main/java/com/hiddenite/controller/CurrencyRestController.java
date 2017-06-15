@@ -2,6 +2,7 @@ package com.hiddenite.controller;
 
 import com.hiddenite.model.Status;
 //import com.hiddenite.service.MQService;
+import com.hiddenite.service.MQService;
 import com.hiddenite.service.StatusService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.log4j.Logger;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 
@@ -20,15 +24,15 @@ public class CurrencyRestController {
 
   static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-//  @Autowired
-//  MQService mqService;
+  @Autowired
+  MQService mqService;
 
   @Autowired
   StatusService statusService;
 
   @GetMapping("/heartbeat")
-  public Status getStatus(javax.servlet.http.HttpServletRequest request) throws IOException, TimeoutException {
-//    mqService.sendMessageToQueue("heartbeat", "Hello World!");
+  public Status getStatus(javax.servlet.http.HttpServletRequest request) throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
+    mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
             .checkStatusCondition(1, true);
     if (status.everythingIsOk()) {

@@ -23,12 +23,12 @@ public class MQService {
   }
 
   public void sendMessageToQueue(String queue, String message)
-          throws IOException, TimeoutException {
+          throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setUsername("dmyuipta");
     factory.setPassword("WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO");
-    factory.setHost("fish.rmq.cloudamqp.com");
-//    factory.setUri(new URI(""));
+    factory.setVirtualHost("dmyuipta");
+    factory.setUri("fish.rmq.cloudamqp.com");
 
 
 
