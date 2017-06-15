@@ -1,5 +1,6 @@
 package com.hiddenite.service;
 
+import com.hiddenite.model.Event;
 import com.rabbitmq.client.*;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,9 @@ public class MQService {
   public void sendMessageToQueue(String queue, String message)
           throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
     channel = connection.createChannel();
-    channel.basicPublish("", queue, null, message.getBytes("UTF-8"));
-    System.out.println(" [x] Sent '" + message + "'");
+    Event event = new Event(message);
+    channel.basicPublish("", queue, null, Event.asJsonString(event).getBytes());
+    System.out.println(" [x] Sent '" + Event.asJsonString(event) + "'");
   }
 
   public void consume(String queue) throws Exception {
