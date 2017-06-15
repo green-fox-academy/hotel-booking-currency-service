@@ -1,8 +1,8 @@
-deployment:
-  staging:
-    branch: master
-    heroku:
-      appname: hotel-booking-payment
+#deployment:
+#  staging:
+#    branch: master
+#   heroku:
+#      appname: hotel-booking-payment
 
 machine:
   java:
