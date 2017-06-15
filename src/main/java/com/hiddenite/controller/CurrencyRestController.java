@@ -26,7 +26,7 @@ public class CurrencyRestController {
 
   @GetMapping("/heartbeat")
   public Status getStatus() throws IOException, TimeoutException {
-    mqService.sendMessageToQueue("heartbeat", "Hello World!");
+//    mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
             .checkStatusCondition(mqService.getQueueMessageCount("heartbeat"), mqService.isConnected());
     if (status.everythingIsOk()) {
