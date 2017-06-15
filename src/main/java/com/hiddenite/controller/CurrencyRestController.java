@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.util.concurrent.TimeoutException;
@@ -25,14 +26,14 @@ public class CurrencyRestController {
   StatusService statusService;
 
   @GetMapping("/heartbeat")
-  public Status getStatus() throws IOException, TimeoutException {
+  public Status getStatus(HttpServletRequest request) throws IOException, TimeoutException {
 //    mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
             .checkStatusCondition(1, true);
     if (status.everythingIsOk()) {
-      log.info("HTTP-REQUEST /heartbeat");
+      log.info("HTTP-REQUEST " + request.getRequestURI());
     } else {
-      log.error("HTTP-ERROR /heartbeat");
+      log.error("HTTP-ERROR" + request.getRequestURI());
     }
     return status;
   }
