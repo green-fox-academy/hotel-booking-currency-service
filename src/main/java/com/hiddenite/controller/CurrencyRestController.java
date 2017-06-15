@@ -5,6 +5,7 @@ import com.hiddenite.model.Status;
 import com.hiddenite.service.MQService;
 import com.hiddenite.service.StatusService;*/
 //import com.hiddenite.service.MQService;
+import com.hiddenite.service.MQService;
 import com.hiddenite.service.StatusService;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
@@ -31,8 +32,8 @@ public class CurrencyRestController {
   private HeartbeatRepository heartbeatRepository;*/
   static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-  /*@Autowired
-  MQService mqService;*/
+  @Autowired
+  MQService mqService;
 
   /*@Autowired
   public CurrencyRestController(HeartbeatRepository heartbeatRepository) {
@@ -44,7 +45,7 @@ public class CurrencyRestController {
 
   @GetMapping("/heartbeat")
   public Status getStatus() throws IOException, TimeoutException {
-    //mqService.sendMessageToQueue("heartbeat", "Hello World!");
+    mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
             .checkStatusCondition(1, true);
     if (status.everythingIsOk()) {
