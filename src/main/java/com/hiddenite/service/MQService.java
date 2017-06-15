@@ -1,6 +1,8 @@
 package com.hiddenite.service;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.AMQP;
@@ -14,14 +16,26 @@ public class MQService {
 
   Channel channel;
   Connection connection;
+  private URI rabbitMqUrl;
+
 
   public MQService() {
   }
 
   public void sendMessageToQueue(String queue, String message)
           throws IOException, TimeoutException {
+    try {
+      rabbitMqUrl = new URI(System.getenv("RABBITMQ_BIGWIG_REST_API_URL"));
+    } catch(URISyntaxException e) {
+      e.getStackTrace();
+    }
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost("localhost");
+    factory.setUsername(rabbitMqUrl.getUserInfo().split(":")[0]);
+    factory.setPassword(rabbitMqUrl.getUserInfo().split(":")[1]);
+    factory.setHost(rabbitMqUrl.getHost());
+    factory.setPort(rabbitMqUrl.getPort());
+    factory.setVirtualHost(rabbitMqUrl.getPath().substring(1));
+//    factory.setHost("localhost");
     connection = factory.newConnection();
     channel = connection.createChannel();
     channel.queueDeclare(queue, false, false, true, null);
