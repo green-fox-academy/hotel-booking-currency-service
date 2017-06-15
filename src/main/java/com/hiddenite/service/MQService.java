@@ -16,14 +16,15 @@ public class MQService {
   Connection connection;
 
   public MQService() throws IOException, TimeoutException {
-    ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost("localhost");
-    this.connection = factory.newConnection();
-    this.channel = connection.createChannel();
+
   }
 
   public void sendMessageToQueue(String queue, String message)
           throws IOException, TimeoutException {
+    ConnectionFactory factory = new ConnectionFactory();
+    factory.setHost("localhost");
+    this.connection = factory.newConnection();
+    this.channel = connection.createChannel();
     channel.queueDeclare(queue, false, false, true, null);
     channel.basicPublish("", queue, null, message.getBytes());
     System.out.println(" [x] Sent '" + message + "'");
