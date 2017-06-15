@@ -1,14 +1,13 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.CurrencyApplication;
+import com.hiddenite.model.Heartbeat;
 import com.hiddenite.repository.HeartbeatRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.Charset;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,43 +32,41 @@ public class CurrencyRestControllerTest {
           MediaType.APPLICATION_JSON.getSubtype(),
           Charset.forName("utf8"));
   private MockMvc mockMvc;
-  private HeartbeatRepository heartbeatRepositoryMock;
+
   @Autowired
   private WebApplicationContext webApplicationContext;
-  @MockBean
+  @Autowired
   private HeartbeatRepository heartbeatRepository;
 
   @Before
   public void setup() throws Exception {
     mockMvc = webAppContextSetup(webApplicationContext).build();
-    heartbeatRepositoryMock = Mockito.mock(HeartbeatRepository.class);
   }
 
   @Test
   public void basicTestCase() throws Exception {
-    when(heartbeatRepositoryMock.count()).thenReturn(0L);
     mockMvc.perform(get("/heartbeat"))
             .andExpect(status().isOk());
   }
 
   @Test
   public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
-    when(heartbeatRepository.count()).thenReturn(1L);
+    heartbeatRepository.save(new Heartbeat());
     mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
             .andExpect(content().json("{\"database\": \"ok\"}"));
+    heartbeatRepository.deleteAll();
   }
 
   @Test
   public void testHearthBeatWithEmptyDataBase() throws Exception {
-    when(heartbeatRepository.count()).thenReturn(0L);
+    heartbeatRepository.deleteAll();
     mockMvc.perform(get("/heartbeat")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
             .andExpect(content().json("{\"database\": \"error\"}"));
   }
-
 }
