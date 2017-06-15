@@ -1,5 +1,6 @@
 package com.hiddenite;
 
+import com.hiddenite.model.Heartbeat;
 import com.hiddenite.repository.HeartbeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +19,6 @@ public class CurrencyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-	//hearthbeatRepository.save(new Heartbeat());
+	heartbeatRepository.save(new Heartbeat());
 	}
 }
