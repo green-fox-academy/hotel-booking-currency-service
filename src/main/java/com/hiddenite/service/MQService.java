@@ -16,25 +16,16 @@ public class MQService {
 
   Channel channel;
   Connection connection;
-  private URI rabbitMqUrl;
-
 
   public MQService() {
   }
 
   public void sendMessageToQueue(String queue, String message)
           throws IOException, TimeoutException {
-    try {
-      rabbitMqUrl = new URI(System.getenv("RABBITMQ_BIGWIG_REST_API_URL"));
-    } catch(URISyntaxException e) {
-      e.getStackTrace();
-    }
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setUsername(rabbitMqUrl.getUserInfo().split(":")[0]);
-    factory.setPassword(rabbitMqUrl.getUserInfo().split(":")[1]);
-    factory.setHost(rabbitMqUrl.getHost());
-    factory.setPort(rabbitMqUrl.getPort());
-    factory.setVirtualHost(rabbitMqUrl.getPath().substring(1));
+    factory.setUsername("dmyuipta");
+    factory.setPassword("WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO");
+    factory.setHost("\tamqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta");
 //    factory.setHost("localhost");
     connection = factory.newConnection();
     channel = connection.createChannel();
