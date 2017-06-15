@@ -25,17 +25,12 @@ public class MQService {
   public void sendMessageToQueue(String queue, String message)
           throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
     ConnectionFactory factory = new ConnectionFactory();
-//    factory.setUsername("dmyuipta");
-//    factory.setPassword("WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO");
-//    factory.setVirtualHost("dmyuipta");
     factory.setUri("amqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta");
     connection = factory.newConnection();
     channel = connection.createChannel();
     channel.queueDeclare(queue, false, false, true, null);
     channel.basicPublish("", queue, null, message.getBytes("UTF-8"));
     System.out.println(" [x] Sent '" + message + "'");
-//    channel.close();
-//    connection.close();
   }
 
   public int getQueueMessageCount(String queue) throws IOException {

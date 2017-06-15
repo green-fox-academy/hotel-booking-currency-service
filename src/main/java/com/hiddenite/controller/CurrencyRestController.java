@@ -34,7 +34,7 @@ public class CurrencyRestController {
   public Status getStatus(javax.servlet.http.HttpServletRequest request) throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
-            .checkStatusCondition(1, true);
+            .checkStatusCondition(mqService.getQueueMessageCount("heartbeat"), mqService.isConnected());
     if (status.everythingIsOk()) {
       log.info("HTTP-REQUEST " + request.getRequestURI());
     } else {

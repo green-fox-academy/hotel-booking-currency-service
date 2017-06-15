@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class StatusService {
 
-
   public StatusService() {
   }
 
@@ -27,8 +26,6 @@ public class StatusService {
     if (queueDepth > 1 || !isConnected) {
       status.setQueue("error");
     }
-    System.out.println(queueDepth);
-    System.out.println(isConnected);
     return status;
   }
 }
