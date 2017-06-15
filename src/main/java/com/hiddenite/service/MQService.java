@@ -15,18 +15,17 @@ public class MQService {
   Channel channel;
   Connection connection;
 
-  public MQService() throws IOException, TimeoutException {
-
+  public MQService() {
   }
 
   public void sendMessageToQueue(String queue, String message)
           throws IOException, TimeoutException {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setHost("localhost");
-    this.connection = factory.newConnection();
-    this.channel = connection.createChannel();
+    connection = factory.newConnection();
+    channel = connection.createChannel();
     channel.queueDeclare(queue, false, false, true, null);
-    channel.basicPublish("", queue, null, message.getBytes());
+    channel.basicPublish("", queue, null, message.getBytes("UTF-8"));
     System.out.println(" [x] Sent '" + message + "'");
 //    channel.close();
 //    connection.close();
@@ -39,7 +38,6 @@ public class MQService {
 
   public boolean isConnected() {
     return channel.isOpen();
-
   }
 
 }

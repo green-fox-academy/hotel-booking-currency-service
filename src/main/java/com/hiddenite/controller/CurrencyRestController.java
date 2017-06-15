@@ -47,7 +47,7 @@ public class CurrencyRestController {
   public Status getStatus() throws IOException, TimeoutException {
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
     Status status = statusService
-            .checkStatusCondition(1, true);
+            .checkStatusCondition(mqService.getQueueMessageCount("heartbeat"), mqService.isConnected());
     if (status.everythingIsOk()) {
       log.info("HTTP-REQUEST /heartbeat");
     } else {

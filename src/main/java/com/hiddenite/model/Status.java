@@ -1,8 +1,5 @@
 package com.hiddenite.model;
 
-import org.springframework.stereotype.Component;
-
-
 public class Status {
   String status;
   String database;
