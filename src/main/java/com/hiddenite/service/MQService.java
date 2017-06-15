@@ -3,6 +3,8 @@ package com.hiddenite.service;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeoutException;
 
 import com.rabbitmq.client.AMQP;
@@ -21,11 +23,12 @@ public class MQService {
   }
 
   public void sendMessageToQueue(String queue, String message)
-          throws IOException, TimeoutException {
+          throws IOException, TimeoutException, URISyntaxException, KeyManagementException, NoSuchAlgorithmException {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setUsername("dmyuipta");
     factory.setPassword("WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO");
-    factory.setHost("amqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta");
+    factory.setHost("fish.rmq.cloudamqp.com");
+    factory.setUri(new URI("amqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta"));
 //    factory.setHost("localhost");
     connection = factory.newConnection();
     channel = connection.createChannel();
