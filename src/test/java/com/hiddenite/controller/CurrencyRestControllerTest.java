@@ -52,19 +52,16 @@ public class CurrencyRestControllerTest {
   @Test
   public void testHearthBeatDataBaseIsNotEmpty() throws Exception {
     heartbeatRepository.save(new Heartbeat());
-    mockMvc.perform(get("/heartbeat")
-            .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(get("/heartbeat"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
             .andExpect(content().json("{\"database\": \"ok\"}"));
-    heartbeatRepository.deleteAll();
   }
 
   @Test
   public void testHearthBeatWithEmptyDataBase() throws Exception {
     heartbeatRepository.deleteAll();
-    mockMvc.perform(get("/heartbeat")
-            .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(get("/heartbeat"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(contentType))
             .andExpect(content().json("{\"database\": \"error\"}"));
