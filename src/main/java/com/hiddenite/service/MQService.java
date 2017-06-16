@@ -22,7 +22,7 @@ public class MQService {
           KeyManagementException,
           URISyntaxException, IOException, TimeoutException {
     this.factory = new ConnectionFactory();
-    this.factory.setUri("amqp://dmyuipta:WNz9LJE3Dchk9dtnAZEL5jo9v7pETTwO@fish.rmq.cloudamqp.com/dmyuipta");
+    this.factory.setUri(System.getenv("CURRENCY_MQ_URI"));
     connection = this.factory.newConnection();
   }
 
