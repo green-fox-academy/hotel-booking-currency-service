@@ -2,6 +2,7 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.Event;
 import com.rabbitmq.client.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;

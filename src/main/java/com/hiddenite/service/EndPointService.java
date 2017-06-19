@@ -2,30 +2,31 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.Status;
 import com.hiddenite.repository.HeartbeatRepository;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeoutException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class StatusService {
-
-  public StatusService() {
-  }
+public class EndPointService {
 
   @Autowired
-  public StatusService(HeartbeatRepository heartbeatRepository) {
-    this.heartbeatRepository = heartbeatRepository;
+  MQService mqService;
+
+  @Autowired
+  StatusService statusService;
+
+  public EndPointService() {
   }
 
-  HeartbeatRepository heartbeatRepository;
+  public Status handleEndPointRequest()
+      throws Exception {
+    mqService.sendMessageToQueue("heartbeat", "Hello World!");
+    mqService.consume("heartbeat");
 
-  public Status checkStatusCondition(int queueDepth, boolean isConnected) {
-    Status status = new Status();
-    if (heartbeatRepository.count() == 0) {
-      status.setDatabase("error");
-    }
-    if (queueDepth > 1 || !isConnected) {
-      status.setQueue("error");
-    }
-    return status;
+    return statusService.checkStatus();
   }
 }
