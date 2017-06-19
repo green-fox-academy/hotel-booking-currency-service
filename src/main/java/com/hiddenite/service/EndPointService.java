@@ -29,7 +29,7 @@ public class EndPointService {
     mqService.setupConnection();
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
     mqService.consume("heartbeat");
-
     return statusService.checkStatus();
   }
+
 }
