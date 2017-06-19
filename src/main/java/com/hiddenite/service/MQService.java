@@ -19,9 +19,10 @@ public class MQService {
   private Channel channel;
   private Consumer consumer;
 
-  public MQService() throws NoSuchAlgorithmException,
-          KeyManagementException,
-          URISyntaxException, IOException, TimeoutException {
+  public MQService() {
+  }
+
+  public void setupConnection() throws NoSuchAlgorithmException, KeyManagementException, URISyntaxException, IOException, TimeoutException {
     this.factory = new ConnectionFactory();
     this.factory.setUri(System.getenv("CURRENCY_MQ_URI"));
     connection = this.factory.newConnection();

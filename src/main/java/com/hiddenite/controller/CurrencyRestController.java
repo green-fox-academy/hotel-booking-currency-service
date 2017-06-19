@@ -20,13 +20,11 @@ public class CurrencyRestController {
 
   @GetMapping("/heartbeat")
   public Status getStatus(javax.servlet.http.HttpServletRequest request) throws Exception {
-
     /*if (status.everythingIsOk()) {
       log.info("HTTP-REQUEST " + request.getRequestURI());
     } else {
       log.error("HTTP-ERROR " + request.getRequestURI());
     }*/
-
     return endPointService.handleEndPointRequest();
   }
 
