@@ -24,7 +24,6 @@ public class StatusService {
 
   public Status checkStatus() throws IOException {
 
-
     Status status = new Status();
     if (heartbeatRepository.count() == 0) {
       status.setDatabase("error");
