@@ -3,12 +3,10 @@ package com.hiddenite.service;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-
 import com.hiddenite.model.Status;
 import com.hiddenite.repository.HeartbeatRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 public class StatusServiceTest {

@@ -13,21 +13,12 @@ import java.lang.invoke.MethodHandles;
 @RestController
 public class CurrencyRestController {
 
-  static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
-
   @Autowired
   EndPointService endPointService;
 
   @GetMapping("/heartbeat")
   public Status getStatus(javax.servlet.http.HttpServletRequest request) throws Exception {
-
-    /*if (status.everythingIsOk()) {
-      log.info("HTTP-REQUEST " + request.getRequestURI());
-    } else {
-      log.error("HTTP-ERROR " + request.getRequestURI());
-    }*/
-
-    return endPointService.handleEndPointRequest();
+    return endPointService.handleEndPointRequest(request);
   }
 
 }
