@@ -1,11 +1,8 @@
 package com.hiddenite.model.checkout;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+
+import javax.persistence.*;
 
 
 @Entity
@@ -17,7 +14,7 @@ public class CheckoutData {
 
   private String type;
 
-  @OneToOne
+  @OneToOne(cascade = {CascadeType.ALL})
   private CheckoutAttribute attributes;
 
   public String getType() {
