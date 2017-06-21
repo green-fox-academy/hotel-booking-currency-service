@@ -1,5 +1,9 @@
 package com.hiddenite.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class ChargeRequest {
 
   public enum Currency {
@@ -10,6 +14,7 @@ public class ChargeRequest {
   private int amount;
   private Currency currency;
   private String stripeEmail;
+  @Id
   private String stripeToken;
 
   public String getDescription() {
