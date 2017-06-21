@@ -19,4 +19,10 @@ public class CheckoutController {
     model.addAttribute("currency", ChargeRequest.Currency.EUR);
     return "checkout";
   }
+
+  @RequestMapping("/index")
+  public String forTest() {
+    return "index";
+  }
+
 }
