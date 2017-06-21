@@ -11,10 +11,12 @@ public class CheckoutController {
 
   @Value("${STRIPE_PUBLIC_KEY}")
   private String stripePublicKey;
+  private int euroToCent = 100;
+  private int amount = 50;
 
   @RequestMapping("/checkout")
   public String checkout(Model model) {
-    model.addAttribute("amount", 50 * 100);
+    model.addAttribute("amount", amount * euroToCent);
     model.addAttribute("stripePublicKey", stripePublicKey);
     model.addAttribute("currency", ChargeRequest.Currency.EUR);
     return "checkout";
@@ -22,7 +24,7 @@ public class CheckoutController {
 
   @RequestMapping("/charge")
   public String charge(Model model) {
-    model.addAttribute("amount", 50 * 100);
+    model.addAttribute("amount", amount * euroToCent);
     model.addAttribute("stripePublicKey", stripePublicKey);
     model.addAttribute("currency", ChargeRequest.Currency.EUR);
     return "checkout";
