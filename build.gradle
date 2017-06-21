@@ -35,5 +35,5 @@ dependencies {
     compile "org.flywaydb:flyway-core:4.2.0"
     testCompile group: 'com.h2database', name: 'h2', version: '1.0.60'
     compile group: 'com.stripe', name: 'stripe-java', version: '5.3.0'
-    compile group: 'org.thymeleaf', name: 'thymeleaf', version: '3.0.5.RELEASE'
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
 }
