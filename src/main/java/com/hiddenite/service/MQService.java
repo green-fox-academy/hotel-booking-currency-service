@@ -1,5 +1,6 @@
 package com.hiddenite.service;
 
+import com.google.gson.Gson;
 import com.hiddenite.model.Event;
 import com.rabbitmq.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,9 @@ public class MQService {
           throws IOException, TimeoutException, NoSuchAlgorithmException, KeyManagementException, URISyntaxException {
     channel = connection.createChannel();
     Event event = new Event(message);
-    channel.basicPublish("", queue, null, Event.asJsonString(event).getBytes());
-    System.out.println(" [x] Sent '" + Event.asJsonString(event) + "'");
+    String eventToJson = new Gson().toJson(event);
+    channel.basicPublish("", queue, null, eventToJson.getBytes());
+    System.out.println(" [x] Sent '" + eventToJson + "'");
   }
 
   public void consume(String queue) throws Exception {
