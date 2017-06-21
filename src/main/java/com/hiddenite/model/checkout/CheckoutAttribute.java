@@ -10,6 +10,14 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class CheckoutAttribute {
 
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
