@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class CheckoutAttribute {
@@ -13,11 +14,15 @@ public class CheckoutAttribute {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+  @NotNull
   @JsonProperty(value = "user_id")
   private Long userId;
+  @NotNull
   @JsonProperty(value = "booking_id")
   private Long bookingId;
+  @NotNull
   private int amount;
+  @NotNull
   private String  currency;
   private String status;
 
