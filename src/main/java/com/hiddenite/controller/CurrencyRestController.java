@@ -15,7 +15,7 @@ public class CurrencyRestController {
 
   @GetMapping("/heartbeat")
   public Status getStatus(javax.servlet.http.HttpServletRequest request) throws Exception {
-    return endPointService.handleEndPointRequest();
+    return endPointService.handleEndPointRequest(request);
   }
 
 }
