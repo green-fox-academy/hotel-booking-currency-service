@@ -1,5 +1,8 @@
 package com.hiddenite.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class Status {
   String status;
   String database;
@@ -27,7 +30,6 @@ public class Status {
     this.status = status;
   }
 
-
   public String getDatabase() {
     return database;
   }
@@ -36,7 +38,4 @@ public class Status {
     this.database = database;
   }
 
-  public boolean everythingIsOk() {
-    return (status.equals("ok") && database.equals("ok") && queue.equals("ok"));
-  }
 }
