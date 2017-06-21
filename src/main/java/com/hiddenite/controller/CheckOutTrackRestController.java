@@ -23,7 +23,7 @@ public class CheckOutTrackRestController {
   HandleRecievedCheckout handleRecievedCheckout;
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  @ResponseStatus(code = HttpStatus.CREATED)
+  @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ErrorMessage MissingBodyParamter(MethodArgumentNotValidException e, HttpServletRequest request) {
     String temp = "Missing field(s): ";
     List<FieldError> errors = e.getBindingResult().getFieldErrors();
