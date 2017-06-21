@@ -1,7 +1,5 @@
 package com.hiddenite.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.time.LocalDateTime;
 
 public class Event {
@@ -33,14 +31,4 @@ public class Event {
   public void setMessage(String message) {
     this.message = message;
   }
-
-  public static String asJsonString(final Object obj) {
-    try {
-      ObjectMapper mapper = new ObjectMapper();
-      return mapper.writeValueAsString(obj);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
-
 }
