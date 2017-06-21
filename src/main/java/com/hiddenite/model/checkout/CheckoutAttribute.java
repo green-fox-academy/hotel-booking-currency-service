@@ -1,8 +1,17 @@
 package com.hiddenite.model.checkout;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+@Entity
 public class CheckoutAttribute {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
   @JsonProperty(value = "user_id")
   private Long userId;
