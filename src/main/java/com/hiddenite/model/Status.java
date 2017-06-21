@@ -38,4 +38,8 @@ public class Status {
     this.database = database;
   }
 
+  public boolean everythingIsOk() {
+    return (getStatus().equals("ok") && getDatabase().equals("ok") && getQueue().equals("ok"));
+  }
+
 }

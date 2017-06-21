@@ -11,7 +11,6 @@ public class LoggingService {
 
   static Logger log = Logger.getLogger(MethodHandles.lookup().lookupClass());
 
-
   public void getLogMessage(HttpServletRequest request, Status status) {
 
     if (status.everythingIsOk()) {
