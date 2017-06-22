@@ -1,5 +1,6 @@
 package com.hiddenite.model.checkout;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hiddenite.model.ChargeRequest;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 public class CheckoutAttribute {
 
   @Id
+  @JsonIgnore
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
