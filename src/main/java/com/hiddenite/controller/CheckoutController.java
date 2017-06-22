@@ -27,6 +27,7 @@ public class CheckoutController {
       Checkout currentCheckout = checkOutRepository.findOne(checkoutId);
       amount = currentCheckout.getCheckoutData().getAttributes().getAmount();
       currency = currentCheckout.getCheckoutData().getAttributes().getCurrency();
+      model.addAttribute("checkout_id", checkoutId);
     } catch (Exception e) {
       e.printStackTrace();
     }

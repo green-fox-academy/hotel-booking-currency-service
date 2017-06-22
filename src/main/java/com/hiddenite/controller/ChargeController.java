@@ -3,6 +3,7 @@ package com.hiddenite.controller;
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
+import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.service.StripeService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -20,9 +21,11 @@ public class ChargeController {
   private StripeService paymentsService;
   @Autowired
   private ChargeRequestRepository chargeRequestRepository;
+  @Autowired
+  private CheckOutRepository checkOutRepository;
 
   @PostMapping("/charge")
-  public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency)
+  public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency, @RequestParam(value = "checkout_id", required = false) Long checkoutId)
           throws StripeException {
 //    chargeRequest.setDescription("Example charge");
     chargeRequest.setCurrency(currency);
@@ -31,6 +34,13 @@ public class ChargeController {
     model.addAttribute("status", charge.getStatus());
     model.addAttribute("chargeId", charge.getId());
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
+    checkOutRepository.findOne(checkoutId);
+    try {
+      checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
+      checkOutRepository.save(checkOutRepository.findOne(checkoutId));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
     chargeRequestRepository.save(chargeRequest);
     return "result";
   }

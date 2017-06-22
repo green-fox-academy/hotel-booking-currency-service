@@ -2,7 +2,10 @@ package com.hiddenite.controller;
 
 import com.google.gson.Gson;
 import com.hiddenite.CurrencyApplication;
+import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.checkout.Checkout;
+import com.hiddenite.model.checkout.CheckoutAttribute;
+import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,13 +41,23 @@ public class CheckOutTrackRestControllerTest {
   private WebApplicationContext webApplicationContext;
   @Autowired
   CheckOutRepository checkOutRepository;
-  Checkout checkout;
+  String checkout;
   String checkoutWithMissingField;
 
   @Before
   public void setup() throws Exception {
     mockMvc = webAppContextSetup(webApplicationContext).build();
-    checkout = new Checkout();
+    checkout = "   {\n" +
+            "     \"data\": {\n" +
+            "       \"type\": \"checkout\",\n" +
+            "       \"attributes\": {\n" +
+            "         \"user_id\": \"1\",\n" +
+            "         \"booking_id\": \"1\",\n" +
+            "         \"amount\": \"100\",\n" +
+            "         \"currency\": \"EUR\"\n" +
+            "       }\n" +
+            "     }\n" +
+            "   }";
     checkoutWithMissingField = "   {\n" +
             "     \"data\": {\n" +
             "       \"type\": \"checkout\",\n" +
@@ -59,11 +72,10 @@ public class CheckOutTrackRestControllerTest {
 
   @Test
   public void responseToCheckout() throws Exception {
-    Gson gson  = new Gson();
     checkOutRepository.deleteAll();
     mockMvc.perform(post("/api/checkouts")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(gson.toJson(checkout)))
+            .content(checkout))
             .andExpect(status().is2xxSuccessful())
             .andExpect(status().isCreated())
             .andExpect(content().contentType(contentType));

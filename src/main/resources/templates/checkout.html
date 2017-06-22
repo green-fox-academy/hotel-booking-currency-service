@@ -8,6 +8,7 @@
 <form action='/charge' method='POST' id='checkout-form'>
   <input type='hidden' th:value='${amount}' name='amount'/>
   <input type='hidden' th:value='${currency}' name='currency'/>
+  <input type='hidden' th:value='${checkout_id}' name='checkout_id'/>
   <label>Price:<span th:text='${amount / 100}'/></label>
   <script
           src='https://checkout.stripe.com/checkout.js'

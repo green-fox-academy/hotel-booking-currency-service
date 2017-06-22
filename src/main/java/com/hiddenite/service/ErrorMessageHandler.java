@@ -11,7 +11,7 @@ import java.util.List;
 @Service
 public class ErrorMessageHandler {
 
-  public ErrorMessage getErrorMessageWithMissingFields(MethodArgumentNotValidException e) {
+    public ErrorMessage getErrorMessageWithMissingFields(MethodArgumentNotValidException e) {
     Gson gson = new Gson();
     String temp = "The attribute fields: ";
     List<FieldError> errors = e.getBindingResult().getFieldErrors();

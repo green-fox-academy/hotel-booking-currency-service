@@ -14,6 +14,7 @@ public class HandleRecievedCheckout {
   public Checkout response(Checkout checkout) {
     checkOutRepository.save(checkout);
     checkout.setLinks(new CheckoutLinks(checkout.getId()));
+    checkout.getCheckoutData().getAttributes().setStatus("pending");
     checkOutRepository.save(checkout);
     return checkout;
   }
