@@ -1,6 +1,7 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
+import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.service.StripeService;
 import com.stripe.exception.StripeException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ChargeController {
@@ -20,10 +22,10 @@ public class ChargeController {
   private ChargeRequestRepository chargeRequestRepository;
 
   @PostMapping("/charge")
-  public String charge(ChargeRequest chargeRequest, Model model)
+  public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency)
           throws StripeException {
-    chargeRequest.setDescription("Example charge");
-    chargeRequest.setCurrency(ChargeRequest.Currency.EUR);
+//    chargeRequest.setDescription("Example charge");
+    chargeRequest.setCurrency(currency);
     Charge charge = paymentsService.charge(chargeRequest);
     model.addAttribute("id", charge.getId());
     model.addAttribute("status", charge.getStatus());

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,7 +20,6 @@ public class CheckoutController {
   private String stripePublicKey;
   private int amount = 5000;
   private ChargeRequest.Currency currency = ChargeRequest.Currency.EUR;
-
 
   @RequestMapping("/checkout")
   public String checkout(Model model, @RequestParam(name = "checkout_id", required = false) Long checkoutId) {
@@ -37,13 +35,5 @@ public class CheckoutController {
     model.addAttribute("currency", currency);
     return "checkout";
   }
-
-//  @RequestMapping("/charge")
-//  public String charge(Model model) {
-//    model.addAttribute("amount", amount);
-//    model.addAttribute("stripePublicKey", stripePublicKey);
-//    model.addAttribute("currency", currency);
-//    return "checkout";
-//  }
 
 }
