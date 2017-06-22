@@ -1,10 +1,12 @@
 package com.hiddenite.repository;
 
 import com.hiddenite.model.checkout.CheckoutData;
-import java.util.List;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
 
+@Repository
 public interface CheckoutDataRepository extends CrudRepository<CheckoutData, Long> {
   public List<CheckoutData> findAll();
 }

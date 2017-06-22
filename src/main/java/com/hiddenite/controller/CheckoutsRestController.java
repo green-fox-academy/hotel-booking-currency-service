@@ -14,8 +14,9 @@ public class CheckoutsRestController {
 
   @GetMapping(value = "/checkouts")
   public Checkouts getCheckouts() {
-    Checkouts checkouts = new Checkouts();
-    checkouts.setData(checkoutDataRepository.findAll());
+    Checkouts checkouts = new Checkouts(checkoutDataRepository);
+    checkouts.setData();
+    checkouts.setLinks();
     return checkouts;
   }
 
