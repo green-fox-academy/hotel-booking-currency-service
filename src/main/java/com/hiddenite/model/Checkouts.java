@@ -1,49 +1,35 @@
 package com.hiddenite.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenite.model.checkout.CheckoutData;
+import com.hiddenite.repository.CheckOutRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
 import java.util.List;
 
 public class Checkouts {
+  @JsonIgnore
+  @Autowired
+  CheckOutRepository checkOutRepository;
 
   private List<CheckoutData> Data;
-  private String self;
-  private String prev;
-  private String next;
-  private String last;
+
+  public HashMap<String, String> getLinks() {
+    return links;
+  }
+
+  public void setLinks(HashMap<String, String> links) {
+    this.links = links;
+  }
+
+  private HashMap<String, String> links;
 
   public Checkouts() {
-  }
-
-  public String getSelf() {
-    return self;
-  }
-
-  public void setSelf(String self) {
-    this.self = self;
-  }
-
-  public String getPrev() {
-    return prev;
-  }
-
-  public void setPrev(String prev) {
-    this.prev = prev;
-  }
-
-  public String getNext() {
-    return next;
-  }
-
-  public void setNext(String next) {
-    this.next = next;
-  }
-
-  public String getLast() {
-    return last;
-  }
-
-  public void setLast(String last) {
-    this.last = last;
+    links = new HashMap<>();
+    if (checkOutRepository.count() < 20) {
+      links.put("self", "https://your-hostname.com/api/checkout");
+    }
   }
 
   public List<CheckoutData> getData() {
