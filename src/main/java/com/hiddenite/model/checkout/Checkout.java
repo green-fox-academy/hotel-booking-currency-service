@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Table(name = "Checkout")
 @SecondaryTable(name = "Checkout_CHECKOUTLINKS",
@@ -19,8 +20,10 @@ public class Checkout {
 
   @OneToOne(cascade = {CascadeType.ALL})
   @JsonProperty(value = "data")
+  @Valid
   private CheckoutData checkoutData;
 
+  @Valid
   @Embedded
   @AttributeOverrides({
           @AttributeOverride(name = "self", column = @Column(table = "Checkout_CHECKOUTLINKS"))

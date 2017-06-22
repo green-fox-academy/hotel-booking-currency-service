@@ -1,8 +1,8 @@
 package com.hiddenite.model.checkout;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -12,8 +12,11 @@ public class CheckoutData {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
+
+  @NotNull
   private String type;
 
+  @Valid
   @OneToOne(cascade = {CascadeType.ALL})
   private CheckoutAttribute attributes;
 
@@ -31,5 +34,13 @@ public class CheckoutData {
 
   public void setAttributes(CheckoutAttribute attributes) {
     this.attributes = attributes;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 }
