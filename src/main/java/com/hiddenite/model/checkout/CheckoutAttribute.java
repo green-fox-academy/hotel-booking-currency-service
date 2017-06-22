@@ -1,37 +1,26 @@
 package com.hiddenite.model.checkout;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hiddenite.model.ChargeRequest;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 @Entity
 public class CheckoutAttribute {
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
-  @NotNull
   @JsonProperty(value = "user_id")
   private Long userId;
-  @NotNull
   @JsonProperty(value = "booking_id")
   private Long bookingId;
-  @NotNull
   private int amount;
-  @NotNull
-  private String  currency;
+  private ChargeRequest.Currency currency;
   private String status;
 
   public CheckoutAttribute() {
@@ -61,11 +50,11 @@ public class CheckoutAttribute {
     this.amount = amount;
   }
 
-  public String getCurrency() {
+  public ChargeRequest.Currency getCurrency() {
     return currency;
   }
 
-  public void setCurrency(String currency) {
+  public void setCurrency(ChargeRequest.Currency currency) {
     this.currency = currency;
   }
 
