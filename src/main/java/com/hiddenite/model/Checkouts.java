@@ -1,7 +1,6 @@
 package com.hiddenite.model;
 
 import com.hiddenite.model.checkout.CheckoutData;
-import com.hiddenite.repository.CheckoutDataRepository;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +10,7 @@ public class Checkouts {
   private HashMap<String, String> links;
   private List<CheckoutData> data;
 
-  public Checkouts(CheckoutDataRepository checkoutDataRepository) {
+  public Checkouts() {
     data = new ArrayList<>();
     links = new HashMap<>();
   }

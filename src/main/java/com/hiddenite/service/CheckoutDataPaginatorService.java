@@ -3,19 +3,26 @@ package com.hiddenite.service;
 import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckoutDataRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CheckoutDataPaginatorService {
 
+public class CheckoutDataPaginatorService {
   CheckoutDataRepository checkoutDataRepository;
   int totalPageNr;
 
+  @Autowired
   public CheckoutDataPaginatorService(CheckoutDataRepository checkoutDataRepository) {
     this.checkoutDataRepository = checkoutDataRepository;
     totalPageNr = (int) checkoutDataRepository.count()/20;
+  }
+
+  public CheckoutDataPaginatorService() {
   }
 
   public void setLinks(Checkouts checkouts, int actualPageNr) {
@@ -37,8 +44,9 @@ public class CheckoutDataPaginatorService {
     }
   }
 
-  public void setData(Checkouts checkouts, int pageNr) {
-    List<CheckoutData> checkoutDataList = checkoutDataRepository.findAll();
-    checkouts.setData(checkoutDataList.subList(pageNr * 20, pageNr + 19));
+  public void setData(Checkouts checkouts, int actualPageNr) {
+    List<CheckoutData> checkoutDataList = checkoutDataRepository.findAll(new PageRequest(actualPageNr,20, Sort
+            .Direction.ASC, "id")).getContent();
+    checkouts.setData(checkoutDataList);
   }
 }
