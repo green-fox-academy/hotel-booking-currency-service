@@ -24,9 +24,10 @@ public class Checkouts {
     return data;
   }
 
-  public void setData() {
-    data = checkoutDataRepository.findAll();
+  public void setData(List<CheckoutData> dataList) {
+    data = dataList;
   }
+
 
 
   public HashMap<String, String> getLinks() {
@@ -36,6 +37,7 @@ public class Checkouts {
   public void setLinks() {
     if (this.checkoutDataRepository.count() < 20) {
       links.put("self", "https://your-hostname.com/api/checkout");
+      links.put("ssecond", "https://your-hostname.com/api/checkout");
     }
   }
 }
