@@ -1,6 +1,5 @@
 package com.hiddenite.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckoutDataRepository;
 
@@ -9,35 +8,31 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Checkouts {
-  @JsonIgnore
-  CheckoutDataRepository checkoutDataRepository;
   private HashMap<String, String> links;
   private List<CheckoutData> data;
 
   public Checkouts(CheckoutDataRepository checkoutDataRepository) {
-    this.checkoutDataRepository = checkoutDataRepository;
     data = new ArrayList<>();
     links = new HashMap<>();
+  }
+
+  public HashMap<String, String> getLinks() {
+    return links;
+  }
+
+  public void setLinks(HashMap<String, String> links) {
+    this.links = links;
   }
 
   public List<CheckoutData> getData() {
     return data;
   }
 
-  public void setData(List<CheckoutData> dataList) {
-    data = dataList;
+  public void setData(List<CheckoutData> data) {
+    this.data = data;
   }
 
-
-
-  public HashMap<String, String> getLinks() {
-    return links;
-  }
-
-  public void setLinks() {
-    if (this.checkoutDataRepository.count() < 20) {
-      links.put("self", "https://your-hostname.com/api/checkout");
-      links.put("ssecond", "https://your-hostname.com/api/checkout");
-    }
+  public void putLinksMap(String key, String value) {
+    links.put(key, value);
   }
 }
