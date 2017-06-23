@@ -25,27 +25,36 @@ public class CheckoutDataPaginatorService {
   public CheckoutDataPaginatorService() {
   }
 
-  public void setLinks(Checkouts checkouts, int actualPageNr) {
+  public void setLinks(Checkouts checkouts, Integer actualPageNr) {
     if (totalPageNr < 1) {
       checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts");
-    } else if (totalPageNr == 2) {
-      if (actualPageNr == 1) {
-        checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr + 1));
+    } else if (totalPageNr == 1) {
+      if (actualPageNr == 2) {
+        checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr));
         checkouts.putLinksMap("previous", "https://your-hostname.com/api/checkouts");
       } else {
         checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts");
+        checkouts.putLinksMap("next", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr));
+      }
+    } else if (totalPageNr > 1) {
+      if (actualPageNr == 1) {
+        checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts");
+      } else if (actualPageNr == 2) {
+        checkouts.putLinksMap("previous", "https://your-hostname.com/api/checkouts");
+        checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr));
+      } else if (actualPageNr > 2) {
+        checkouts.putLinksMap("previous", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr - 1));
+        checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr));
+      }
+      checkouts.putLinksMap("last", "https://your-hostname.com/api/checkouts?page=" + (totalPageNr + 1));
+      if (actualPageNr != totalPageNr + 1) {
         checkouts.putLinksMap("next", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr + 1));
       }
-    } else if (totalPageNr > 2) {
-      checkouts.putLinksMap("self", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr + 1));
-      checkouts.putLinksMap("next", "https://your-hostname.com/api/checkouts?page=" + (actualPageNr + 2));
-      checkouts.putLinksMap("previous", "https://your-hostname.com/api/checkouts?page=" + actualPageNr);
-      checkouts.putLinksMap("last", "https://your-hostname.com/api/checkouts?page=" + totalPageNr);
     }
   }
 
   public void setData(Checkouts checkouts, int actualPageNr) {
-    List<CheckoutData> checkoutDataList = checkoutDataRepository.findAll(new PageRequest(actualPageNr,20, Sort
+    List<CheckoutData> checkoutDataList = checkoutDataRepository.findAll(new PageRequest(actualPageNr - 1,20, Sort
             .Direction.ASC, "id")).getContent();
     checkouts.setData(checkoutDataList);
   }

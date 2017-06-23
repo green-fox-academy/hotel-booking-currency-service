@@ -20,8 +20,8 @@ public class CheckoutsRestController {
       checkoutDataPaginatorService.setData(checkouts, actualPageNumber);
       checkoutDataPaginatorService.setLinks(checkouts, actualPageNumber);
     } else {
-      checkoutDataPaginatorService.setData(checkouts, 0);
-      checkoutDataPaginatorService.setLinks(checkouts, 0);
+      checkoutDataPaginatorService.setData(checkouts, 1);
+      checkoutDataPaginatorService.setLinks(checkouts, 1);
     }
     return checkouts;
   }
