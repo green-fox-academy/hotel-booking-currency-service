@@ -1,7 +1,6 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.service.StripeService;
@@ -36,7 +35,7 @@ public class ChargeController {
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
     checkOutRepository.findOne(checkoutId);
     try {
-      checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
+      checkOutRepository.findOne(checkoutId + 1).getCheckoutData().getAttributes().setStatus("success");
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();

@@ -8,7 +8,7 @@ public class CheckoutLinks {
   private String self;
 
   public CheckoutLinks(Long id) {
-    this.self = "https://your-hostname.com/checkout/" + id;
+    this.self = "https://your-hostname.com/checkout/" + (id - 1);
   }
 
   public CheckoutLinks() {

@@ -2,12 +2,9 @@ package com.hiddenite.controller;
 
 import com.hiddenite.model.ErrorMessage;
 import com.hiddenite.model.checkout.Checkout;
-import com.hiddenite.model.checkout.CheckoutLinks;
-import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.service.ErrorMessageHandler;
 import com.hiddenite.service.HandleRecievedCheckout;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +24,7 @@ public class CheckOutTrackRestController {
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ErrorMessage missingBodyParamter(MethodArgumentNotValidException e) {
     return errorMessageHandler.getErrorMessageWithMissingFields(e);
-  }
+}
 
   @RequestMapping(value = "/api/checkouts", method = RequestMethod.POST)
   @ResponseStatus(code = HttpStatus.CREATED)
