@@ -14,10 +14,15 @@ public class CheckoutsRestController {
   CheckoutDataPaginatorService checkoutDataPaginatorService;
 
   @GetMapping(value = "/checkouts")
-  public Checkouts getCheckouts(@RequestParam(name = "page", required = false) int actualPageNumber) {
+  public Checkouts getCheckouts(@RequestParam(name = "page", required = false) Integer actualPageNumber) {
     Checkouts checkouts = new Checkouts();
-    checkoutDataPaginatorService.setData(checkouts, actualPageNumber);
-    checkoutDataPaginatorService.setLinks(checkouts,actualPageNumber);
+    if (actualPageNumber != null) {
+      checkoutDataPaginatorService.setData(checkouts, actualPageNumber);
+      checkoutDataPaginatorService.setLinks(checkouts, actualPageNumber);
+    } else {
+      checkoutDataPaginatorService.setData(checkouts, 0);
+      checkoutDataPaginatorService.setLinks(checkouts, 0);
+    }
     return checkouts;
   }
 }

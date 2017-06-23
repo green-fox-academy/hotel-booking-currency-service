@@ -14,12 +14,12 @@ import java.util.List;
 
 public class CheckoutDataPaginatorService {
   CheckoutDataRepository checkoutDataRepository;
-  int totalPageNr;
+  long totalPageNr;
 
   @Autowired
   public CheckoutDataPaginatorService(CheckoutDataRepository checkoutDataRepository) {
     this.checkoutDataRepository = checkoutDataRepository;
-    totalPageNr = (int) checkoutDataRepository.count()/20;
+    totalPageNr = checkoutDataRepository.count()/20;
   }
 
   public CheckoutDataPaginatorService() {
