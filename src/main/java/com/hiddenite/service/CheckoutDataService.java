@@ -1,9 +1,8 @@
 package com.hiddenite.service;
 
-import com.google.gson.Gson;
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
-import com.hiddenite.model.ErrorMessage;
+import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
@@ -104,13 +103,7 @@ public class CheckoutDataService {
     return checkoutDataRepository.findAllByAttributes_Currency(currency);
   }
 
-  public Object getCheckoutById(long id) {
-    try {
-      return checkOutRepository.findOne(id);
-    } catch (Exception e) {
-      Gson gson = new Gson();
-      ErrorMessage errors = new ErrorMessage(404, "Bad Request", "No checkouts found by id: " + 1);
-      return gson.toJson(errors);
-    }
+  public Checkout getCheckoutById(long id) {
+    return checkOutRepository.findOne(id);
   }
 }

@@ -32,7 +32,7 @@ public class CheckoutsRestController {
     return checkouts;
   }
 
-  @GetMapping(value = "/api/checkout/{id}")
+  @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id) {
     return checkoutDataService.getCheckoutById(id);
   }
