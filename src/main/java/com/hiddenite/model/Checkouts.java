@@ -20,7 +20,7 @@ public class Checkouts {
   }
 
   public void setLinks(HashMap<String, String> links) {
-    this.links = links;
+      this.links = links;
   }
 
   public List<CheckoutData> getData() {
@@ -31,7 +31,7 @@ public class Checkouts {
     this.data = data;
   }
 
-  public void putLinksMap(String key, String value) {
+  public void putLinksToMap(String key, String value) {
     links.put(key, value);
   }
 }

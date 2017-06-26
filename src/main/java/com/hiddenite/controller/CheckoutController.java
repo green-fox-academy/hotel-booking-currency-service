@@ -18,7 +18,7 @@ public class CheckoutController {
 
   @Value("${STRIPE_PUBLIC_KEY}")
   private String stripePublicKey;
-  private int amount = 5000;
+  private int amount;
   private ChargeRequest.Currency currency = ChargeRequest.Currency.EUR;
 
   @RequestMapping("/checkout")
@@ -36,5 +36,4 @@ public class CheckoutController {
     model.addAttribute("currency", currency);
     return "checkout";
   }
-
 }

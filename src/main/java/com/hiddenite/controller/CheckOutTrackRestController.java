@@ -24,12 +24,11 @@ public class CheckOutTrackRestController {
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)
   public ErrorMessage missingBodyParamter(MethodArgumentNotValidException e) {
     return errorMessageHandler.getErrorMessageWithMissingFields(e);
-}
+  }
 
   @RequestMapping(value = "/api/checkouts", method = RequestMethod.POST)
   @ResponseStatus(code = HttpStatus.CREATED)
   public Checkout responseToCheckout(@RequestBody @Valid Checkout recievedCheckout) {
     return handleRecievedCheckout.response(recievedCheckout);
   }
-
 }

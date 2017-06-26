@@ -9,19 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CheckoutsRestController {
-
   @Autowired
-  CheckoutDataPaginatorService checkoutDataPaginatorService;
+  private CheckoutDataPaginatorService checkoutDataPaginatorService;
 
   @GetMapping(value = "/checkouts")
   public Checkouts getCheckouts(@RequestParam(name = "page", required = false) Integer actualPageNumber) {
     Checkouts checkouts = new Checkouts();
     if (actualPageNumber != null) {
-      checkoutDataPaginatorService.setData(checkouts, actualPageNumber);
-      checkoutDataPaginatorService.setLinks(checkouts, actualPageNumber);
+      checkoutDataPaginatorService.setCheckouts(checkouts, actualPageNumber);
     } else {
-      checkoutDataPaginatorService.setData(checkouts, 1);
-      checkoutDataPaginatorService.setLinks(checkouts, 1);
+      checkoutDataPaginatorService.setCheckouts(checkouts, 1);
     }
     return checkouts;
   }

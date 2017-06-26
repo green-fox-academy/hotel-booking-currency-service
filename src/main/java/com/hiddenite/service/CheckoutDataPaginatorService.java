@@ -7,58 +7,58 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
-
 public class CheckoutDataPaginatorService {
-  CheckoutDataRepository checkoutDataRepository;
-  long totalPageNr;
+  private CheckoutDataRepository checkoutDataRepository;
+  private int totalPageNr;
+  private final String BASIC_CHECKOUT_LINK = "https://your-hostname.com/api/checkouts";
+  private final String CHECKOUT_WITH_QUERY_LINK = "https://your-hostname.com/api/checkouts?page=";
+  private final int CHECKOUTS_PER_PAGE = 20;
 
   @Autowired
   public CheckoutDataPaginatorService(CheckoutDataRepository checkoutDataRepository) {
     this.checkoutDataRepository = checkoutDataRepository;
-    totalPageNr = checkoutDataRepository.count()/20;
+    totalPageNr = (int) checkoutDataRepository.count()/ CHECKOUTS_PER_PAGE + 1;
   }
 
-  public CheckoutDataPaginatorService() {
-  }
-
-  public void setLinks(Checkouts checkouts, Integer actualPageNr) {
-    String basicCheckout = "https://your-hostname.com/api/checkouts";
-    String checkoutWithQuery = "https://your-hostname.com/api/checkouts?page=";
-    if (totalPageNr < 1) {
-      checkouts.putLinksMap("self", basicCheckout);
-    } else if (totalPageNr == 1) {
+  private void addLinks(Checkouts checkouts, int actualPageNr) {
+    if (totalPageNr <= 2) {
       if (actualPageNr == 2) {
-        checkouts.putLinksMap("self", checkoutWithQuery + (actualPageNr));
-        checkouts.putLinksMap("previous", basicCheckout);
+        checkouts.putLinksToMap("self", CHECKOUT_WITH_QUERY_LINK + (actualPageNr));
+        checkouts.putLinksToMap("previous", BASIC_CHECKOUT_LINK);
       } else {
-        checkouts.putLinksMap("self", basicCheckout);
-        checkouts.putLinksMap("next", checkoutWithQuery + (actualPageNr));
+        checkouts.putLinksToMap("self", BASIC_CHECKOUT_LINK);
+        checkouts.putLinksToMap("next", CHECKOUT_WITH_QUERY_LINK + (actualPageNr + 1));
       }
-    } else if (totalPageNr > 1) {
+    } else if (totalPageNr > 2) {
       if (actualPageNr == 1) {
-        checkouts.putLinksMap("self", basicCheckout);
-      } else if (actualPageNr == 2) {
-        checkouts.putLinksMap("previous", basicCheckout);
-        checkouts.putLinksMap("self", checkoutWithQuery + (actualPageNr));
-      } else if (actualPageNr > 2) {
-        checkouts.putLinksMap("previous", checkoutWithQuery + (actualPageNr - 1));
-        checkouts.putLinksMap("self", checkoutWithQuery + (actualPageNr));
+        checkouts.putLinksToMap("self", BASIC_CHECKOUT_LINK);
+      } else {
+        checkouts.putLinksToMap("self", CHECKOUT_WITH_QUERY_LINK + (actualPageNr));
+        if (actualPageNr == 2) {
+          checkouts.putLinksToMap("previous", BASIC_CHECKOUT_LINK);
+        } else if (actualPageNr > 2) {
+          checkouts.putLinksToMap("previous", CHECKOUT_WITH_QUERY_LINK + (actualPageNr - 1));
+        }
       }
-      checkouts.putLinksMap("last", checkoutWithQuery + (totalPageNr + 1));
-      if (actualPageNr != totalPageNr + 1) {
-        checkouts.putLinksMap("next", checkoutWithQuery + (actualPageNr + 1));
+      if (actualPageNr != totalPageNr) {
+        checkouts.putLinksToMap("next", CHECKOUT_WITH_QUERY_LINK + (actualPageNr + 1));
       }
+      checkouts.putLinksToMap("last", CHECKOUT_WITH_QUERY_LINK + totalPageNr);
     }
   }
 
-  public void setData(Checkouts checkouts, int actualPageNr) {
+  private void setCheckOutData(Checkouts checkouts, int actualPageNr) {
     List<CheckoutData> checkoutDataList = checkoutDataRepository
             .findAll(new PageRequest(actualPageNr - 1,20, Sort.Direction.ASC, "id"))
             .getContent();
     checkouts.setData(checkoutDataList);
+  }
+
+  public void setCheckouts(Checkouts checkouts, int actualPageNr) {
+    addLinks(checkouts, actualPageNr);
+    setCheckOutData(checkouts, actualPageNr);
   }
 }
