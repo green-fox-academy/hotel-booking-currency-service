@@ -1,16 +1,19 @@
 package com.hiddenite.service;
 
+import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckoutDataRepository;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
-public class CheckoutDataPaginatorService {
+public class CheckoutDataService {
   private CheckoutDataRepository checkoutDataRepository;
   private int totalPageNr;
   private final String BASIC_CHECKOUT_LINK = "https://your-hostname.com/api/checkouts";
@@ -18,7 +21,7 @@ public class CheckoutDataPaginatorService {
   private final int CHECKOUTS_PER_PAGE = 20;
 
   @Autowired
-  public CheckoutDataPaginatorService(CheckoutDataRepository checkoutDataRepository) {
+  public CheckoutDataService(CheckoutDataRepository checkoutDataRepository) {
     this.checkoutDataRepository = checkoutDataRepository;
     totalPageNr = (int) checkoutDataRepository.count()/ CHECKOUTS_PER_PAGE + 1;
   }
@@ -57,8 +60,42 @@ public class CheckoutDataPaginatorService {
     checkouts.setData(checkoutDataList);
   }
 
-  public void setCheckouts(Checkouts checkouts, int actualPageNr) {
+  public void listCheckoutsByPages(Checkouts checkouts, int actualPageNr) {
     addLinks(checkouts, actualPageNr);
     setCheckOutData(checkouts, actualPageNr);
+  }
+
+  public void setCheckoutFiltering(Checkouts checkouts, HttpServletRequest request) {
+    String filterName = request.getParameterNames().nextElement();
+    checkouts.putLinksToMap("self", "https://your-hostname.com/checkouts?" + filterName + "=" + request.getParameter
+            (filterName));
+
+    if(filterName.equals("booking_id")) {
+      checkouts.setData(getCheckoutListByBookingId(Long.valueOf(request.getParameter(filterName))));
+    } else if(filterName.equals("user_id")) {
+      checkouts.setData(getCheckoutListByUserId(Long.valueOf(request.getParameter
+              (filterName))));
+    } else if(filterName.equals("currency")) {
+      checkouts.setData(getCheckoutListByCurrency(ChargeRequest.Currency.valueOf(request.getParameter
+              (filterName))));
+    } else if(filterName.equals("status")) {
+      checkouts.setData(getCheckoutListByStatus(request.getParameter(filterName)));
+    }
+  }
+
+  private List<CheckoutData> getCheckoutListByBookingId(long filterparam) {
+    return checkoutDataRepository.findAllByAttributes_BookingId(filterparam);
+  }
+
+  private List<CheckoutData> getCheckoutListByUserId(long filterparam) {
+    return checkoutDataRepository.findAllByAttributes_UserId(filterparam);
+  }
+
+  private List<CheckoutData> getCheckoutListByStatus(String status) {
+    return checkoutDataRepository.findAllByAttributes_Status(status);
+  }
+
+  private List<CheckoutData> getCheckoutListByCurrency(ChargeRequest.Currency currency) {
+    return checkoutDataRepository.findAllByAttributes_Currency(currency);
   }
 }

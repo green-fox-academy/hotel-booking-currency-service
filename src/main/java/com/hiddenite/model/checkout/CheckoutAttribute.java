@@ -12,7 +12,6 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class CheckoutAttribute {
-
   @Id
   @JsonIgnore
   @GeneratedValue(strategy = GenerationType.AUTO)
