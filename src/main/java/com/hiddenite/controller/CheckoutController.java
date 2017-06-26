@@ -19,7 +19,7 @@ public class CheckoutController {
   @Value("${STRIPE_PUBLIC_KEY}")
   private String stripePublicKey;
   private int amount;
-  private ChargeRequest.Currency currency = ChargeRequest.Currency.EUR;
+  private ChargeRequest.Currency currency;
 
   @RequestMapping("/checkout")
   public String checkout(Model model, @RequestParam(name = "checkout_id", required = false) Long checkoutId) {
