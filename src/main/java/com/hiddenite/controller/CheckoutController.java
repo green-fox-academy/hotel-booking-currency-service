@@ -24,7 +24,7 @@ public class CheckoutController {
   @RequestMapping("/checkout")
   public String checkout(Model model, @RequestParam(name = "checkout_id", required = false) Long checkoutId) {
     try {
-      Checkout currentCheckout = checkOutRepository.findOne(checkoutId + 1);
+      Checkout currentCheckout = checkOutRepository.findOne(checkoutId);
       amount = currentCheckout.getCheckoutData().getAttributes().getAmount();
       currency = currentCheckout.getCheckoutData().getAttributes().getCurrency();
       model.addAttribute("checkout_id", checkoutId);

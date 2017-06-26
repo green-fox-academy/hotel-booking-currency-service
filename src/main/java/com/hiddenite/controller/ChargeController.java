@@ -35,7 +35,7 @@ public class ChargeController {
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
     checkOutRepository.findOne(checkoutId);
     try {
-      checkOutRepository.findOne(checkoutId + 1).getCheckoutData().getAttributes().setStatus("success");
+      checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();
