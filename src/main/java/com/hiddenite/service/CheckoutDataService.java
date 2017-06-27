@@ -2,6 +2,7 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
+import com.hiddenite.model.checkout.CheckoutLinks;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
@@ -106,6 +107,16 @@ public class CheckoutDataService {
   public Object getCheckoutById(long id) throws NoIndexException {
     if (checkOutRepository.exists(id)) {
       return checkOutRepository.findOne(id);
+    } else {
+      throw new NoIndexException("NOT_FOUND", id);
+    }
+  }
+
+  public Object deleteCheckoutById(Long id) throws NoIndexException {
+    if (checkOutRepository.exists(id)) {
+      CheckoutLinks tempLinks = checkOutRepository.findOne(id).getLinks();
+      checkOutRepository.delete(id);
+      return tempLinks;
     } else {
       throw new NoIndexException("NOT_FOUND", id);
     }

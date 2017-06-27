@@ -31,11 +31,15 @@ public class CheckoutsRestController {
     checkoutDataService.setCheckoutFiltering(checkouts, request);
     return checkouts;
   }
-
-
+  
   @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id) throws NoIndexException {
     return checkoutDataService.getCheckoutById(id);
+  }
+
+  @DeleteMapping(value = "/api/checkouts/{id}")
+  public Object deleteCheckout(@PathVariable(name = "id") Long id) throws NoIndexException {
+    return checkoutDataService.deleteCheckoutById(id);
   }
 
   @ExceptionHandler(NoIndexException.class)
