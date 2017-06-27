@@ -24,7 +24,7 @@ public class CheckoutAttribute {
   @JsonProperty(value = "booking_id")
   private Long bookingId;
   @NotNull
-  private int amount;
+  private Integer amount;
   @NotNull
   private ChargeRequest.Currency currency;
   private String status;
@@ -48,11 +48,11 @@ public class CheckoutAttribute {
     this.bookingId = bookingId;
   }
 
-  public int getAmount() {
+  public Integer getAmount() {
     return amount;
   }
 
-  public void setAmount(int amount) {
+  public void setAmount(Integer amount) {
     this.amount = amount;
   }
 

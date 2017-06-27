@@ -1,4 +1,4 @@
-package com.hiddenite.model;
+package com.hiddenite.model.error;
 
 public class ErrorMessage {
   private int status;
