@@ -1,7 +1,6 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.service.StripeService;
@@ -27,7 +26,6 @@ public class ChargeController {
   @PostMapping("/charge")
   public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency, @RequestParam(value = "checkout_id", required = false) Long checkoutId)
           throws StripeException {
-//    chargeRequest.setDescription("Example charge");
     chargeRequest.setCurrency(currency);
     Charge charge = paymentsService.charge(chargeRequest);
     model.addAttribute("id", charge.getId());

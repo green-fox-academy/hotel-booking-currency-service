@@ -26,8 +26,7 @@ public class Checkout {
   @Valid
   @Embedded
   @AttributeOverrides({
-          @AttributeOverride(name = "self", column = @Column(table = "Checkout_CHECKOUTLINKS"))
-  })
+          @AttributeOverride(name = "self", column = @Column(table = "Checkout_CHECKOUTLINKS"))})
   private CheckoutLinks links;
 
   public CheckoutData getCheckoutData() {
