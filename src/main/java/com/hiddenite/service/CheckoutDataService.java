@@ -132,7 +132,7 @@ public class CheckoutDataService {
     if (checkOutRepository.exists(inputCheckout.getCheckoutData().getId())) {
       BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
       Checkout checkout = checkOutRepository.findOne(inputCheckout.getCheckoutData().getId());
-      notNull.copyProperties(checkout, inputCheckout);
+      notNull.copyProperties(checkout.getCheckoutData().getAttributes(), inputCheckout.getCheckoutData().getAttributes());
       checkOutRepository.save(checkout);
       return checkout;
     } else {
