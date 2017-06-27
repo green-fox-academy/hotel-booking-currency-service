@@ -37,7 +37,7 @@ public class CheckoutsRestController {
     Checkouts checkouts = new Checkouts();
     checkoutDataService.setCheckoutFiltering(checkouts, request);
     return checkouts;
-  }
+}
 
   @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id) throws NoIndexException {

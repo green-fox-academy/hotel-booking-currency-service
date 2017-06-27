@@ -1,11 +1,6 @@
 package com.hiddenite.controller;
 
-import com.google.gson.Gson;
 import com.hiddenite.CurrencyApplication;
-import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.checkout.Checkout;
-import com.hiddenite.model.checkout.CheckoutAttribute;
-import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import org.junit.Before;
 import org.junit.Test;
