@@ -19,6 +19,14 @@ public class CheckoutData {
   @OneToOne(cascade = {CascadeType.ALL})
   private CheckoutAttribute attributes;
 
+  public CheckoutData() {
+  }
+
+  public CheckoutData(String type, CheckoutAttribute attributes) {
+    this.type = type;
+    this.attributes = attributes;
+  }
+
   public String getType() {
     return type;
   }

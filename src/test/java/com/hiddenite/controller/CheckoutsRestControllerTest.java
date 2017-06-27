@@ -5,7 +5,6 @@ import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.checkout.CheckoutAttribute;
 import com.hiddenite.model.checkout.CheckoutData;
-import com.hiddenite.model.checkout.CheckoutLinks;
 import com.hiddenite.repository.CheckOutRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +20,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.nio.charset.Charset;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
@@ -47,39 +46,17 @@ public class CheckoutsRestControllerTest {
   @Before
   public void setup() throws Exception {
     mockMvc = webAppContextSetup(webApplicationContext).build();
-    EURcheckout = new Checkout();
-    EURcheckout.setCheckoutData(new CheckoutData());
-    EURcheckout.setLinks(new CheckoutLinks());
-    EURcheckout.getLinks().setSelf(1L);
-    EURcheckout.getCheckoutData().setAttributes(new CheckoutAttribute());
-    EURcheckout.getCheckoutData().getAttributes().setCurrency(ChargeRequest.Currency.EUR);
-    EURcheckout.getCheckoutData().getAttributes().setAmount(5000);
-    EURcheckout.getCheckoutData().getAttributes().setBookingId(1L);
-    EURcheckout.getCheckoutData().getAttributes().setUserId(1L);
-    EURcheckout.getCheckoutData().getAttributes().setStatus("pending");
-
-    USDcheckout = new Checkout();
-    USDcheckout.setCheckoutData(new CheckoutData());
-    USDcheckout.setLinks(new CheckoutLinks());
-    USDcheckout.getLinks().setSelf(1L);
-    USDcheckout.getCheckoutData().setAttributes(new CheckoutAttribute());
-    USDcheckout.getCheckoutData().getAttributes().setCurrency(ChargeRequest.Currency.USD);
-    USDcheckout.getCheckoutData().getAttributes().setAmount(5000);
-    USDcheckout.getCheckoutData().getAttributes().setBookingId(1L);
-    USDcheckout.getCheckoutData().getAttributes().setUserId(1L);
-    USDcheckout.getCheckoutData().getAttributes().setStatus("pending");
+    CheckoutAttribute checkoutAttribute = new CheckoutAttribute(1L, 1L, 5000, ChargeRequest.Currency.EUR, "pending");
+    CheckoutData checkoutData = new CheckoutData("checkout", checkoutAttribute);
+    EURcheckout = new Checkout(checkoutData);
   }
 
   @Test
-  public void filterCheckouts() throws Exception {
-//    BDDMockito.given(EURcheckout.getCheckoutData().getAttributes().getCurrency()).willReturn(ChargeRequest.Currency
-//            .EUR);
-//    BDDMockito.given(USDcheckout.getCheckoutData().getAttributes().getCurrency()).willReturn(ChargeRequest.Currency
-//            .USD);
+  public void testFilterCheckouts() throws Exception {
     checkOutRepository.deleteAll();
     checkOutRepository.save(EURcheckout);
-    checkOutRepository.save(USDcheckout);
-    mockMvc.perform(post("/api/checkouts")
+//    checkOutRepository.save(USDcheckout);
+    mockMvc.perform(get("/checkouts")
             .param("currency", "EUR"))
             .andExpect(status().isOk());
   }

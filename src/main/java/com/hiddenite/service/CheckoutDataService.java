@@ -8,13 +8,13 @@ import com.hiddenite.model.checkout.CheckoutLinks;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 

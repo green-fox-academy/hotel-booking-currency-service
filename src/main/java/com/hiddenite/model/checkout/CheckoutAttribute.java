@@ -32,6 +32,14 @@ public class CheckoutAttribute {
   public CheckoutAttribute() {
   }
 
+  public CheckoutAttribute(Long userId, Long bookingId, Integer amount, ChargeRequest.Currency currency, String status) {
+    this.userId = userId;
+    this.bookingId = bookingId;
+    this.amount = amount;
+    this.currency = currency;
+    this.status = status;
+  }
+
   public Long getUserId() {
     return userId;
   }
