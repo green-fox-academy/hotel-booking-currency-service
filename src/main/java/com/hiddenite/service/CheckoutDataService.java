@@ -3,9 +3,9 @@ package com.hiddenite.service;
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.Checkout;
+import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.model.checkout.CheckoutLinks;
 import com.hiddenite.model.error.NoIndexException;
-import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
@@ -15,8 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
