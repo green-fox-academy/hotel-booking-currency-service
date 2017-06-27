@@ -136,7 +136,7 @@ public class CheckoutDataService {
       checkOutRepository.save(checkout);
       return checkout;
     } else {
-      throw new NoIndexException("NOT_FOUND", inputCheckout.getId());
+      throw new NoIndexException("NOT_FOUND", inputCheckout.getCheckoutData().getId());
     }
   }
 }
