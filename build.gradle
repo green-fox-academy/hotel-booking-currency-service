@@ -38,4 +38,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile 'com.google.code.gson:gson:2.3.1'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.8.3'
+    compile group: 'org.aspectj', name: 'aspectjweaver', version: '1.8.10'
+    compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.10'
+    compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
 }

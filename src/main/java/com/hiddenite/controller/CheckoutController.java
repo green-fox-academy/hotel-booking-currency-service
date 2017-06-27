@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,8 +22,8 @@ public class CheckoutController {
   private int amount;
   private ChargeRequest.Currency currency;
 
-  @RequestMapping("/checkout")
-  public String checkout(Model model, @RequestParam(name = "checkout_id", required = false) Long checkoutId) {
+  @GetMapping("/checkout")
+  public String checkout(Model model, @RequestParam(name = "checkout_id", required = false) Long checkoutId, javax.servlet.http.HttpServletRequest request) {
     try {
       Checkout currentCheckout = checkOutRepository.findOne(checkoutId);
       amount = currentCheckout.getCheckoutData().getAttributes().getAmount();

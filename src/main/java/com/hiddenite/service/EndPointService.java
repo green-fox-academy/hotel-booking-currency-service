@@ -9,9 +9,6 @@ import org.springframework.stereotype.Service;
 public class EndPointService {
 
   @Autowired
-  LoggingService loggingService;
-
-  @Autowired
   MQService mqService;
 
   @Autowired
@@ -24,7 +21,6 @@ public class EndPointService {
       throws Exception {
     mqService.sendMessageToQueue("heartbeat", "Hello World!");
     mqService.consume("heartbeat");
-    loggingService.getLogMessage(request,statusService.checkStatus());
     return statusService.checkStatus();
   }
 }
