@@ -1,18 +1,25 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Checkouts;
+import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.error.NoIndexException;
+import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.service.CheckoutDataService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.InvocationTargetException;
+
+
 @RestController
 public class CheckoutsRestController {
   @Autowired
   private CheckoutDataService checkoutDataService;
+  @Autowired
+  private CheckOutRepository checkOutRepository;
 
   @GetMapping(value = "/api/checkouts")
   public Checkouts getCheckouts(@RequestParam(name = "page", required = false) Integer actualPageNumber) {
@@ -31,7 +38,7 @@ public class CheckoutsRestController {
     checkoutDataService.setCheckoutFiltering(checkouts, request);
     return checkouts;
   }
-  
+
   @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id) throws NoIndexException {
     return checkoutDataService.getCheckoutById(id);
@@ -41,6 +48,13 @@ public class CheckoutsRestController {
   public Object deleteCheckout(@PathVariable(name = "id") Long id) throws NoIndexException {
     return checkoutDataService.deleteCheckoutById(id);
   }
+
+
+  @PatchMapping(value = "/api/checkouts/{id}")
+  public Object updateCheckout(@RequestBody Checkout checkout, @PathVariable(name = "id") Long id) throws NoIndexException, InvocationTargetException, IllegalAccessException {
+    return checkoutDataService.updateCheckout(checkout);
+  }
+
 
   @ExceptionHandler(NoIndexException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)

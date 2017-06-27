@@ -2,17 +2,22 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
+import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.checkout.CheckoutLinks;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
+import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @Service
@@ -23,6 +28,7 @@ public class CheckoutDataService {
   private final String BASIC_CHECKOUT_LINK = "https://your-hostname.com/api/checkouts";
   private final String CHECKOUT_WITH_QUERY_LINK = "https://your-hostname.com/api/checkouts?page=";
   private final int CHECKOUTS_PER_PAGE = 20;
+  private Checkout checkout;
 
   @Autowired
   public CheckoutDataService(CheckoutDataRepository checkoutDataRepository, CheckOutRepository checkOutRepository) {
@@ -119,6 +125,18 @@ public class CheckoutDataService {
       return tempLinks;
     } else {
       throw new NoIndexException("NOT_FOUND", id);
+    }
+  }
+
+  public Object updateCheckout(Checkout inputCheckout) throws NoIndexException, IllegalAccessException, InvocationTargetException {
+    if (checkOutRepository.exists(inputCheckout.getCheckoutData().getId())) {
+      BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
+      Checkout checkout = checkOutRepository.findOne(inputCheckout.getCheckoutData().getId());
+      notNull.copyProperties(checkout, inputCheckout);
+      checkOutRepository.save(checkout);
+      return checkout;
+    } else {
+      throw new NoIndexException("NOT_FOUND", inputCheckout.getId());
     }
   }
 }
