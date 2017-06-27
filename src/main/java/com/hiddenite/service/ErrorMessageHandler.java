@@ -1,7 +1,7 @@
 package com.hiddenite.service;
 
 import com.google.gson.Gson;
-import com.hiddenite.model.ErrorMessage;
+import com.hiddenite.model.error.ErrorMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
