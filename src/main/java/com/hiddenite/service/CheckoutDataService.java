@@ -107,7 +107,7 @@ public class CheckoutDataService {
     if (checkOutRepository.exists(id)) {
       return checkOutRepository.findOne(id);
     } else {
-      throw new NoIndexException("BAD_REQUEST");
+      throw new NoIndexException("NOT_FOUND", id);
     }
   }
 }

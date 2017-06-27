@@ -41,7 +41,7 @@ public class CheckoutsRestController {
   @ExceptionHandler(NoIndexException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)
   public ErrorMessage notExistingId() {
-    return new ErrorMessage(404, "Not found", "No checkouts found by id: ");
+    return new ErrorMessage(404, "Not found", "No checkouts found by id: " + NoIndexException.index);
   }
 
 }
