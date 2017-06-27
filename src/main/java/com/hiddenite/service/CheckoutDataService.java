@@ -2,7 +2,7 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
-import com.hiddenite.model.checkout.Checkout;
+import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
@@ -27,7 +27,7 @@ public class CheckoutDataService {
   public CheckoutDataService(CheckoutDataRepository checkoutDataRepository, CheckOutRepository checkOutRepository) {
     this.checkoutDataRepository = checkoutDataRepository;
     this.checkOutRepository = checkOutRepository;
-    totalPageNr = (int) checkoutDataRepository.count()/ CHECKOUTS_PER_PAGE + 1;
+    totalPageNr = (int) checkoutDataRepository.count() / CHECKOUTS_PER_PAGE + 1;
   }
 
   private void addLinks(Checkouts checkouts, int actualPageNr) {
@@ -59,7 +59,7 @@ public class CheckoutDataService {
 
   private void setCheckOutData(Checkouts checkouts, int actualPageNr) {
     List<CheckoutData> checkoutDataList = checkoutDataRepository
-            .findAll(new PageRequest(actualPageNr - 1,20, Sort.Direction.ASC, "id"))
+            .findAll(new PageRequest(actualPageNr - 1, 20, Sort.Direction.ASC, "id"))
             .getContent();
     checkouts.setData(checkoutDataList);
   }
@@ -74,15 +74,15 @@ public class CheckoutDataService {
     checkouts.putLinksToMap("self", "https://your-hostname.com/checkouts?" + filterName + "=" + request.getParameter
             (filterName));
 
-    if(filterName.equals("booking_id")) {
+    if (filterName.equals("booking_id")) {
       checkouts.setData(getCheckoutListByBookingId(Long.valueOf(request.getParameter(filterName))));
-    } else if(filterName.equals("user_id")) {
+    } else if (filterName.equals("user_id")) {
       checkouts.setData(getCheckoutListByUserId(Long.valueOf(request.getParameter
               (filterName))));
-    } else if(filterName.equals("currency")) {
+    } else if (filterName.equals("currency")) {
       checkouts.setData(getCheckoutListByCurrency(ChargeRequest.Currency.valueOf(request.getParameter
               (filterName))));
-    } else if(filterName.equals("status")) {
+    } else if (filterName.equals("status")) {
       checkouts.setData(getCheckoutListByStatus(request.getParameter(filterName)));
     }
   }
@@ -103,7 +103,11 @@ public class CheckoutDataService {
     return checkoutDataRepository.findAllByAttributes_Currency(currency);
   }
 
-  public Checkout getCheckoutById(long id) {
-    return checkOutRepository.findOne(id);
+  public Object getCheckoutById(long id) throws NoIndexException {
+    if (checkOutRepository.exists(id)) {
+      return checkOutRepository.findOne(id);
+    } else {
+      throw new NoIndexException("BAD_REQUEST");
+    }
   }
 }

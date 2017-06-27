@@ -1,6 +1,6 @@
 package com.hiddenite.controller;
 
-import com.hiddenite.model.ErrorMessage;
+import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.service.ErrorMessageHandler;
 import com.hiddenite.service.HandleRecievedCheckout;
