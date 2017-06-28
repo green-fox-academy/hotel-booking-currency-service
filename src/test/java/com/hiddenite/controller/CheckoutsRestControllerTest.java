@@ -84,10 +84,9 @@ public class CheckoutsRestControllerTest {
     checkOutRepository.deleteAll();
     checkOutRepository.save(EURcheckout);
     checkOutRepository.save(USDcheckout);
-    mockMvc.perform(delete("/api/checkouts/2"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.self").value("https://your-hostname.com/api/checkout/2"))
-    ;
+    assertEquals(checkOutRepository.count(), 2);
+    mockMvc.perform(delete("/api/checkouts/1"))
+        .andExpect(status().isOk());
     assertEquals(checkOutRepository.count(), 1);
 
   }
