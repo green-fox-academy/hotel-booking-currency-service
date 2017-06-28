@@ -2,7 +2,6 @@ package com.hiddenite.controller;
 
 import com.hiddenite.CurrencyApplication;
 import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.ChargeRequest.Currency;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.checkout.CheckoutAttribute;
 import com.hiddenite.model.checkout.CheckoutData;
@@ -18,20 +17,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 import java.nio.charset.Charset;
 
 import static com.hiddenite.model.ChargeRequest.Currency.EUR;
-
+import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
@@ -53,6 +47,7 @@ public class CheckoutsRestControllerTest {
 
   Checkout EURcheckout;
   Checkout USDcheckout;
+  String updateCheckout;
 
   @Before
   public void setup() throws Exception {
@@ -65,6 +60,16 @@ public class CheckoutsRestControllerTest {
         ChargeRequest.Currency.USD, "not so pending");
     CheckoutData checkoutData2 = new CheckoutData("checkout", checkoutAttribute2);
     USDcheckout = new Checkout(checkoutData2);
+    updateCheckout = "   {\n" +
+            "     \"data\": {\n" +
+            "       \"type\": \"checkouts\",\n" +
+            "       \"id\": \"1\",\n" +
+            "       \"attributes\": {\n" +
+            "         \"currency\": \"USD\",\n" +
+            "         \"status\": \"success\"\n" +
+            "       }\n" +
+            "     }\n" +
+            "   }";
   }
 
   @Test
@@ -99,6 +104,23 @@ public class CheckoutsRestControllerTest {
         .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is4xxClientError())
         .andExpect(content().contentType(contentType));
+  }
+
+  @Test
+  public void testUpdateCheckout() throws Exception {
+    checkOutRepository.deleteAll();
+    checkOutRepository.save(EURcheckout);
+    checkOutRepository.save(USDcheckout);
+    mockMvc.perform(patch("/api/checkouts/1")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(updateCheckout))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType(contentType))
+            .andExpect(jsonPath("$.data.attributes.booking_id").value("1"))
+            .andExpect(jsonPath("$.data.attributes.user_id").value("1"))
+            .andExpect(jsonPath("$.data.attributes.amount").value("5000"))
+            .andExpect(jsonPath("$.data.attributes.currency").value("USD"))
+            .andExpect(jsonPath("$.data.attributes.status").value("success"));
   }
 
 
