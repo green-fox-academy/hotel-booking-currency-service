@@ -74,7 +74,6 @@ public class CheckOutTrackRestControllerTest {
             .andExpect(status().is2xxSuccessful())
             .andExpect(status().isCreated())
             .andExpect(content().contentType(contentType));
-
   }
 
   @Test
@@ -85,9 +84,7 @@ public class CheckOutTrackRestControllerTest {
             .content(checkoutWithMissingField))
             .andExpect(status().is4xxClientError())
             .andExpect(content().contentType(contentType));
-
   }
-
 
 //  @Test
 //  public void responseToCheckoutWithMissingFieldsShouldReturnErrorMessage() throws Exception {
