@@ -18,12 +18,15 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 import java.nio.charset.Charset;
 
 import static com.hiddenite.model.ChargeRequest.Currency.EUR;
 
-import static com.sun.org.apache.xerces.internal.util.PropertyState.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -70,9 +73,19 @@ public class CheckoutsRestControllerTest {
     mockMvc.perform(get("/checkouts")
         .param("currency", "EUR"))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.data.length()"). value(1))
+        .andExpect(jsonPath("$.data.length()").value(1))
         .andExpect(jsonPath("$.data[:1].attributes.currency").value("EUR"));
+  }
 
-
+  @Test
+  public void testDeleteCheckouts() throws Exception {
+    checkOutRepository.deleteAll();
+    checkOutRepository.save(EURcheckout);
+    checkOutRepository.save(USDcheckout);
+    mockMvc.perform(delete("/api/checkouts/2"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.self").value("https://your-hostname.com/api/checkout/2"))
+        ;
+    assertEquals(checkOutRepository.count(), 1);
   }
 }
