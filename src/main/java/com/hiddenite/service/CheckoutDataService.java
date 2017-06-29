@@ -75,22 +75,22 @@ public class CheckoutDataService {
     setCheckOutData(checkouts, actualPageNr);
   }
 
-  private void setCheckoutSingleFiltering(Checkouts checkouts, HttpServletRequest request) {
-    String filterName = request.getParameterNames().nextElement();
-    checkouts.putLinksToMap("self", request.getRequestURI() + request.getQueryString());
-
-    if (filterName.equals("booking_id")) {
-      checkouts.setData(getCheckoutListByBookingId(Long.valueOf(request.getParameter(filterName))));
-    } else if (filterName.equals("user_id")) {
-      checkouts.setData(getCheckoutListByUserId(Long.valueOf(request.getParameter
-              (filterName))));
-    } else if (filterName.equals("currency")) {
-      checkouts.setData(getCheckoutListByCurrency(ChargeRequest.Currency.valueOf(request.getParameter
-              (filterName))));
-    } else if (filterName.equals("status")) {
-      checkouts.setData(getCheckoutListByStatus(request.getParameter(filterName)));
-    }
-  }
+//  private void setCheckoutSingleFiltering(Checkouts checkouts, HttpServletRequest request) {
+//    String filterName = request.getParameterNames().nextElement();
+//    checkouts.putLinksToMap("self", request.getRequestURI() + request.getQueryString());
+//
+//    if (filterName.equals("booking_id")) {
+//      checkouts.setData(getCheckoutListByBookingId(Long.valueOf(request.getParameter(filterName))));
+//    } else if (filterName.equals("user_id")) {
+//      checkouts.setData(getCheckoutListByUserId(Long.valueOf(request.getParameter
+//              (filterName))));
+//    } else if (filterName.equals("currency")) {
+//      checkouts.setData(getCheckoutListByCurrency(ChargeRequest.Currency.valueOf(request.getParameter
+//              (filterName))));
+//    } else if (filterName.equals("status")) {
+//      checkouts.setData(getCheckoutListByStatus(request.getParameter(filterName)));
+//    }
+//  }
 
   public void setCheckoutFiltering(Checkouts checkouts, HttpServletRequest request) {
     Map<String, String[]> filterNames = request.getParameterMap();
@@ -105,8 +105,6 @@ public class CheckoutDataService {
     String status = filterNames.get("status")[0];
 
     List<CheckoutData> checkoutDataListByMultiFilters;
-
-    checkouts.putLinksToMap("self", request.getRequestURI() + request.getQueryString());
 
     if (hasBookingIdQuery && hasUserIdQuery && hasCurrencyQuery && hasStatusQuery) {
       checkoutDataListByMultiFilters = checkoutDataRepository
@@ -124,13 +122,12 @@ public class CheckoutDataService {
     } else if (hasBookingIdQuery && hasCurrencyQuery && hasStatusQuery) {
       checkoutDataListByMultiFilters = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_CurrencyAndAttributes_Status(bookingId, currency, status);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasBookingIdQuery && hasCurrencyQuery) {
       checkoutDataListByMultiFilters = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_Currency(bookingId, currency);
       checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasBookingIdQuery && hasStatusQuery) {
-        checkoutDataListByMultiFilters = checkoutDataRepository
+      checkoutDataListByMultiFilters = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_Status(bookingId, status);
       checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasUserIdQuery && hasCurrencyQuery && hasStatusQuery) {
@@ -149,9 +146,20 @@ public class CheckoutDataService {
       checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_UserIdAndAttributes_Currency
               (userId, currency);
       checkouts.setData(checkoutDataListByMultiFilters);
-    } else {
-      setCheckoutSingleFiltering(checkouts, request);
+    } else if (hasBookingIdQuery){
+      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_BookingId(bookingId);
+      checkouts.setData(checkoutDataListByMultiFilters);
+    } else if (hasUserIdQuery) {
+      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_UserId(userId);
+      checkouts.setData(checkoutDataListByMultiFilters);
+    } else if (hasCurrencyQuery) {
+      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_Currency(currency);
+      checkouts.setData(checkoutDataListByMultiFilters);
+    } else if (hasStatusQuery) {
+      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_Status(status);
+      checkouts.setData(checkoutDataListByMultiFilters);
     }
+    checkouts.putLinksToMap("self", request.getRequestURI() + request.getQueryString());
   }
 
   private List<CheckoutData> getCheckoutListByBookingId(long filterparam) {
