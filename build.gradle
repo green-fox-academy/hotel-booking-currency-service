@@ -38,4 +38,5 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile 'com.google.code.gson:gson:2.3.1'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+    compile group: 'com.jayway.jsonpath', name: 'json-path', version: '2.2.0'
 }
