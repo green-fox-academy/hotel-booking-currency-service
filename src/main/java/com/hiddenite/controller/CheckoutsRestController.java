@@ -1,7 +1,6 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Checkouts;
-import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.service.CheckoutDataService;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.InvocationTargetException;
 
 
 @RestController
@@ -32,9 +30,16 @@ public class CheckoutsRestController {
   @GetMapping(value = "/checkouts")
   public Checkouts filterCheckouts(HttpServletRequest request) {
     Checkouts checkouts = new Checkouts();
-    checkoutDataService.setCheckoutFiltering(checkouts, request);
+    checkoutDataService.setCheckoutSingleFiltering(checkouts, request);
     return checkouts;
-}
+  }
+
+  @GetMapping(value = "/checkoutsmulti")
+  public Checkouts filterMultiCheckouts(HttpServletRequest request) {
+    Checkouts checkouts = new Checkouts();
+    checkoutDataService.setCheckoutMultiFiltering(checkouts, request);
+    return checkouts;
+  }
 
   @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException {
@@ -45,12 +50,12 @@ public class CheckoutsRestController {
   public Object deleteCheckout(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException {
     return checkoutDataService.deleteCheckoutById(id);
   }
-
-
-  @PatchMapping(value = "/api/checkouts/{id}")
-  public Object updateCheckout(@RequestBody Checkout checkout, @PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException, InvocationTargetException, IllegalAccessException {
-    return checkoutDataService.updateCheckout(checkout);
-  }
+//
+//
+//  @PatchMapping(value = "/api/checkouts/{id}")
+//  public Object updateCheckout(@RequestBody Checkout checkout, @PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException, InvocationTargetException, IllegalAccessException {
+//    return checkoutDataService.updateCheckout(checkout);
+//  }
 
 
   @ExceptionHandler(NoIndexException.class)

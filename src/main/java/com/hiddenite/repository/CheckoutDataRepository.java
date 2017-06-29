@@ -17,4 +17,18 @@ public interface CheckoutDataRepository extends CrudRepository<CheckoutData, Lon
   List<CheckoutData> findAllByAttributes_UserId(long userId);
   List<CheckoutData> findAllByAttributes_Currency(ChargeRequest.Currency currency);
   List<CheckoutData> findAllByAttributes_Status(String status);
+
+  List<CheckoutData> findAllByAttributes_BookingIdAndAttributes_UserId(Long bookingId, Long userId);
+  List<CheckoutData> findAllByAttributes_BookingIdAndAttributes_UserIdAndAttributes_Currency(Long bookingId, Long
+          userId, ChargeRequest.Currency currency);
+  List<CheckoutData> findAllByAttributes_BookingIdAndAttributes_UserIdAndAttributes_CurrencyAndAttributes_Status(Long bookingId, Long userId, ChargeRequest.Currency currency, String status);
+  List<CheckoutData> findAllByAttributes_BookingIdAndAttributes_CurrencyAndAttributes_Status(Long bookingId,ChargeRequest.Currency currency, String status);
+  List<CheckoutData> findAllByAttributes_BookingIdAndAttributes_Currency(Long bookingId, ChargeRequest.Currency
+          currency);
+  List<CheckoutData> findAllByAttributes_BookingIdAndAttributes_Status(Long bookingID, String status);
+  List<CheckoutData> findAllByAttributes_UserIdAndAttributes_CurrencyAndAttributes_Status(Long userId, ChargeRequest
+          .Currency currency, String status);
+  List<CheckoutData> findAllByAttributes_UserIdAndAttributes_Currency(Long userId, ChargeRequest.Currency currency);
+  List<CheckoutData> findAllByAttributes_UserIdAndAttributes_Status(Long userId, String status);
+  List<CheckoutData> findAllByAttributes_CurrencyAndAttributes_Status(ChargeRequest.Currency currency, String status);
 }
