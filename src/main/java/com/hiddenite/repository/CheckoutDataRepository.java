@@ -13,7 +13,6 @@ import java.util.List;
 public interface CheckoutDataRepository extends CrudRepository<CheckoutData, Long> {
   List<CheckoutData> findAll();
   Page<CheckoutData> findAll(Pageable pageable);
-
   List<CheckoutData> findAllByAttributes_BookingId(Long bookingId);
   List<CheckoutData> findAllByAttributes_UserId(Long userId);
   List<CheckoutData> findAllByAttributes_Currency(ChargeRequest.Currency currency);

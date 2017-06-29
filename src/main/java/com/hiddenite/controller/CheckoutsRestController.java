@@ -8,10 +8,8 @@ import com.hiddenite.service.CheckoutDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
-
 
 @RestController
 public class CheckoutsRestController {
@@ -28,13 +26,6 @@ public class CheckoutsRestController {
     }
     return checkouts;
   }
-//
-//  @GetMapping(value = "/checkouts")
-//  public Checkouts filterCheckouts(HttpServletRequest request) {
-//    Checkouts checkouts = new Checkouts();
-//    checkoutDataService.setCheckoutSingleFiltering(checkouts, request);
-//    return checkouts;
-//  }
 
   @GetMapping(value = "/checkouts")
   public Checkouts filterMultiCheckouts(HttpServletRequest request) {
@@ -53,17 +44,14 @@ public class CheckoutsRestController {
     return checkoutDataService.deleteCheckoutById(id);
   }
 
-
   @PatchMapping(value = "/api/checkouts/{id}")
   public Object updateCheckout(@RequestBody Checkout checkout, @PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException, InvocationTargetException, IllegalAccessException {
     return checkoutDataService.updateCheckout(checkout);
   }
-
 
   @ExceptionHandler(NoIndexException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)
   public ErrorMessage notExistingId(javax.servlet.http.HttpServletRequest request) {
     return new ErrorMessage(404, "Not found", "No checkouts found by id: " + NoIndexException.index);
   }
-
 }

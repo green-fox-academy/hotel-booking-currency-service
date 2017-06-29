@@ -13,7 +13,6 @@ import javax.validation.Valid;
 
 @RestController
 public class CheckOutTrackRestController {
-
   @Autowired
   private ErrorMessageHandler errorMessageHandler;
 

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ChargeController {
-
   @Autowired
   private StripeService paymentsService;
   @Autowired

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class CurrencyRestController {
-
   @Autowired
   EndPointService endPointService;
 
@@ -16,5 +15,4 @@ public class CurrencyRestController {
   public Status getStatus(javax.servlet.http.HttpServletRequest request) throws Exception {
     return endPointService.handleEndPointRequest(request);
   }
-
 }
