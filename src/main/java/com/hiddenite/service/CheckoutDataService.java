@@ -127,14 +127,14 @@ public class CheckoutDataService {
   }
 
   public Object updateCheckout(Checkout inputCheckout) throws NoIndexException, IllegalAccessException, InvocationTargetException {
-    if (checkOutRepository.exists(inputCheckout.getCheckoutData().getId())) {
-      BeanUtilsBean notNull = new NullAwareBeanUtilsBean();
-      Checkout checkout = checkOutRepository.findOne(inputCheckout.getCheckoutData().getId());
-      notNull.copyProperties(checkout.getCheckoutData().getAttributes(), inputCheckout.getCheckoutData().getAttributes());
+    Long checkoutId = inputCheckout.getCheckoutData().getId();
+    if (checkOutRepository.exists(checkoutId)) {
+      BeanUtilsBean notNullBeanUtilsBean = new NullAwareBeanUtilsBean();
+      Checkout checkout = checkOutRepository.findOne(checkoutId);
+      notNullBeanUtilsBean.copyProperties(checkout.getCheckoutData().getAttributes(), inputCheckout.getCheckoutData().getAttributes());
       checkOutRepository.save(checkout);
       return checkout;
-    } else {
-      throw new NoIndexException("NOT_FOUND", inputCheckout.getCheckoutData().getId());
     }
+    throw new NoIndexException("NOT_FOUND", checkoutId);
   }
 }
