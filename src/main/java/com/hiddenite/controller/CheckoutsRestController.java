@@ -5,11 +5,11 @@ import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.service.CheckoutDataService;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 
 
@@ -34,7 +34,7 @@ public class CheckoutsRestController {
     Checkouts checkouts = new Checkouts();
     checkoutDataService.setCheckoutFiltering(checkouts, request);
     return checkouts;
-  }
+}
 
   @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException {

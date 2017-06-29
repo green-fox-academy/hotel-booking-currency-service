@@ -1,11 +1,6 @@
 package com.hiddenite.controller;
 
-import com.google.gson.Gson;
 import com.hiddenite.CurrencyApplication;
-import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.checkout.Checkout;
-import com.hiddenite.model.checkout.CheckoutAttribute;
-import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.CheckOutRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,7 +74,6 @@ public class CheckOutTrackRestControllerTest {
             .andExpect(status().is2xxSuccessful())
             .andExpect(status().isCreated())
             .andExpect(content().contentType(contentType));
-
   }
 
   @Test
@@ -90,9 +84,7 @@ public class CheckOutTrackRestControllerTest {
             .content(checkoutWithMissingField))
             .andExpect(status().is4xxClientError())
             .andExpect(content().contentType(contentType));
-
   }
-
 
 //  @Test
 //  public void responseToCheckoutWithMissingFieldsShouldReturnErrorMessage() throws Exception {

@@ -29,6 +29,13 @@ public class Checkout {
           @AttributeOverride(name = "self", column = @Column(table = "Checkout_CHECKOUTLINKS"))})
   private CheckoutLinks links;
 
+  public Checkout(CheckoutData checkoutData) {
+    this.checkoutData = checkoutData;
+  }
+
+  public Checkout() {
+  }
+
   public CheckoutData getCheckoutData() {
     return checkoutData;
   }
