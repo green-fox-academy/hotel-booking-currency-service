@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,6 @@ public class CheckoutDataService {
   private final String BASIC_CHECKOUT_LINK = "https://your-hostname.com/api/checkouts";
   private final String CHECKOUT_WITH_QUERY_LINK = "https://your-hostname.com/api/checkouts?page=";
   private final int CHECKOUTS_PER_PAGE = 20;
-  private Checkout checkout;
 
   @Autowired
   public CheckoutDataService(CheckoutDataRepository checkoutDataRepository, CheckOutRepository checkOutRepository) {
@@ -75,107 +74,71 @@ public class CheckoutDataService {
     setCheckOutData(checkouts, actualPageNr);
   }
 
-//  private void setCheckoutSingleFiltering(Checkouts checkouts, HttpServletRequest request) {
-//    String filterName = request.getParameterNames().nextElement();
-//    checkouts.putLinksToMap("self", request.getRequestURI() + request.getQueryString());
-//
-//    if (filterName.equals("booking_id")) {
-//      checkouts.setData(getCheckoutListByBookingId(Long.valueOf(request.getParameter(filterName))));
-//    } else if (filterName.equals("user_id")) {
-//      checkouts.setData(getCheckoutListByUserId(Long.valueOf(request.getParameter
-//              (filterName))));
-//    } else if (filterName.equals("currency")) {
-//      checkouts.setData(getCheckoutListByCurrency(ChargeRequest.Currency.valueOf(request.getParameter
-//              (filterName))));
-//    } else if (filterName.equals("status")) {
-//      checkouts.setData(getCheckoutListByStatus(request.getParameter(filterName)));
-//    }
-//  }
-
   public void setCheckoutFiltering(Checkouts checkouts, HttpServletRequest request) {
     Map<String, String[]> filterNames = request.getParameterMap();
     boolean hasBookingIdQuery = filterNames.containsKey("booking_id");
     boolean hasUserIdQuery = filterNames.containsKey("user_id");
     boolean hasCurrencyQuery = filterNames.containsKey("currency");
     boolean hasStatusQuery = filterNames.containsKey("status");
+    Long bookingId = null;
+    Long userId = null;
+    ChargeRequest.Currency currency = null;
+    String status = null;
 
-    Long bookingId = Long.valueOf(filterNames.get("booking_id")[0]);
-    Long userId = Long.valueOf(filterNames.get("user_id")[0]);
-    ChargeRequest.Currency currency = ChargeRequest.Currency.valueOf(filterNames.get("currency")[0]);
-    String status = filterNames.get("status")[0];
-
-    List<CheckoutData> checkoutDataListByMultiFilters;
-
+    if (hasBookingIdQuery) {
+      bookingId = Long.valueOf(filterNames.get("booking_id")[0]);
+    }
+    if (hasUserIdQuery) {
+      userId = Long.valueOf(filterNames.get("user_id")[0]);
+    }
+    if (hasCurrencyQuery) {
+      currency = ChargeRequest.Currency.valueOf(filterNames.get("currency")[0]);
+    }
+    if (hasStatusQuery) {
+      status = filterNames.get("status")[0];
+    }
+    List<CheckoutData> filteredDataList = new ArrayList<>();
     if (hasBookingIdQuery && hasUserIdQuery && hasCurrencyQuery && hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_UserIdAndAttributes_CurrencyAndAttributes_Status
                       (bookingId, userId, currency, status);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasBookingIdQuery && hasUserIdQuery && hasCurrencyQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_UserIdAndAttributes_Currency(bookingId, userId, currency);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasBookingIdQuery && hasUserIdQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_BookingIdAndAttributes_UserId
-              (bookingId, userId);
-      checkouts.setData(checkoutDataListByMultiFilters);
+      filteredDataList = checkoutDataRepository.findAllByAttributesBookingIdAndAttributes_UserId(bookingId, userId);
     } else if (hasBookingIdQuery && hasCurrencyQuery && hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_CurrencyAndAttributes_Status(bookingId, currency, status);
     } else if (hasBookingIdQuery && hasCurrencyQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_Currency(bookingId, currency);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasBookingIdQuery && hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_BookingIdAndAttributes_Status(bookingId, status);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasUserIdQuery && hasCurrencyQuery && hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_UserIdAndAttributes_CurrencyAndAttributes_Status
+      filteredDataList = checkoutDataRepository.findAllByAttributes_UserIdAndAttributes_CurrencyAndAttributes_Status
               (userId, currency, status);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasCurrencyQuery && hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_CurrencyAndAttributes_Status(currency, status);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasUserIdQuery && hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository
+      filteredDataList = checkoutDataRepository
               .findAllByAttributes_UserIdAndAttributes_Status(userId, status);
-      checkouts.setData(checkoutDataListByMultiFilters);
     } else if (hasUserIdQuery && hasCurrencyQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_UserIdAndAttributes_Currency
+      filteredDataList = checkoutDataRepository.findAllByAttributes_UserIdAndAttributes_Currency
               (userId, currency);
-      checkouts.setData(checkoutDataListByMultiFilters);
-    } else if (hasBookingIdQuery){
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_BookingId(bookingId);
-      checkouts.setData(checkoutDataListByMultiFilters);
+    } else if (hasBookingIdQuery) {
+      filteredDataList = checkoutDataRepository.findAllByAttributes_BookingId(bookingId);
     } else if (hasUserIdQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_UserId(userId);
-      checkouts.setData(checkoutDataListByMultiFilters);
+      filteredDataList = checkoutDataRepository.findAllByAttributes_UserId(userId);
     } else if (hasCurrencyQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_Currency(currency);
-      checkouts.setData(checkoutDataListByMultiFilters);
+      filteredDataList = checkoutDataRepository.findAllByAttributes_Currency(currency);
     } else if (hasStatusQuery) {
-      checkoutDataListByMultiFilters = checkoutDataRepository.findAllByAttributes_Status(status);
-      checkouts.setData(checkoutDataListByMultiFilters);
+      filteredDataList = checkoutDataRepository.findAllByAttributes_Status(status);
     }
-    checkouts.putLinksToMap("self", request.getRequestURI() + request.getQueryString());
-  }
-
-  private List<CheckoutData> getCheckoutListByBookingId(long filterparam) {
-    return checkoutDataRepository.findAllByAttributes_BookingId(filterparam);
-  }
-
-  private List<CheckoutData> getCheckoutListByUserId(long filterparam) {
-    return checkoutDataRepository.findAllByAttributes_UserId(filterparam);
-  }
-
-  private List<CheckoutData> getCheckoutListByStatus(String status) {
-    return checkoutDataRepository.findAllByAttributes_Status(status);
-  }
-
-  private List<CheckoutData> getCheckoutListByCurrency(ChargeRequest.Currency currency) {
-    return checkoutDataRepository.findAllByAttributes_Currency(currency);
+    checkouts.putLinksToMap("self", request.getRequestURI() + "?" + request.getQueryString());
+    checkouts.setData(filteredDataList);
   }
 
   public Object getCheckoutById(long id) throws NoIndexException {
@@ -206,26 +169,5 @@ public class CheckoutDataService {
     } else {
       throw new NoIndexException("NOT_FOUND", inputCheckout.getCheckoutData().getId());
     }
-  }
-
-  private boolean hasBookingIdQuery(HttpServletRequest request) {
-    Map<String, String[]> filterNames = request.getParameterMap();
-    return filterNames.containsKey("booking_id");
-  }
-
-  private boolean hasUserIdQuery(HttpServletRequest request) {
-    Map<String, String[]> filterNames = request.getParameterMap();
-    return filterNames.containsKey("user_id");
-  }
-
-
-  private boolean hasCurrencyQuery(HttpServletRequest request) {
-    Map<String, String[]> filterNames = request.getParameterMap();
-    return filterNames.containsKey("currency");
-  }
-
-  private boolean hasStatusQuery(HttpServletRequest request) {
-    Map<String, String[]> filterNames = request.getParameterMap();
-    return filterNames.containsKey("status");
   }
 }
