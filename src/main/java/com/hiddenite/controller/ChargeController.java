@@ -1,8 +1,11 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
+import com.hiddenite.model.Transaction;
+import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
+import com.hiddenite.repository.TransactionsRepository;
 import com.hiddenite.service.StripeService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -22,6 +25,8 @@ public class ChargeController {
   private ChargeRequestRepository chargeRequestRepository;
   @Autowired
   private CheckOutRepository checkOutRepository;
+  @Autowired
+  private TransactionsRepository transactionsRepository;
 
   @PostMapping("/charge")
   public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency, @RequestParam(value = "checkout_id", required = false) Long checkoutId)
@@ -34,7 +39,9 @@ public class ChargeController {
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
     checkOutRepository.findOne(checkoutId);
     try {
-      checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
+      Checkout checkout = checkOutRepository.findOne(checkoutId);
+        checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
+      transactionsRepository.save(new Transaction(checkout.getCheckoutData().getId(),checkout.getCheckoutData().getAttributes().getCurrency().toString(),checkout.getCheckoutData().getAttributes().getAmount()));
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();
