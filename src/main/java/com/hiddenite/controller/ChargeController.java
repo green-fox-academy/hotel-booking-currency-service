@@ -24,7 +24,7 @@ public class ChargeController {
   private CheckOutRepository checkOutRepository;
 
   @PostMapping("/charge")
-  public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency, @RequestParam(value = "checkout_id", required = false) Long checkoutId)
+  public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency, @RequestParam(value = "checkout_id", required = false) Long checkoutId, javax.servlet.http.HttpServletRequest request)
           throws StripeException {
     chargeRequest.setCurrency(currency);
     Charge charge = paymentsService.charge(chargeRequest);
@@ -44,7 +44,7 @@ public class ChargeController {
   }
 
   @ExceptionHandler(StripeException.class)
-  public String handleError(Model model, StripeException ex) {
+  public String handleError(Model model, StripeException ex, javax.servlet.http.HttpServletRequest request) {
     model.addAttribute("error", ex.getMessage());
     return "result";
   }
