@@ -45,10 +45,11 @@ public class CheckoutsRestControllerTest {
   @Autowired
   private CheckOutRepository checkOutRepository;
 
-  Checkout EURcheckout;
-  Checkout USDcheckout;
-  String updateCheckout;
-  Gson gson;
+  private Checkout EURcheckout;
+  private Checkout USDcheckout;
+  private String updateCheckout;
+  private Gson gson;
+  private Checkout USDcheckout2;
 
   @Before
   public void setup() throws Exception {
@@ -58,9 +59,13 @@ public class CheckoutsRestControllerTest {
     CheckoutData checkoutData = new CheckoutData("checkout", checkoutAttribute);
     EURcheckout = new Checkout(checkoutData);
     CheckoutAttribute checkoutAttribute2 = new CheckoutAttribute(2L, 2L, 8000,
-        ChargeRequest.Currency.USD, "not so pending");
+        ChargeRequest.Currency.USD, "success");
     CheckoutData checkoutData2 = new CheckoutData("checkout", checkoutAttribute2);
     USDcheckout = new Checkout(checkoutData2);
+    CheckoutAttribute checkoutAttribute3 = new CheckoutAttribute(3L, 1L, 8000,
+            ChargeRequest.Currency.USD, "pending");
+    CheckoutData checkoutData3 = new CheckoutData("checkout", checkoutAttribute3);
+    USDcheckout2 = new Checkout(checkoutData3);
     gson = new Gson();
   }
 
@@ -74,6 +79,22 @@ public class CheckoutsRestControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.data.length()").value(1))
         .andExpect(jsonPath("$.data[:1].attributes.currency").value("EUR"));
+  }
+
+  @Test
+  public void testMultipleFilterCheckouts() throws Exception {
+    checkOutRepository.deleteAll();
+    checkOutRepository.save(EURcheckout);
+    checkOutRepository.save(USDcheckout);
+    checkOutRepository.save(USDcheckout2);
+    mockMvc.perform(get("/checkouts")
+            .param("booking_id", "1")
+            .param("status", "pending"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.length()").value(2))
+            .andExpect(jsonPath("$.data[0].attributes.currency").value("EUR"))
+            .andExpect(jsonPath("$.data[1].attributes.currency").value("USD"))
+            .andExpect(jsonPath("$.data[1].attributes.user_id").value("3"));
   }
 
   @Test
