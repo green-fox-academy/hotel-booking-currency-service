@@ -111,8 +111,9 @@ public class CheckoutsRestControllerTest {
   @Test
   public void responseToNoIndexGetCheckout() throws Exception {
     checkOutRepository.deleteAll();
-    ErrorMessage errorMessage = new ErrorMessage(404, "Not found", "No checkouts found by id: 666");
-    mockMvc.perform(get("/api/checkouts/666"))
+    int outOfBoundIndex = (int) checkOutRepository.count() + 1;
+    ErrorMessage errorMessage = new ErrorMessage(404, "Not found", "No checkouts found by id: " + outOfBoundIndex);
+    mockMvc.perform(get("/api/checkouts/" + outOfBoundIndex))
             .andExpect(status().is4xxClientError())
             .andExpect(content().contentType(contentType))
             .andExpect(content().json(gson.toJson(errorMessage)));

@@ -98,6 +98,7 @@ public class CheckoutDataService {
     if (hasStatusQuery) {
       status = filterNames.get("status")[0];
     }
+
     List<CheckoutData> filteredDataList = new ArrayList<>();
     if (hasBookingIdQuery && hasUserIdQuery && hasCurrencyQuery && hasStatusQuery) {
       filteredDataList = checkoutDataRepository
