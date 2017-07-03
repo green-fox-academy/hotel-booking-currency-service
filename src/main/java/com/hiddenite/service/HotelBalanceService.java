@@ -1,6 +1,7 @@
 package com.hiddenite.service;
 
 import com.hiddenite.model.HotelBalance;
+import com.hiddenite.model.HotelBalanceData;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.repository.TransactionsRepository;
 import java.util.HashMap;
@@ -16,10 +17,13 @@ public class HotelBalanceService {
 
 
   public HotelBalance getHotelBalanceByCurrency(Long hotelID) {
+    HotelBalanceData returnBalanceData = new HotelBalanceData();
     HotelBalance returnBalance = new HotelBalance();
-    returnBalance.getAttributes().put("eur", getBalanceByCurrency("eur", hotelID));
-   // returnBalance.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID));
-    returnBalance.getAttributes().put("usd", getBalanceByCurrency("usd", hotelID));
+    returnBalanceData.getAttributes().put("eur", getBalanceByCurrency("eur", hotelID));
+   // returnBalanceData.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID));
+    returnBalanceData.getAttributes().put("usd", getBalanceByCurrency("usd", hotelID));
+    returnBalance.setData(returnBalanceData);
+    returnBalance.setLinks("https://your-hostname.com/api/hotels/" + hotelID + "/balances");
     return returnBalance;
   }
 
