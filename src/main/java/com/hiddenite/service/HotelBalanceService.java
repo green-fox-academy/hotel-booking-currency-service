@@ -20,7 +20,7 @@ public class HotelBalanceService {
     HotelBalanceData returnBalanceData = new HotelBalanceData();
     HotelBalance returnBalance = new HotelBalance();
     returnBalanceData.getAttributes().put("eur", getBalanceByCurrency("eur", hotelID));
-   // returnBalanceData.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID));
+    returnBalanceData.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID));
     returnBalanceData.getAttributes().put("usd", getBalanceByCurrency("usd", hotelID));
     returnBalance.setData(returnBalanceData);
     returnBalance.setLinks("https://your-hostname.com/api/hotels/" + hotelID + "/balances");
