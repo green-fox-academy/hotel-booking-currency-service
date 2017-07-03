@@ -1,6 +1,7 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ErrorMessage;
+import com.hiddenite.model.HotelBalance;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.repository.TransactionsRepository;
 import com.hiddenite.service.TransactionService;
@@ -54,5 +55,9 @@ public class TransactionController {
     throw new NoSuchElementException();
   }
 
+  @GetMapping("/api/hotels/{id}/balances")
+  public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID) {
+    return new HotelBalance();
+  }
 
 }
