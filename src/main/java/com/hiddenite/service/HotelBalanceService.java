@@ -18,7 +18,7 @@ public class HotelBalanceService {
   public HotelBalance getHotelBalanceByCurrency(Long hotelID) {
     HotelBalance returnBalance = new HotelBalance();
     returnBalance.getAttributes().put("eur", getBalanceByCurrency("eur", hotelID));
-    returnBalance.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID));
+   // returnBalance.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID));
     returnBalance.getAttributes().put("usd", getBalanceByCurrency("usd", hotelID));
     return returnBalance;
   }
@@ -26,7 +26,7 @@ public class HotelBalanceService {
   public Integer getBalanceByCurrency(String currency, Long hotelID) {
     HashMap<String, Integer> returnHM = new HashMap<>();
     List<Transaction> listByCurrency = transactionsRepository
-        .findAllByCurrencyAndHotelID("eur", hotelID);
+        .findAllByCurrencyAndHotelID(currency, hotelID);
     Integer balance = 0;
     for (Transaction transaction : listByCurrency) {
       balance = balance + transaction.getAmount();

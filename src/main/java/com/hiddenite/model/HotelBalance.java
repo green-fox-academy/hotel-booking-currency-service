@@ -8,6 +8,8 @@ public class HotelBalance {
   private HashMap<String, Integer> attributes;
 
   public HotelBalance() {
+    this.type = "balances";
+    attributes = new HashMap<>();
   }
 
   public HotelBalance(String links,
