@@ -13,12 +13,12 @@ public class ErrorMessageHandler {
 
     public ErrorMessage getErrorMessageWithMissingFields(MethodArgumentNotValidException e) {
     Gson gson = new Gson();
-    String temp = "The attribute fields: ";
+    StringBuilder temp = new StringBuilder("The attribute fields: ");
     List<FieldError> errors = e.getBindingResult().getFieldErrors();
     for (FieldError error : errors) {
-      temp = temp.concat(gson.toJson(error.getField()) + ", ");
+      temp = temp.append(gson.toJson(error.getField()) + ", ");
     }
-    temp = temp.concat(" are missing");
-    return new ErrorMessage(400, "Bad Request!", temp);
+    temp = temp.append(" are missing");
+    return new ErrorMessage(400, "Bad Request!", temp.toString());
   }
 }
