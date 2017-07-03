@@ -4,6 +4,7 @@ import com.hiddenite.model.ErrorMessage;
 import com.hiddenite.model.HotelBalance;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.repository.TransactionsRepository;
+import com.hiddenite.service.HotelBalanceService;
 import com.hiddenite.service.TransactionService;
 
 
@@ -29,6 +30,9 @@ public class TransactionController {
 
   @Autowired
   TransactionsRepository transactionsRepository;
+
+  @Autowired
+  HotelBalanceService hotelBalanceService;
 
   @ExceptionHandler(NoSuchElementException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)
@@ -57,7 +61,7 @@ public class TransactionController {
 
   @GetMapping("/api/hotels/{id}/balances")
   public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID) {
-    return new HotelBalance();
+    return hotelBalanceService.getHotelBalanceByCurrency(hotelID);
   }
 
 }
