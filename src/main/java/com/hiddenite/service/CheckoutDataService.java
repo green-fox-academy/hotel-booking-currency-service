@@ -5,7 +5,7 @@ import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.model.checkout.CheckoutLinks;
-import com.hiddenite.model.error.NoIndexException;
+import com.hiddenite.model.error.NoSuchAnIndexException;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -23,10 +23,9 @@ public class CheckoutDataService {
   private CheckoutDataRepository checkoutDataRepository;
   private CheckOutRepository checkOutRepository;
   private int totalPageNr;
-  private final String BASIC_CHECKOUT_LINK = "https://your-hostname.com/api/checkouts";
-  private final String CHECKOUT_WITH_QUERY_LINK = "https://your-hostname.com/api/checkouts?page=";
+  private final String BASIC_CHECKOUT_LINK = "hotel-booking-payment.herokuapp.com/api/checkouts";
+  private final String CHECKOUT_WITH_QUERY_LINK = "hotel-booking-payment.herokuapp.com/api/checkouts?page=";
   private final int CHECKOUTS_PER_PAGE = 20;
-  private Checkout checkout;
 
   @Autowired
   public CheckoutDataService(CheckoutDataRepository checkoutDataRepository, CheckOutRepository checkOutRepository) {
@@ -108,25 +107,25 @@ public class CheckoutDataService {
     return checkoutDataRepository.findAllByAttributes_Currency(currency);
   }
 
-  public Object getCheckoutById(long id) throws NoIndexException {
+  public Object getCheckoutById(long id) throws NoSuchAnIndexException {
     if (checkOutRepository.exists(id)) {
       return checkOutRepository.findOne(id);
     } else {
-      throw new NoIndexException("NOT_FOUND", id);
+      throw new NoSuchAnIndexException("NOT_FOUND", id);
     }
   }
 
-  public Object deleteCheckoutById(Long id) throws NoIndexException {
+  public Object deleteCheckoutById(Long id) throws NoSuchAnIndexException {
     if (checkOutRepository.exists(id)) {
       CheckoutLinks tempLinks = checkOutRepository.findOne(id).getLinks();
       checkOutRepository.delete(id);
       return tempLinks;
     } else {
-      throw new NoIndexException("NOT_FOUND", id);
+      throw new NoSuchAnIndexException("NOT_FOUND", id);
     }
   }
 
-  public Object updateCheckout(Checkout inputCheckout) throws NoIndexException, IllegalAccessException, InvocationTargetException {
+  public Object updateCheckout(Checkout inputCheckout) throws NoSuchAnIndexException, IllegalAccessException, InvocationTargetException {
     Long checkoutId = inputCheckout.getCheckoutData().getId();
     if (checkOutRepository.exists(checkoutId)) {
       BeanUtilsBean notNullBeanUtilsBean = new NullAwareBeanUtilsBean();
@@ -135,6 +134,6 @@ public class CheckoutDataService {
       checkOutRepository.save(checkout);
       return checkout;
     }
-    throw new NoIndexException("NOT_FOUND", checkoutId);
+    throw new NoSuchAnIndexException("NOT_FOUND", checkoutId);
   }
 }

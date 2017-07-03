@@ -3,7 +3,7 @@ package com.hiddenite.controller;
 import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.error.ErrorMessage;
-import com.hiddenite.model.error.NoIndexException;
+import com.hiddenite.model.error.NoSuchAnIndexException;
 import com.hiddenite.service.CheckoutDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,26 +37,26 @@ public class CheckoutsRestController {
 }
 
   @GetMapping(value = "/api/checkouts/{id}")
-  public Object filterCheckouts(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException {
+  public Object filterCheckouts(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoSuchAnIndexException {
     return checkoutDataService.getCheckoutById(id);
   }
 
   @DeleteMapping(value = "/api/checkouts/{id}")
-  public Object deleteCheckout(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException {
+  public Object deleteCheckout(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoSuchAnIndexException {
     return checkoutDataService.deleteCheckoutById(id);
   }
 
 
   @PatchMapping(value = "/api/checkouts/{id}")
-  public Object updateCheckout(@RequestBody Checkout checkout, @PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException, InvocationTargetException, IllegalAccessException {
+  public Object updateCheckout(@RequestBody Checkout checkout, @PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoSuchAnIndexException, InvocationTargetException, IllegalAccessException {
     return checkoutDataService.updateCheckout(checkout);
   }
 
 
-  @ExceptionHandler(NoIndexException.class)
+  @ExceptionHandler(NoSuchAnIndexException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)
   public ErrorMessage notExistingId(javax.servlet.http.HttpServletRequest request) {
-    return new ErrorMessage(404, "Not found", "No checkouts found by id: " + NoIndexException.index);
+    return new ErrorMessage(404, "Not found", "No checkouts found by id: " + NoSuchAnIndexException.index);
   }
 
 }

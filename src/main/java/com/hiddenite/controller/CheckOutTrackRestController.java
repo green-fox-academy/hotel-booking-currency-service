@@ -26,7 +26,7 @@ public class CheckOutTrackRestController {
     return errorMessageHandler.getErrorMessageWithMissingFields(e);
   }
 
-  @RequestMapping(value = "/api/checkouts", method = RequestMethod.POST)
+  @PostMapping(value = "/api/checkouts")
   @ResponseStatus(code = HttpStatus.CREATED)
   public Checkout responseToCheckout(@RequestBody @Valid Checkout recievedCheckout, javax.servlet.http.HttpServletRequest request) {
     return handleRecievedCheckout.response(recievedCheckout);

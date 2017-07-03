@@ -8,7 +8,7 @@ public class CheckoutLinks {
   private String self;
 
   public CheckoutLinks(Long id) {
-    this.self = "https://your-hostname.com/api/checkout/" + (id);
+    this.self = "hotel-booking-payment.herokuapp.com/api/checkout/" + (id);
   }
 
   public CheckoutLinks() {
@@ -19,6 +19,6 @@ public class CheckoutLinks {
   }
 
   public void setSelf(Long id) {
-    this.self = "https://your-hostname.com/api/checkout/" + id;
+    this.self = "hotel-booking-payment.herokuapp.com/api/checkout/" + id;
   }
 }

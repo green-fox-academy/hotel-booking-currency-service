@@ -41,4 +41,5 @@ dependencies {
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.10'
     compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.23.0.RELEASE'
 }
