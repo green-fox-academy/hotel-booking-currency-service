@@ -12,8 +12,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class HotelBalanceService {
 
+
+  private TransactionsRepository transactionsRepository;
+
   @Autowired
-  TransactionsRepository transactionsRepository;
+  public HotelBalanceService (TransactionsRepository transactionsRepository) {
+    this.transactionsRepository = transactionsRepository;
+  }
 
 
   public HotelBalance getHotelBalanceByCurrency(Long hotelID) {
