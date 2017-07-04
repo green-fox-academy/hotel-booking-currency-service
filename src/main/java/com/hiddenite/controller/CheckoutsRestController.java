@@ -6,8 +6,10 @@ import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.service.CheckoutDataService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 
@@ -17,12 +19,15 @@ public class CheckoutsRestController {
   private CheckoutDataService checkoutDataService;
 
   @GetMapping(value = "/api/checkouts")
-  public Checkouts getCheckouts(@RequestParam(name = "page", required = false) Integer actualPageNumber, javax.servlet.http.HttpServletRequest request) {
+  public Checkouts getCheckouts(@RequestParam(name = "page", required = false) Integer actualPageNumber, javax
+          .servlet.http.HttpServletRequest request, Pageable pageable) {
     Checkouts checkouts = new Checkouts();
     if (actualPageNumber != null) {
-      checkoutDataService.listCheckoutsByPages(checkouts, actualPageNumber);
+      checkoutDataService.addLinks(checkouts, actualPageNumber);
+      checkoutDataService.setCheckOutData(checkouts, pageable);
     } else {
-      checkoutDataService.listCheckoutsByPages(checkouts, 1);
+      checkoutDataService.addLinks(checkouts, 1);
+      checkoutDataService.setCheckOutData(checkouts, pageable);
     }
     return checkouts;
   }

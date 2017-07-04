@@ -10,8 +10,7 @@ import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +35,7 @@ public class CheckoutDataService {
     totalPageNr = (int) checkoutDataRepository.count() / CHECKOUTS_PER_PAGE + 1;
   }
 
-  private void addLinks(Checkouts checkouts, int actualPageNr) {
+  public void addLinks(Checkouts checkouts, int actualPageNr) {
     if (totalPageNr <= 2) {
       if (actualPageNr == 2) {
         checkouts.putLinksToMap("self", CHECKOUT_WITH_QUERY_LINK + (actualPageNr));
@@ -63,16 +62,8 @@ public class CheckoutDataService {
     }
   }
 
-  private void setCheckOutData(Checkouts checkouts, int actualPageNr) {
-    List<CheckoutData> checkoutDataList = checkoutDataRepository
-            .findAll(new PageRequest(actualPageNr - 1, 20, Sort.Direction.ASC, "id"))
-            .getContent();
-    checkouts.setData(checkoutDataList);
-  }
-
-  public void listCheckoutsByPages(Checkouts checkouts, int actualPageNr) {
-    addLinks(checkouts, actualPageNr);
-    setCheckOutData(checkouts, actualPageNr);
+  public void setCheckOutData(Checkouts checkouts, Pageable pageable) {
+    checkouts.setData(checkoutDataRepository.findAll(pageable).getContent());
   }
 
   public void setCheckoutFiltering(Checkouts checkouts, HttpServletRequest request) {
