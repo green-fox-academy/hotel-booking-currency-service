@@ -1,6 +1,6 @@
 package com.hiddenite.controller;
 
-import com.hiddenite.model.ErrorMessage;
+import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.HotelBalance;
 import com.hiddenite.model.HotelBalanceData;
 import com.hiddenite.model.Transaction;
