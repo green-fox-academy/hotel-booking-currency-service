@@ -7,7 +7,7 @@ import javax.persistence.Id;
 public class ChargeRequest {
 
   public enum Currency {
-    EUR, USD;
+    EUR, USD, HUF;
   }
 
   private String description;
