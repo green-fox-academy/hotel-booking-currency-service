@@ -19,7 +19,7 @@ public class Transaction {
   private String currency;
   private int amount;
   private Timestamp createdAt;
-  
+
   @OneToOne(cascade = {CascadeType.ALL})
   private ExchangeRate exchangeRate;
 
