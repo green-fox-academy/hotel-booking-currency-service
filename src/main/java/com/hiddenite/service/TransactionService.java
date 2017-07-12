@@ -2,12 +2,14 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.Transaction;
 import com.hiddenite.repository.TransactionsRepository;
-
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class TransactionService {
@@ -23,5 +25,15 @@ public class TransactionService {
       }
     }
     return transactionsRepository.findAllByHotelID(id);
+  }
+
+  public Timestamp createTimeStampFromDate(Date date) {
+    Timestamp tsEnd;
+    if (date != null) {
+      tsEnd = new Timestamp(date.getTime());
+    } else {
+      tsEnd = Timestamp.valueOf(LocalDateTime.now());
+    }
+    return tsEnd;
   }
 }
