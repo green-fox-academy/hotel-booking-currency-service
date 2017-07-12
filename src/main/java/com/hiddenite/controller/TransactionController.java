@@ -7,11 +7,13 @@ import com.hiddenite.repository.TransactionsRepository;
 import com.hiddenite.service.HotelBalanceService;
 import com.hiddenite.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -54,9 +56,10 @@ public class TransactionController {
   }
 
   @GetMapping("/api/hotels/{id}/balances")
-  public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID, @RequestParam(name = "from", value =
-          "1970-01-01") Timestamp startDate) {
-    return hotelBalanceService.getHotelBalanceByCurrency(hotelID, startDate);
+  public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID, @RequestParam (name = "from",
+          defaultValue = "1970-01-01")@DateTimeFormat (pattern = "yyyy-MM-dd") Date startDate) {
+    Timestamp ts = new Timestamp(startDate.getTime());
+    return hotelBalanceService.getHotelBalanceByCurrency(hotelID, ts);
   }
 
 //  public static String createDateFormat(LocalDate date) {

@@ -1,7 +1,6 @@
 package com.hiddenite.service;
 
 
-
 import com.hiddenite.repository.TransactionsRepository;
 import org.junit.Before;
 import org.mockito.Mockito;
@@ -18,7 +17,7 @@ public class HotelBalanceServiceTest {
     mockTransactionsRepository = Mockito.mock(TransactionsRepository.class);
     hotelBalanceService = new HotelBalanceService(mockTransactionsRepository);
   }
-//
+
 //  @Test
 //  public void testServiceWithSelectedCurrency() throws Exception {
 //    List<Transaction> testList = new ArrayList<>();

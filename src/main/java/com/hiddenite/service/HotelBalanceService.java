@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -35,7 +34,6 @@ public class HotelBalanceService {
   }
 
   public Integer getBalanceByCurrency(String currency, Long hotelID, Timestamp startDate) {
-    HashMap<String, Integer> returnHM = new HashMap<>();
     List<Transaction> listByCurrency = transactionsRepository
         .findAllByCurrencyAndHotelIDAndCreatedAtAfter(currency, hotelID, startDate);
     Integer balance = 0;
