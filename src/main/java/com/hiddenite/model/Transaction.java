@@ -17,13 +17,15 @@ public class Transaction {
   private String currency;
   private int amount;
   private Timestamp createdAt;
+  private ExchangeRate exchangeRate;
 
-  public Transaction(Long checkoutID, String currency, int amount) {
+  public Transaction(Long checkoutID, String currency, int amount, ExchangeRate exchangeRate) {
     this.hotelID = 1L;
     this.checkoutID = checkoutID;
     this.currency = currency;
     this.amount = amount;
     this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+    this.exchangeRate = exchangeRate;
   }
 
   public Transaction() {
@@ -75,5 +77,13 @@ public class Transaction {
 
   public void setCheckoutID(Long checkoutID) {
     this.checkoutID = checkoutID;
+  }
+
+  public ExchangeRate getExchangeRate() {
+    return exchangeRate;
+  }
+
+  public void setExchangeRate(ExchangeRate exchangeRate) {
+    this.exchangeRate = exchangeRate;
   }
 }
