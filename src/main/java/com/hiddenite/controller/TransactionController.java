@@ -10,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.support.HttpRequestHandlerServlet;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -58,16 +56,12 @@ public class TransactionController {
   }
 
   @GetMapping("/api/hotels/{id}/balances")
-  public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID, @RequestParam (name = "from",
-  defaultValue = "1970-01-01")@DateTimeFormat (pattern = "yyyy-MM-dd") Date startDate, @RequestParam (name = "to",
-          required = false) @DateTimeFormat (pattern = "yyyy-MM-dd") Date endDate, HttpRequestHandlerServlet request) {
+  public HotelBalance getHotelBalance(
+          @PathVariable(name = "id") Long hotelID,
+          @RequestParam (name = "from", defaultValue = "1970-01-01")@DateTimeFormat (pattern = "yyyy-MM-dd") Date startDate,
+          @RequestParam (name = "to", required = false) @DateTimeFormat (pattern = "yyyy-MM-dd") Date endDate) {
     Timestamp tsStart = new Timestamp(startDate.getTime());
-    Timestamp tsEnd;
-    if (endDate != null) {
-      tsEnd = new Timestamp(endDate.getTime());
-    } else {
-      tsEnd = Timestamp.valueOf(LocalDateTime.now());
-    }
+    Timestamp tsEnd = transactionService.createTimeStampFromDate(endDate);
     return hotelBalanceService.getHotelBalanceByCurrency(hotelID, tsStart, tsEnd);
   }
 }
