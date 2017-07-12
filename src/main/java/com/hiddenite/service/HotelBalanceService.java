@@ -22,20 +22,20 @@ public class HotelBalanceService {
   }
 
 
-  public HotelBalance getHotelBalanceByCurrency(Long hotelID, Timestamp startDate) {
+  public HotelBalance getHotelBalanceByCurrency(Long hotelID, Timestamp startDate, Timestamp endDate) {
     HotelBalanceData returnBalanceData = new HotelBalanceData();
     HotelBalance returnBalance = new HotelBalance();
-    returnBalanceData.getAttributes().put("eur", getBalanceByCurrency("eur", hotelID, startDate));
-    returnBalanceData.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID, startDate));
-    returnBalanceData.getAttributes().put("usd", getBalanceByCurrency("usd", hotelID, startDate));
+    returnBalanceData.getAttributes().put("eur", getBalanceByCurrency("eur", hotelID, startDate, endDate));
+    returnBalanceData.getAttributes().put("huf", getBalanceByCurrency("huf", hotelID, startDate, endDate));
+    returnBalanceData.getAttributes().put("usd", getBalanceByCurrency("usd", hotelID, startDate, endDate));
     returnBalance.setData(returnBalanceData);
     returnBalance.setLinks("https://your-hostname.com/api/hotels/" + hotelID + "/balances");
     return returnBalance;
   }
 
-  public Integer getBalanceByCurrency(String currency, Long hotelID, Timestamp startDate) {
+  public Integer getBalanceByCurrency(String currency, Long hotelID, Timestamp startDate, Timestamp endDate) {
     List<Transaction> listByCurrency = transactionsRepository
-        .findAllByCurrencyAndHotelIDAndCreatedAtAfter(currency, hotelID, startDate);
+        .findAllByCurrencyAndHotelIDAndCreatedAtBetween(currency, hotelID, startDate, endDate);
     Integer balance = 0;
     for (Transaction transaction : listByCurrency) {
       balance = balance + transaction.getAmount();
