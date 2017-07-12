@@ -1,11 +1,13 @@
 package com.hiddenite.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Transaction {
@@ -17,6 +19,8 @@ public class Transaction {
   private String currency;
   private int amount;
   private Timestamp createdAt;
+  
+  @OneToOne(cascade = {CascadeType.ALL})
   private ExchangeRate exchangeRate;
 
   public Transaction(Long checkoutID, String currency, int amount, ExchangeRate exchangeRate) {
