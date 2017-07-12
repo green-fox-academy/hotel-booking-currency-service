@@ -1,11 +1,11 @@
 package com.hiddenite.model;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 public class Transaction {
@@ -16,14 +16,14 @@ public class Transaction {
   private Long transactionID;
   private String currency;
   private int amount;
-  private Timestamp created_at;
+  private Timestamp createdAt;
 
   public Transaction(Long checkoutID, String currency, int amount) {
     this.hotelID = 1L;
     this.checkoutID = checkoutID;
     this.currency = currency;
     this.amount = amount;
-    this.created_at = Timestamp.valueOf(LocalDateTime.now());
+    this.createdAt = Timestamp.valueOf(LocalDateTime.now());
   }
 
   public Transaction() {
@@ -53,12 +53,12 @@ public class Transaction {
     this.amount = amount;
   }
 
-  public Timestamp getCreated_at() {
-    return created_at;
+  public Timestamp getCreatedAt() {
+    return createdAt;
   }
 
-  public void setCreated_at(Timestamp created_at) {
-    this.created_at = created_at;
+  public void setCreatedAt(Timestamp createdAt) {
+    this.createdAt = createdAt;
   }
 
   public Long getHotelID() {

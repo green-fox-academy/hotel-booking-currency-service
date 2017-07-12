@@ -14,11 +14,15 @@ import javax.validation.Valid;
 @RestController
 public class CheckOutTrackRestController {
 
-  @Autowired
-  private ErrorMessageHandler errorMessageHandler;
+  private final ErrorMessageHandler errorMessageHandler;
+
+  private final HandleRecievedCheckout handleRecievedCheckout;
 
   @Autowired
-  private HandleRecievedCheckout handleRecievedCheckout;
+  public CheckOutTrackRestController(ErrorMessageHandler errorMessageHandler, HandleRecievedCheckout handleRecievedCheckout) {
+    this.errorMessageHandler = errorMessageHandler;
+    this.handleRecievedCheckout = handleRecievedCheckout;
+  }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(code = HttpStatus.BAD_REQUEST)

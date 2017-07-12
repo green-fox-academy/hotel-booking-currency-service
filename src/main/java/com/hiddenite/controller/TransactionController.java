@@ -1,25 +1,19 @@
 package com.hiddenite.controller;
 
-import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.HotelBalance;
-import com.hiddenite.model.HotelBalanceData;
 import com.hiddenite.model.Transaction;
+import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.repository.TransactionsRepository;
 import com.hiddenite.service.HotelBalanceService;
 import com.hiddenite.service.TransactionService;
-
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class TransactionController {
@@ -32,6 +26,7 @@ public class TransactionController {
 
   @Autowired
   HotelBalanceService hotelBalanceService;
+
 
   @ExceptionHandler(NoSuchElementException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)
@@ -59,8 +54,30 @@ public class TransactionController {
   }
 
   @GetMapping("/api/hotels/{id}/balances")
-  public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID) {
-    return hotelBalanceService.getHotelBalanceByCurrency(hotelID);
+  public HotelBalance getHotelBalance(@PathVariable(name = "id") Long hotelID, @RequestParam(name = "from", value =
+          "1970-01-01") Timestamp startDate) {
+    return hotelBalanceService.getHotelBalanceByCurrency(hotelID, startDate);
   }
 
+//  public static String createDateFormat(LocalDate date) {
+//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-LL-dd");
+//    return date.format(formatter);
+//  }
+//
+//
+//  @InitBinder
+//  public void initBinder(WebDataBinder binder) throws Exception {
+//    final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+//    final CustomDateEditor dateEditor = new CustomDateEditor(df, true) {
+//      @Override
+//      public void setAsText(String text) throws IllegalArgumentException {
+//        if ("today".equals(text)) {
+//          setValue(LocalDate.now());
+//        } else {
+//          super.setAsText(text);
+//        }
+//      }
+//    };
+//    binder.registerCustomEditor(Date.class, dateEditor);
+//  }
 }

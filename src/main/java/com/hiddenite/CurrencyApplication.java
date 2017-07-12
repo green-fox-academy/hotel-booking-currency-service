@@ -10,8 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CurrencyApplication implements CommandLineRunner {
 
+	private final HeartbeatRepository heartbeatRepository;
+
 	@Autowired
-	HeartbeatRepository heartbeatRepository;
+	public CurrencyApplication(HeartbeatRepository heartbeatRepository) {
+		this.heartbeatRepository = heartbeatRepository;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CurrencyApplication.class, args);
