@@ -1,42 +1,40 @@
 package com.hiddenite.model.exchangerates;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
-import java.util.HashMap;
 
 @Entity
 public class ExchangeRate {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
-  private String base;
-  private Date date;
-  private HashMap<String, Double> rates;
+  @EmbeddedId
+  ExchangeRateKey exchangeRateKey;
+  double rate;
 
-  public String getBase() {
-    return base;
+  public ExchangeRate(ExchangeRateKey exchangeRateKey, double rate) {
+    this.exchangeRateKey = exchangeRateKey;
+    this.rate = rate;
   }
 
-  public void setBase(String base) {
-    this.base = base;
+  public ExchangeRate(ExchangeRateKey exchangeRateKey) {
+    this.exchangeRateKey = exchangeRateKey;
   }
 
-  public Date getDate() {
-    return date;
+  public ExchangeRate() {
   }
 
-  public void setDate(Date date) {
-    this.date = date;
+  public double getRate() {
+    return rate;
   }
 
-  public HashMap<String, Double> getRates() {
-    return rates;
+  public void setRate(double rate) {
+    this.rate = rate;
   }
 
-  public void setRates(HashMap<String, Double> rates) {
-    this.rates = rates;
+  public ExchangeRateKey getExchangeRateKey() {
+    return exchangeRateKey;
   }
+
+  public void setExchangeRateKey(ExchangeRateKey exchangeRateKey) {
+    this.exchangeRateKey = exchangeRateKey;
+  }
+
 }

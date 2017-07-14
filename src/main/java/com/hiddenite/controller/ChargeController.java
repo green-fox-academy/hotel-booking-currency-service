@@ -8,6 +8,7 @@ import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.TransactionsRepository;
 import com.hiddenite.service.ExchangeRateService;
 import com.hiddenite.service.StripeService;
+import com.hiddenite.service.TransactionService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +20,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ChargeController {
-
   private final StripeService paymentsService;
   private final ChargeRequestRepository chargeRequestRepository;
   private final CheckOutRepository checkOutRepository;
   private final TransactionsRepository transactionsRepository;
   private final ExchangeRateService exchangeRateService;
+  private final TransactionService transactionService;
 
   @Autowired
-  public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository, CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService) {
+  public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository,
+                          CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository,
+                          ExchangeRateService exchangeRateService, TransactionService transactionService) {
     this.paymentsService = paymentsService;
     this.chargeRequestRepository = chargeRequestRepository;
     this.checkOutRepository = checkOutRepository;
     this.transactionsRepository = transactionsRepository;
     this.exchangeRateService = exchangeRateService;
+    this.transactionService = transactionService;
   }
 
   @PostMapping("/charge")
@@ -56,8 +60,8 @@ public class ChargeController {
               checkout.getCheckoutData().getAttributes().getCurrency().toString(),
               checkout.getCheckoutData().getAttributes().getAmount());
       transactionsRepository.save(transaction);
-      exchangeRateService.saveExChangeDTOsFromExchangeRates(transaction);
-      checkout.getCheckoutData().getAttributes().setStatus("success");
+      exchangeRateService.saveSingleExchangeRatesFromFixer(transaction);
+//      transactionService.setTransactionValuesOfDifferentCurrencies(transaction);
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();

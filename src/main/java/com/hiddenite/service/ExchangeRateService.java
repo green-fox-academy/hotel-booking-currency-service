@@ -2,13 +2,14 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.Transaction;
 import com.hiddenite.model.exchangerates.ExchangeRate;
-import com.hiddenite.model.exchangerates.ExchangeRateDTO;
 import com.hiddenite.model.exchangerates.ExchangeRateKey;
-import com.hiddenite.repository.ExchangeRateDTORepository;
+import com.hiddenite.model.exchangerates.ExchangeRatesFromFixer;
+import com.hiddenite.repository.ExchangeRateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,56 +18,56 @@ import java.util.List;
 
 @Service
 public class ExchangeRateService {
-  private final ExchangeRateDTORepository exchangeRateDTORepository;
+  private final ExchangeRateRepository exchangeRateRepository;
 
   @Autowired
-  public ExchangeRateService(ExchangeRateDTORepository exchangeRateDTORepository) {
-    this.exchangeRateDTORepository = exchangeRateDTORepository;
+  public ExchangeRateService(ExchangeRateRepository exchangeRateRepository) {
+    this.exchangeRateRepository = exchangeRateRepository;
   }
 
-  private ExchangeRate getExchangeratesForGivenDates() {
+  private ExchangeRatesFromFixer getExchangeratesForGivenDates() {
     RestTemplate restTemplate = new RestTemplate();
-    return restTemplate.getForObject("http://api.fixer.io/latest",  ExchangeRate
+    return restTemplate.getForObject("http://api.fixer.io/latest",  ExchangeRatesFromFixer
             .class);
   }
 
-  public void saveExChangeDTOsFromExchangeRates(Transaction transaction) {
+  public void saveSingleExchangeRatesFromFixer(Transaction transaction) {
     ExchangeRateKey exchangeRateKey = new ExchangeRateKey();
     exchangeRateKey.setDate(getPreviousDayWithGivenFormat(transaction));
     exchangeRateKey.setBase("EUR");
     exchangeRateKey.setForeignCurrency(transaction.getCurrency());
-    if (!exchangeRateDTORepository.exists(exchangeRateKey)) {
-      ExchangeRate exchangeRate = getExchangeratesForGivenDates();
-      List<String> listOfCurrencies = new ArrayList<>(exchangeRate.getRates().keySet());
+    if (!exchangeRateRepository.exists(exchangeRateKey)) {
+      ExchangeRatesFromFixer exchangeRatesFromFixer = getExchangeratesForGivenDates();
+      List<String> listOfCurrencies = new ArrayList<>(exchangeRatesFromFixer.getRates().keySet());
       if (listOfCurrencies.size() != 0) {
         for (String currency : listOfCurrencies) {
           ExchangeRateKey newExchangeRateKey = new ExchangeRateKey();
-          newExchangeRateKey.setDate(exchangeRate.getDate());
-          newExchangeRateKey.setBase(exchangeRate.getBase());
+          newExchangeRateKey.setDate(exchangeRatesFromFixer.getDate());
+          newExchangeRateKey.setBase(exchangeRatesFromFixer.getBase());
           newExchangeRateKey.setForeignCurrency(currency);
-          ExchangeRateDTO exchangeRateDTO = new ExchangeRateDTO(newExchangeRateKey);
-          exchangeRateDTO.setRate(exchangeRate.getRates().get(currency));
-          exchangeRateDTORepository.save(exchangeRateDTO);
+          ExchangeRate exchangeRate = new ExchangeRate(newExchangeRateKey);
+          exchangeRate.setRate(exchangeRatesFromFixer.getRates().get(currency));
+          exchangeRateRepository.save(exchangeRate);
         }
         ExchangeRateKey newExchangeRateKey = new ExchangeRateKey();
-        newExchangeRateKey.setDate(exchangeRate.getDate());
+        newExchangeRateKey.setDate(exchangeRatesFromFixer.getDate());
         newExchangeRateKey.setBase("EUR");
         newExchangeRateKey.setForeignCurrency("EUR");
-        ExchangeRateDTO exchangeRateDTOEUR = new ExchangeRateDTO(newExchangeRateKey);
+        ExchangeRate exchangeRateDTOEUR = new ExchangeRate(newExchangeRateKey);
         exchangeRateDTOEUR.setRate(1);
-        exchangeRateDTORepository.save(exchangeRateDTOEUR);
+        exchangeRateRepository.save(exchangeRateDTOEUR);
       }
     }
   }
 
-  private Date getPreviousDayWithGivenFormat(Transaction transaction) {
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+  public String getPreviousDayWithGivenFormat(Transaction transaction) {
     Date dateOfTransaction = new Date(transaction.getCreatedAt().getTime());
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(dateOfTransaction);
     calendar.add(Calendar.DAY_OF_YEAR, -1);
     Date dateOfRateToUse = calendar.getTime();
-    sdf.format(dateOfRateToUse);
-    return dateOfRateToUse;
+    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    String formattedDate = format.format(dateOfRateToUse);
+    return formattedDate;
   }
 }

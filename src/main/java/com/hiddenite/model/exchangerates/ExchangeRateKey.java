@@ -2,15 +2,14 @@ package com.hiddenite.model.exchangerates;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;
-import java.util.Date;
 
 @Embeddable
 public class ExchangeRateKey implements Serializable{
-  private Date date;
+  private String date;
   private String base;
   private String foreignCurrency;
 
-  public ExchangeRateKey(Date date, String base, String foreignCurrency) {
+  public ExchangeRateKey(String date, String base, String foreignCurrency) {
     this.date = date;
     this.base = base;
     this.foreignCurrency = foreignCurrency;
@@ -19,11 +18,11 @@ public class ExchangeRateKey implements Serializable{
   public ExchangeRateKey() {
   }
 
-  public Date getDate() {
+  public String getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
+  public void setDate(String date) {
     this.date = date;
   }
 
