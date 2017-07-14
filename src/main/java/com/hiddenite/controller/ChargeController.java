@@ -6,6 +6,7 @@ import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.TransactionsRepository;
+import com.hiddenite.service.ExchangeRateService;
 import com.hiddenite.service.StripeService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
@@ -19,14 +20,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ChargeController {
 
+  private final StripeService paymentsService;
+  private final ChargeRequestRepository chargeRequestRepository;
+  private final CheckOutRepository checkOutRepository;
+  private final TransactionsRepository transactionsRepository;
+  private final ExchangeRateService exchangeRateService;
+
   @Autowired
-  private StripeService paymentsService;
-  @Autowired
-  private ChargeRequestRepository chargeRequestRepository;
-  @Autowired
-  private CheckOutRepository checkOutRepository;
-  @Autowired
-  private TransactionsRepository transactionsRepository;
+  public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository, CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService) {
+    this.paymentsService = paymentsService;
+    this.chargeRequestRepository = chargeRequestRepository;
+    this.checkOutRepository = checkOutRepository;
+    this.transactionsRepository = transactionsRepository;
+    this.exchangeRateService = exchangeRateService;
+  }
 
   @PostMapping("/charge")
   public String charge(ChargeRequest chargeRequest, Model model,
@@ -44,10 +51,13 @@ public class ChargeController {
     checkOutRepository.findOne(checkoutId);
     try {
       Checkout checkout = checkOutRepository.findOne(checkoutId);
-      checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
-      transactionsRepository.save(new Transaction(checkout.getCheckoutData().getId(),
-          checkout.getCheckoutData().getAttributes().getCurrency().toString(),
-          checkout.getCheckoutData().getAttributes().getAmount()));
+      checkout.getCheckoutData().getAttributes().setStatus("success");
+      Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
+              checkout.getCheckoutData().getAttributes().getCurrency().toString(),
+              checkout.getCheckoutData().getAttributes().getAmount());
+      transactionsRepository.save(transaction);
+      exchangeRateService.saveExChangeDTOsFromExchangeRates(transaction);
+      checkout.getCheckoutData().getAttributes().setStatus("success");
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();

@@ -14,6 +14,10 @@ public class ExchangeRateDTO {
     this.rate = rate;
   }
 
+  public ExchangeRateDTO(ExchangeRateKey exchangeRateKey) {
+    this.exchangeRateKey = exchangeRateKey;
+  }
+
   public ExchangeRateDTO() {
   }
 

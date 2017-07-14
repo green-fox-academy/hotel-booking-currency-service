@@ -9,7 +9,6 @@ import java.util.HashMap;
 
 @Entity
 public class ExchangeRate {
-
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;

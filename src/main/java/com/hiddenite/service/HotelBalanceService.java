@@ -30,7 +30,7 @@ public class HotelBalanceService {
     return returnBalance;
   }
 
-  public Integer getBalanceByCurrency(String currency, Long hotelID, Timestamp startDate, Timestamp endDate) {
+  private Integer getBalanceByCurrency(String currency, Long hotelID, Timestamp startDate, Timestamp endDate) {
     List<Transaction> listByCurrency = transactionsRepository
         .findAllByCurrencyAndHotelIDAndCreatedAtBetween(currency, hotelID, startDate, endDate);
     Integer balance = 0;

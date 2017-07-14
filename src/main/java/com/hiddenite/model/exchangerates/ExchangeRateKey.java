@@ -6,9 +6,9 @@ import java.util.Date;
 
 @Embeddable
 public class ExchangeRateKey implements Serializable{
-  Date date;
-  String base;
-  String foreignCurrency;
+  private Date date;
+  private String base;
+  private String foreignCurrency;
 
   public ExchangeRateKey(Date date, String base, String foreignCurrency) {
     this.date = date;

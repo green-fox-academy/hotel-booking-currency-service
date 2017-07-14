@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 public class TransactionService {
 
+  private final TransactionsRepository transactionsRepository;
+
   @Autowired
-  TransactionsRepository transactionsRepository;
+  public TransactionService(TransactionsRepository transactionsRepository) {
+    this.transactionsRepository = transactionsRepository;
+  }
 
   public List<Transaction> filterTransaction(Long id, HttpServletRequest request) {
     if (request.getParameterNames().hasMoreElements()) {
