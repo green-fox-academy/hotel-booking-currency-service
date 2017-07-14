@@ -1,7 +1,6 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.ExchangeRate;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
@@ -16,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class ChargeController {
@@ -42,15 +40,14 @@ public class ChargeController {
     model.addAttribute("status", charge.getStatus());
     model.addAttribute("chargeId", charge.getId());
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
-    RestTemplate restTemplate = new RestTemplate();
-    ExchangeRate exchangeRate=  restTemplate.getForObject("http://api.fixer.io/latest",  ExchangeRate.class);
+
     checkOutRepository.findOne(checkoutId);
     try {
       Checkout checkout = checkOutRepository.findOne(checkoutId);
       checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
       transactionsRepository.save(new Transaction(checkout.getCheckoutData().getId(),
           checkout.getCheckoutData().getAttributes().getCurrency().toString(),
-          checkout.getCheckoutData().getAttributes().getAmount(), exchangeRate));
+          checkout.getCheckoutData().getAttributes().getAmount()));
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();

@@ -12,15 +12,12 @@ import java.util.List;
 
 @Service
 public class HotelBalanceService {
-
-
   private TransactionsRepository transactionsRepository;
 
   @Autowired
   public HotelBalanceService (TransactionsRepository transactionsRepository) {
     this.transactionsRepository = transactionsRepository;
   }
-
 
   public HotelBalance getHotelBalanceByCurrency(Long hotelID, Timestamp startDate, Timestamp endDate) {
     HotelBalanceData returnBalanceData = new HotelBalanceData();

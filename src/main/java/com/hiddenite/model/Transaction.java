@@ -1,13 +1,11 @@
 package com.hiddenite.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import javax.persistence.OneToOne;
 
 @Entity
 public class Transaction {
@@ -20,16 +18,12 @@ public class Transaction {
   private int amount;
   private Timestamp createdAt;
 
-  @OneToOne(cascade = {CascadeType.ALL})
-  private ExchangeRate exchangeRate;
-
-  public Transaction(Long checkoutID, String currency, int amount, ExchangeRate exchangeRate) {
+  public Transaction(Long checkoutID, String currency, int amount) {
     this.hotelID = 1L;
     this.checkoutID = checkoutID;
     this.currency = currency;
     this.amount = amount;
     this.createdAt = Timestamp.valueOf(LocalDateTime.now());
-    this.exchangeRate = exchangeRate;
   }
 
   public Transaction() {
@@ -81,13 +75,5 @@ public class Transaction {
 
   public void setCheckoutID(Long checkoutID) {
     this.checkoutID = checkoutID;
-  }
-
-  public ExchangeRate getExchangeRate() {
-    return exchangeRate;
-  }
-
-  public void setExchangeRate(ExchangeRate exchangeRate) {
-    this.exchangeRate = exchangeRate;
   }
 }
