@@ -60,8 +60,6 @@ public class ChargeController {
               checkout.getCheckoutData().getAttributes().getCurrency().toString(),
               checkout.getCheckoutData().getAttributes().getAmount());
       transactionsRepository.save(transaction);
-      exchangeRateService.saveSingleExchangeRatesFromFixer(transaction);
-//      transactionService.setTransactionValuesOfDifferentCurrencies(transaction);
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();

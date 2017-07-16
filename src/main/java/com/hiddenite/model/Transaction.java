@@ -17,9 +17,6 @@ public class Transaction {
   private String currency;
   private int amount;
   private Timestamp createdAt;
-  private double EURvalue;
-  private double USDvalue;
-  private double HUFvalue;
 
   public Transaction(Long checkoutID, String currency, int amount) {
     this.hotelID = 1L;
@@ -78,29 +75,5 @@ public class Transaction {
 
   public void setCheckoutID(Long checkoutID) {
     this.checkoutID = checkoutID;
-  }
-
-  public double getEURvalue() {
-    return EURvalue;
-  }
-
-  public void setEURvalue(double EURvalue) {
-    this.EURvalue = EURvalue;
-  }
-
-  public double getUSDvalue() {
-    return USDvalue;
-  }
-
-  public void setUSDvalue(double USDvalue) {
-    this.USDvalue = USDvalue;
-  }
-
-  public double getHUFvalue() {
-    return HUFvalue;
-  }
-
-  public void setHUFvalue(double HUFvalue) {
-    this.HUFvalue = HUFvalue;
   }
 }

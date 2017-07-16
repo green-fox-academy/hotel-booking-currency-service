@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -25,24 +24,24 @@ public class ExchangeRateService {
     this.exchangeRateRepository = exchangeRateRepository;
   }
 
-  private ExchangeRatesFromFixer getExchangeratesForGivenDates() {
+  private ExchangeRatesFromFixer getExchangeratesForGivenDates(String queryParam) {
     RestTemplate restTemplate = new RestTemplate();
-    return restTemplate.getForObject("http://api.fixer.io/latest",  ExchangeRatesFromFixer
+    return restTemplate.getForObject("http://api.fixer.io/" + queryParam,  ExchangeRatesFromFixer
             .class);
   }
 
-  public void saveSingleExchangeRatesFromFixer(Transaction transaction) {
+  void saveSingleExchangeRatesFromFixer(Transaction transaction) {
     ExchangeRateKey exchangeRateKey = new ExchangeRateKey();
-    exchangeRateKey.setDate(getPreviousDayWithGivenFormat(transaction));
+    exchangeRateKey.setDate(getDayInGivenFormat(transaction));
     exchangeRateKey.setBase("EUR");
     exchangeRateKey.setForeignCurrency(transaction.getCurrency());
     if (!exchangeRateRepository.exists(exchangeRateKey)) {
-      ExchangeRatesFromFixer exchangeRatesFromFixer = getExchangeratesForGivenDates();
+      ExchangeRatesFromFixer exchangeRatesFromFixer = getExchangeratesForGivenDates(getDayInGivenFormat(transaction));
       List<String> listOfCurrencies = new ArrayList<>(exchangeRatesFromFixer.getRates().keySet());
       if (listOfCurrencies.size() != 0) {
         for (String currency : listOfCurrencies) {
-          ExchangeRate exchangeRate = generatingExchangeRates(exchangeRatesFromFixer.getDate(), currency,
-                  exchangeRatesFromFixer.getBase(), exchangeRatesFromFixer.getRates().get(currency));
+          ExchangeRate exchangeRate = generatingExchangeRates(exchangeRatesFromFixer.getDate(),
+                  exchangeRatesFromFixer.getBase(), currency, exchangeRatesFromFixer.getRates().get(currency));
           exchangeRateRepository.save(exchangeRate);
         }
         ExchangeRate exchangeRateEUR = generatingExchangeRates(exchangeRatesFromFixer.getDate(), "EUR",
@@ -52,15 +51,10 @@ public class ExchangeRateService {
     }
   }
 
-  public String getPreviousDayWithGivenFormat(Transaction transaction) {
+  private String getDayInGivenFormat(Transaction transaction) {
     Date dateOfTransaction = new Date(transaction.getCreatedAt().getTime());
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(dateOfTransaction);
-    calendar.add(Calendar.DAY_OF_YEAR, -1);
-    Date dateOfRateToUse = calendar.getTime();
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    String formattedDate = format.format(dateOfRateToUse);
-    return formattedDate;
+    return format.format(dateOfTransaction);
   }
 
   private ExchangeRate generatingExchangeRates(String date, String base, String foreignCurrency, double rate) {
@@ -70,6 +64,27 @@ public class ExchangeRateService {
     newExchangeRateKey.setForeignCurrency(foreignCurrency);
     ExchangeRate exchangeRate = new ExchangeRate(newExchangeRateKey);
     exchangeRate.setRate(rate);
+    return exchangeRate;
+  }
+
+  double calculateTransactionToOtherCurrency(Transaction transaction, String otherCurrency) {
+    String date = getDayInGivenFormat(transaction);
+    String baseCurrency = transaction.getCurrency();
+    double exchangeRate = 1;
+    if (!baseCurrency.equals(otherCurrency)) {
+      ExchangeRate EURtoOtherCurrencyRate = exchangeRateRepository
+              .findExchangeRateByExchangeRateKey_DateAndExchangeRateKey_ForeignCurrency(date, otherCurrency);
+      if (baseCurrency.equals("EUR")) {
+        exchangeRate = EURtoOtherCurrencyRate.getRate();
+      } else {
+        ExchangeRate EURtoTransactionBase = exchangeRateRepository
+                .findExchangeRateByExchangeRateKey_DateAndExchangeRateKey_ForeignCurrency(date, transaction
+                        .getCurrency());
+        double EURtoBaseRate = EURtoTransactionBase.getRate();
+        double EURToOtherCurrencyRate = EURtoOtherCurrencyRate.getRate();
+        exchangeRate = EURtoBaseRate * EURToOtherCurrencyRate;
+      }
+    }
     return exchangeRate;
   }
 }

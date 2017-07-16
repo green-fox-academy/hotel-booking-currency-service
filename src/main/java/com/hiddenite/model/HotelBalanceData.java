@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class HotelBalanceData {
 
   private String type;
-  private HashMap<String, Integer> attributes;
+  private HashMap<String, Double> attributes;
 
   public HotelBalanceData() {
     this.type = "balances";
@@ -20,11 +20,11 @@ public class HotelBalanceData {
     this.type = type;
   }
 
-  public HashMap<String, Integer> getAttributes() {
+  public HashMap<String, Double> getAttributes() {
     return attributes;
   }
 
-  public void setAttributes(HashMap<String, Integer> attributes) {
+  public void setAttributes(HashMap<String, Double> attributes) {
     this.attributes = attributes;
   }
 }
