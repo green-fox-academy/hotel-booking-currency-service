@@ -41,21 +41,13 @@ public class ExchangeRateService {
       List<String> listOfCurrencies = new ArrayList<>(exchangeRatesFromFixer.getRates().keySet());
       if (listOfCurrencies.size() != 0) {
         for (String currency : listOfCurrencies) {
-          ExchangeRateKey newExchangeRateKey = new ExchangeRateKey();
-          newExchangeRateKey.setDate(exchangeRatesFromFixer.getDate());
-          newExchangeRateKey.setBase(exchangeRatesFromFixer.getBase());
-          newExchangeRateKey.setForeignCurrency(currency);
-          ExchangeRate exchangeRate = new ExchangeRate(newExchangeRateKey);
-          exchangeRate.setRate(exchangeRatesFromFixer.getRates().get(currency));
+          ExchangeRate exchangeRate = generatingExchangeRates(exchangeRatesFromFixer.getDate(), currency,
+                  exchangeRatesFromFixer.getBase(), exchangeRatesFromFixer.getRates().get(currency));
           exchangeRateRepository.save(exchangeRate);
         }
-        ExchangeRateKey newExchangeRateKey = new ExchangeRateKey();
-        newExchangeRateKey.setDate(exchangeRatesFromFixer.getDate());
-        newExchangeRateKey.setBase("EUR");
-        newExchangeRateKey.setForeignCurrency("EUR");
-        ExchangeRate exchangeRateDTOEUR = new ExchangeRate(newExchangeRateKey);
-        exchangeRateDTOEUR.setRate(1);
-        exchangeRateRepository.save(exchangeRateDTOEUR);
+        ExchangeRate exchangeRateEUR = generatingExchangeRates(exchangeRatesFromFixer.getDate(), "EUR",
+                "EUR", 1);
+        exchangeRateRepository.save(exchangeRateEUR);
       }
     }
   }
@@ -69,5 +61,15 @@ public class ExchangeRateService {
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     String formattedDate = format.format(dateOfRateToUse);
     return formattedDate;
+  }
+
+  private ExchangeRate generatingExchangeRates(String date, String base, String foreignCurrency, double rate) {
+    ExchangeRateKey newExchangeRateKey = new ExchangeRateKey();
+    newExchangeRateKey.setDate(date);
+    newExchangeRateKey.setBase(base);
+    newExchangeRateKey.setForeignCurrency(foreignCurrency);
+    ExchangeRate exchangeRate = new ExchangeRate(newExchangeRateKey);
+    exchangeRate.setRate(rate);
+    return exchangeRate;
   }
 }
