@@ -44,7 +44,7 @@ public class TransactionService {
     if (transaction.getCurrency().equals("EUR")) {
       return transaction.getAmount();
     } else {
-      return transaction.getAmount() * transaction.getExchangeRates().getRates().get(transaction.getCurrency());
+      return transaction.getAmount() / transaction.getExchangeRates().getRates().get(transaction.getCurrency());
     }
   }
 

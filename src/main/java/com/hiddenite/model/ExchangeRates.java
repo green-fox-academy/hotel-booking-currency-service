@@ -1,19 +1,15 @@
-package com.hiddenite.model.exchangerates;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.hiddenite.model;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class ExchangeRatesFromFixer {
+public class ExchangeRates {
   private String base;
   @Id
   private String date;
   @ElementCollection
-  @JoinTable(name = "EXCHANGE_RATES",
+  @JoinTable(name = "CURRENCY_RATES",
           joinColumns = @JoinColumn(name = "date"))
   @Column(name = "RATE")
   private Map<String, Double> rates;

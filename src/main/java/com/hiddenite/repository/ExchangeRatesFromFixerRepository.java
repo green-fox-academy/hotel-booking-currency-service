@@ -1,7 +1,7 @@
 package com.hiddenite.repository;
 
-import com.hiddenite.model.exchangerates.ExchangeRatesFromFixer;
+import com.hiddenite.model.ExchangeRates;
 import org.springframework.data.repository.CrudRepository;
 
-public interface ExchangeRatesFromFixerRepository extends CrudRepository<ExchangeRatesFromFixer, String> {
+public interface ExchangeRatesFromFixerRepository extends CrudRepository<ExchangeRates, String> {
 }

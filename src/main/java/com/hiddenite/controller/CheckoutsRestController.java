@@ -4,7 +4,6 @@ import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.error.NoIndexException;
-import com.hiddenite.model.exchangerates.ExchangeRatesFromFixer;
 import com.hiddenite.repository.ExchangeRatesFromFixerRepository;
 import com.hiddenite.service.CheckoutDataService;
 import com.hiddenite.service.ExchangeRateService;

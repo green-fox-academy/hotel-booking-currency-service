@@ -1,7 +1,5 @@
 package com.hiddenite.model;
 
-import com.hiddenite.model.exchangerates.ExchangeRatesFromFixer;
-
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,13 +15,13 @@ public class Transaction {
   private int amount;
   private Timestamp createdAt;
   @ManyToOne
-  private ExchangeRatesFromFixer exchangeRates;
+  private ExchangeRates exchangeRates;
 
-  public ExchangeRatesFromFixer getExchangeRates() {
+  public ExchangeRates getExchangeRates() {
     return exchangeRates;
   }
 
-  public void setExchangeRates(ExchangeRatesFromFixer exchangeRates) {
+  public void setExchangeRates(ExchangeRates exchangeRates) {
     this.exchangeRates = exchangeRates;
   }
 
