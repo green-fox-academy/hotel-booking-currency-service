@@ -44,7 +44,7 @@ public class HotelBalanceService {
     return returnBalance;
   }
 
-  private Double getBalanceByCurrencies(String currency, Long hotelID, Timestamp startDate, Timestamp endDate) {
+  public Double getBalanceByCurrencies(String currency, Long hotelID, Timestamp startDate, Timestamp endDate) {
     List<Transaction> listByCurrency = transactionsRepository
             .findAllByCurrencyAndHotelIDAndCreatedAtBetween(currency, hotelID, startDate, endDate);
     Double balance = 0.0;
@@ -54,7 +54,7 @@ public class HotelBalanceService {
     return balance;
   }
 
-  private double getBalanceInOneCurrency(String currencyToCalculate, Long hotelID, Timestamp startDate, Timestamp
+  public double getBalanceInOneCurrency(String currencyToCalculate, Long hotelID, Timestamp startDate, Timestamp
           endDate) {
     List<Transaction> transactionList = transactionsRepository
             .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
