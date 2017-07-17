@@ -60,9 +60,9 @@ public class ChargeController {
       Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
               checkout.getCheckoutData().getAttributes().getCurrency().toString(),
               checkout.getCheckoutData().getAttributes().getAmount());
+      transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
       transactionsRepository.save(transaction);
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
-      transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
     } catch (Exception e) {
       e.printStackTrace();
     }
