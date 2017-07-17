@@ -36,15 +36,15 @@ public class ExchangeRateService {
     exchangeRateKey.setBase("EUR");
     exchangeRateKey.setForeignCurrency(transaction.getCurrency());
     if (!exchangeRateRepository.exists(exchangeRateKey)) {
-      ExchangeRatesFromFixer exchangeRatesFromFixer = getExchangeratesForGivenDates(getDayInGivenFormat(transaction));
-      List<String> listOfCurrencies = new ArrayList<>(exchangeRatesFromFixer.getRates().keySet());
+      ExchangeRatesFromFixer exchangeRatesFixer = getExchangeratesForGivenDates(getDayInGivenFormat(transaction));
+      List<String> listOfCurrencies = new ArrayList<>(exchangeRatesFixer.getRates().keySet());
       if (listOfCurrencies.size() != 0) {
         for (String currency : listOfCurrencies) {
-          ExchangeRate exchangeRate = generatingExchangeRates(exchangeRatesFromFixer.getDate(),
-                  exchangeRatesFromFixer.getBase(), currency, exchangeRatesFromFixer.getRates().get(currency));
+          ExchangeRate exchangeRate = generatingExchangeRates(exchangeRatesFixer.getDate(),
+                  exchangeRatesFixer.getBase(), currency, exchangeRatesFixer.getRates().get(currency));
           exchangeRateRepository.save(exchangeRate);
         }
-        ExchangeRate exchangeRateEUR = generatingExchangeRates(exchangeRatesFromFixer.getDate(), "EUR",
+        ExchangeRate exchangeRateEUR = generatingExchangeRates(exchangeRatesFixer.getDate(), "EUR",
                 "EUR", 1);
         exchangeRateRepository.save(exchangeRateEUR);
       }
@@ -71,9 +71,9 @@ public class ExchangeRateService {
     String date = getDayInGivenFormat(transaction);
     String baseCurrency = transaction.getCurrency();
     double exchangeRate = 1;
+    ExchangeRate EURtoOtherCurrencyRate = exchangeRateRepository
+            .findExchangeRateByExchangeRateKey_DateAndExchangeRateKey_ForeignCurrency(date, otherCurrency);
     if (!baseCurrency.equals(otherCurrency)) {
-      ExchangeRate EURtoOtherCurrencyRate = exchangeRateRepository
-              .findExchangeRateByExchangeRateKey_DateAndExchangeRateKey_ForeignCurrency(date, otherCurrency);
       if (baseCurrency.equals("EUR")) {
         exchangeRate = EURtoOtherCurrencyRate.getRate();
       } else {
