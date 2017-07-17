@@ -11,11 +11,13 @@ public class HotelBalanceServiceTest {
   private HotelBalanceService hotelBalanceService;
 
   private TransactionsRepository mockTransactionsRepository;
+  private ExchangeRateService mockExchangeRepository;
+
 
   @Before
-  public void runBeforeEachTests() throws Exception{
+  public void runBeforeEachTests() throws Exception {
     mockTransactionsRepository = Mockito.mock(TransactionsRepository.class);
-    hotelBalanceService = new HotelBalanceService(mockTransactionsRepository);
+    hotelBalanceService = new HotelBalanceService(mockTransactionsRepository, mockExchangeRepository);
   }
 
 //  @Test

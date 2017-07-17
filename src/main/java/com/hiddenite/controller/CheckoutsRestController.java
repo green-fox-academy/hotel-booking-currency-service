@@ -4,7 +4,9 @@ import com.hiddenite.model.Checkouts;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.error.ErrorMessage;
 import com.hiddenite.model.error.NoIndexException;
+import com.hiddenite.repository.ExchangeRatesFromFixerRepository;
 import com.hiddenite.service.CheckoutDataService;
+import com.hiddenite.service.ExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,10 @@ import java.lang.reflect.InvocationTargetException;
 public class CheckoutsRestController {
   @Autowired
   private CheckoutDataService checkoutDataService;
+  @Autowired
+  private ExchangeRateService exchangeRateService;
+  @Autowired
+  private ExchangeRatesFromFixerRepository exchangeRatesFromFixerRepository;
 
   @GetMapping(value = "/api/checkouts")
   public Checkouts getCheckouts(@RequestParam(name = "page", required = false) Integer actualPageNumber, javax.servlet.http.HttpServletRequest request) {
@@ -34,7 +40,7 @@ public class CheckoutsRestController {
     Checkouts checkouts = new Checkouts();
     checkoutDataService.setCheckoutFiltering(checkouts, request);
     return checkouts;
-}
+  }
 
   @GetMapping(value = "/api/checkouts/{id}")
   public Object filterCheckouts(@PathVariable(name = "id") Long id, javax.servlet.http.HttpServletRequest request) throws NoIndexException {

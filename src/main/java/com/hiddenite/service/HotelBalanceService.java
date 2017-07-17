@@ -14,6 +14,8 @@ import java.util.List;
 public class HotelBalanceService {
   private TransactionsRepository transactionsRepository;
   private ExchangeRateService exchangeRateService;
+  @Autowired
+  private TransactionService transactionService;
 
   @Autowired
   public HotelBalanceService(TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService) {
@@ -32,8 +34,7 @@ public class HotelBalanceService {
     return returnBalance;
   }
 
-
-  public HotelBalance getHotelBalanceInOneCurrency(String currency,Long hotelID, Timestamp startDate, Timestamp
+  public HotelBalance getHotelBalanceInOneCurrency(String currency, Long hotelID, Timestamp startDate, Timestamp
           endDate) {
     HotelBalanceData returnBalanceData = new HotelBalanceData();
     HotelBalance returnBalance = new HotelBalance();
@@ -59,10 +60,12 @@ public class HotelBalanceService {
             .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
     double balanceInOneCurrency = 0;
     for (Transaction transaction : transactionList) {
-      exchangeRateService.saveSingleExchangeRatesFromFixer(transaction);
-      double exchangeRate = exchangeRateService.calculateTransactionToOtherCurrency
-              (transaction, currencyToCalculate);
-      balanceInOneCurrency = balanceInOneCurrency + transaction.getAmount() / exchangeRate;
+      double amountInEUR = transactionService.changeAmountToEUR(transaction);
+      if (currencyToCalculate.equals("EUR")) {
+        balanceInOneCurrency += amountInEUR;
+      } else {
+        balanceInOneCurrency += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate);
+      }
     }
     return balanceInOneCurrency;
   }

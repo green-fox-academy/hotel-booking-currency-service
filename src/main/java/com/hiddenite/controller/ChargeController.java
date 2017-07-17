@@ -24,8 +24,10 @@ public class ChargeController {
   private final ChargeRequestRepository chargeRequestRepository;
   private final CheckOutRepository checkOutRepository;
   private final TransactionsRepository transactionsRepository;
-  private final ExchangeRateService exchangeRateService;
   private final TransactionService transactionService;
+
+  @Autowired
+  private ExchangeRateService exchangeRateService;
 
   @Autowired
   public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository,
@@ -41,17 +43,16 @@ public class ChargeController {
 
   @PostMapping("/charge")
   public String charge(ChargeRequest chargeRequest, Model model,
-      @RequestParam("currency") ChargeRequest.Currency currency,
-      @RequestParam(value = "checkout_id", required = false) Long checkoutId,
-      javax.servlet.http.HttpServletRequest request)
-      throws StripeException {
+                       @RequestParam("currency") ChargeRequest.Currency currency,
+                       @RequestParam(value = "checkout_id", required = false) Long checkoutId,
+                       javax.servlet.http.HttpServletRequest request)
+          throws StripeException {
     chargeRequest.setCurrency(currency);
     Charge charge = paymentsService.charge(chargeRequest);
     model.addAttribute("id", charge.getId());
     model.addAttribute("status", charge.getStatus());
     model.addAttribute("chargeId", charge.getId());
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
-
     checkOutRepository.findOne(checkoutId);
     try {
       Checkout checkout = checkOutRepository.findOne(checkoutId);
@@ -59,6 +60,7 @@ public class ChargeController {
       Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
               checkout.getCheckoutData().getAttributes().getCurrency().toString(),
               checkout.getCheckoutData().getAttributes().getAmount());
+      transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
       transactionsRepository.save(transaction);
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
@@ -70,7 +72,7 @@ public class ChargeController {
 
   @ExceptionHandler(StripeException.class)
   public String handleError(Model model, StripeException ex,
-      javax.servlet.http.HttpServletRequest request) {
+                            javax.servlet.http.HttpServletRequest request) {
     model.addAttribute("error", ex.getMessage());
     return "result";
   }

@@ -1,9 +1,6 @@
 package com.hiddenite.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -17,6 +14,16 @@ public class Transaction {
   private String currency;
   private int amount;
   private Timestamp createdAt;
+  @ManyToOne
+  private ExchangeRates exchangeRates;
+
+  public ExchangeRates getExchangeRates() {
+    return exchangeRates;
+  }
+
+  public void setExchangeRates(ExchangeRates exchangeRates) {
+    this.exchangeRates = exchangeRates;
+  }
 
   public Transaction(Long checkoutID, String currency, int amount) {
     this.hotelID = 1L;

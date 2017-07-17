@@ -39,7 +39,7 @@ public class TransactionController {
 
   @GetMapping("/api/hotel/{id}/transactions")
   public List<Transaction> getTransactions(@PathVariable(name = "id") Long id,
-      HttpServletRequest request) {
+                                           HttpServletRequest request) {
     if (transactionService.filterTransaction(id, request).size() != 0) {
       return transactionService.filterTransaction(id, request);
     } else {
@@ -49,7 +49,7 @@ public class TransactionController {
 
   @GetMapping("/api/hotel/{hotelID}/transactions/{transactionID}")
   public Transaction getSingleTransaction(@PathVariable(name = "hotelID") Long hotelid,
-      @PathVariable(name = "transactionID") Long trID) {
+                                          @PathVariable(name = "transactionID") Long trID) {
     if (transactionsRepository.findByTransactionIDAndHotelID(trID, hotelid) != null) {
       return transactionsRepository.findByTransactionIDAndHotelID(trID, hotelid);
     }
@@ -59,10 +59,14 @@ public class TransactionController {
   @GetMapping("/api/hotels/{id}/balances")
   public HotelBalance getHotelBalance(
           @PathVariable(name = "id") Long hotelID,
-          @RequestParam (name = "from", defaultValue = "1970-01-01")@DateTimeFormat (pattern = "yyyy-MM-dd") Date startDate,
-          @RequestParam (name = "to", required = false) @DateTimeFormat (pattern = "yyyy-MM-dd") Date endDate) {
+          @RequestParam(name = "from", defaultValue = "1970-01-01") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+          @RequestParam(name = "to", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam(name = "currency", required = false) String currency) {
     Timestamp tsStart = new Timestamp(startDate.getTime());
     Timestamp tsEnd = transactionService.createTimeStampFromDate(endDate);
-    return hotelBalanceService.getHotelBalanceByCurrency(hotelID, tsStart, tsEnd);
+    if (currency == null) {
+      return hotelBalanceService.getHotelBalanceByCurrency(hotelID, tsStart, tsEnd);
+    } else {
+      return hotelBalanceService.getHotelBalanceInOneCurrency(currency, hotelID, tsStart, tsEnd);
+    }
   }
 }
