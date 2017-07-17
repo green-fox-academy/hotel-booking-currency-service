@@ -1,13 +1,14 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.ExchangeRate;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.TransactionsRepository;
+import com.hiddenite.service.ExchangeRateService;
 import com.hiddenite.service.StripeService;
+import com.hiddenite.service.TransactionService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,19 +17,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class ChargeController {
+  private final StripeService paymentsService;
+  private final ChargeRequestRepository chargeRequestRepository;
+  private final CheckOutRepository checkOutRepository;
+  private final TransactionsRepository transactionsRepository;
+  private final ExchangeRateService exchangeRateService;
+  private final TransactionService transactionService;
 
   @Autowired
-  private StripeService paymentsService;
-  @Autowired
-  private ChargeRequestRepository chargeRequestRepository;
-  @Autowired
-  private CheckOutRepository checkOutRepository;
-  @Autowired
-  private TransactionsRepository transactionsRepository;
+  public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository,
+                          CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository,
+                          ExchangeRateService exchangeRateService, TransactionService transactionService) {
+    this.paymentsService = paymentsService;
+    this.chargeRequestRepository = chargeRequestRepository;
+    this.checkOutRepository = checkOutRepository;
+    this.transactionsRepository = transactionsRepository;
+    this.exchangeRateService = exchangeRateService;
+    this.transactionService = transactionService;
+  }
 
   @PostMapping("/charge")
   public String charge(ChargeRequest chargeRequest, Model model,
@@ -42,15 +51,15 @@ public class ChargeController {
     model.addAttribute("status", charge.getStatus());
     model.addAttribute("chargeId", charge.getId());
     model.addAttribute("balance_transaction", charge.getBalanceTransaction());
-    RestTemplate restTemplate = new RestTemplate();
-    ExchangeRate exchangeRate=  restTemplate.getForObject("http://api.fixer.io/latest",  ExchangeRate.class);
+
     checkOutRepository.findOne(checkoutId);
     try {
       Checkout checkout = checkOutRepository.findOne(checkoutId);
-      checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
-      transactionsRepository.save(new Transaction(checkout.getCheckoutData().getId(),
-          checkout.getCheckoutData().getAttributes().getCurrency().toString(),
-          checkout.getCheckoutData().getAttributes().getAmount(), exchangeRate));
+      checkout.getCheckoutData().getAttributes().setStatus("success");
+      Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
+              checkout.getCheckoutData().getAttributes().getCurrency().toString(),
+              checkout.getCheckoutData().getAttributes().getAmount());
+      transactionsRepository.save(transaction);
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();

@@ -16,7 +16,8 @@ public interface TransactionsRepository extends CrudRepository<Transaction, Long
 
    List<Transaction> findAllByCurrencyAndHotelIDAndCreatedAtBetween(String currency, Long HotelID, Timestamp
            createdAtFrom, Timestamp createdAtTo);
-
+   List<Transaction> findAllByHotelIDAndCreatedAtBetween(Long HotelID, Timestamp
+           createdAtFrom, Timestamp createdAtTo);
    List<Transaction> findAllByCurrencyAndHotelID(String currency, Long HotelID);
    Transaction findByTransactionIDAndHotelID(Long id, Long HotelID);
 

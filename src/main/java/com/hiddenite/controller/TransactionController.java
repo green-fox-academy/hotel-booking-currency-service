@@ -20,15 +20,16 @@ import java.util.NoSuchElementException;
 @RestController
 public class TransactionController {
 
-  @Autowired
-  TransactionService transactionService;
+  private final TransactionService transactionService;
+  private final TransactionsRepository transactionsRepository;
+  private final HotelBalanceService hotelBalanceService;
 
   @Autowired
-  TransactionsRepository transactionsRepository;
-
-  @Autowired
-  HotelBalanceService hotelBalanceService;
-
+  public TransactionController(TransactionService transactionService, TransactionsRepository transactionsRepository, HotelBalanceService hotelBalanceService) {
+    this.transactionService = transactionService;
+    this.transactionsRepository = transactionsRepository;
+    this.hotelBalanceService = hotelBalanceService;
+  }
 
   @ExceptionHandler(NoSuchElementException.class)
   @ResponseStatus(code = HttpStatus.NOT_FOUND)
@@ -36,7 +37,7 @@ public class TransactionController {
     return new ErrorMessage(404, "NOT FOUND", "no transaction found by the filters");
   }
 
-  @RequestMapping("/api/hotel/{id}/transactions")
+  @GetMapping("/api/hotel/{id}/transactions")
   public List<Transaction> getTransactions(@PathVariable(name = "id") Long id,
       HttpServletRequest request) {
     if (transactionService.filterTransaction(id, request).size() != 0) {

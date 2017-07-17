@@ -1,22 +1,10 @@
-package com.hiddenite.model;
+package com.hiddenite.model.exchangerates;
 
-import java.util.Date;
 import java.util.HashMap;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
-@Entity
-public class ExchangeRate {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+public class ExchangeRatesFromFixer {
   private String base;
-  private Date date;
-
-
+  private String date;
   private HashMap<String, Double> rates;
 
   public String getBase() {
@@ -27,11 +15,11 @@ public class ExchangeRate {
     this.base = base;
   }
 
-  public Date getDate() {
+  public String getDate() {
     return date;
   }
 
-  public void setDate(Date date) {
+  public void setDate(String date) {
     this.date = date;
   }
 
