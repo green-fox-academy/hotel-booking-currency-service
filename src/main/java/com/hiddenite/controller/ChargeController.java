@@ -6,7 +6,9 @@ import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.TransactionsRepository;
+import com.hiddenite.service.ExchangeRateService;
 import com.hiddenite.service.StripeService;
+import com.hiddenite.service.TransactionService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +20,31 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class ChargeController {
+  private final StripeService paymentsService;
+  private final ChargeRequestRepository chargeRequestRepository;
+  private final CheckOutRepository checkOutRepository;
+  private final TransactionsRepository transactionsRepository;
+  private final TransactionService transactionService;
+
+  private ExchangeRateService exchangeRateService;
 
   @Autowired
-  private StripeService paymentsService;
-  @Autowired
-  private ChargeRequestRepository chargeRequestRepository;
-  @Autowired
-  private CheckOutRepository checkOutRepository;
-  @Autowired
-  private TransactionsRepository transactionsRepository;
+  public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository,
+                          CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository,
+                          ExchangeRateService exchangeRateService, TransactionService transactionService) {
+    this.paymentsService = paymentsService;
+    this.chargeRequestRepository = chargeRequestRepository;
+    this.checkOutRepository = checkOutRepository;
+    this.transactionsRepository = transactionsRepository;
+    this.exchangeRateService = exchangeRateService;
+    this.transactionService = transactionService;
+  }
 
   @PostMapping("/charge")
-  public String charge(ChargeRequest chargeRequest, Model model, @RequestParam("currency") ChargeRequest.Currency currency, @RequestParam(value = "checkout_id", required = false) Long checkoutId, javax.servlet.http.HttpServletRequest request)
+  public String charge(ChargeRequest chargeRequest, Model model,
+                       @RequestParam("currency") ChargeRequest.Currency currency,
+                       @RequestParam(value = "checkout_id", required = false) Long checkoutId,
+                       javax.servlet.http.HttpServletRequest request)
           throws StripeException {
     chargeRequest.setCurrency(currency);
     Charge charge = paymentsService.charge(chargeRequest);
@@ -40,8 +55,12 @@ public class ChargeController {
     checkOutRepository.findOne(checkoutId);
     try {
       Checkout checkout = checkOutRepository.findOne(checkoutId);
-        checkOutRepository.findOne(checkoutId).getCheckoutData().getAttributes().setStatus("success");
-      transactionsRepository.save(new Transaction(checkout.getCheckoutData().getId(),checkout.getCheckoutData().getAttributes().getCurrency().toString(),checkout.getCheckoutData().getAttributes().getAmount()));
+      checkout.getCheckoutData().getAttributes().setStatus("success");
+      Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
+              checkout.getCheckoutData().getAttributes().getCurrency().toString(),
+              checkout.getCheckoutData().getAttributes().getAmount());
+      transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
+      transactionsRepository.save(transaction);
       checkOutRepository.save(checkOutRepository.findOne(checkoutId));
     } catch (Exception e) {
       e.printStackTrace();
@@ -51,7 +70,8 @@ public class ChargeController {
   }
 
   @ExceptionHandler(StripeException.class)
-  public String handleError(Model model, StripeException ex, javax.servlet.http.HttpServletRequest request) {
+  public String handleError(Model model, StripeException ex,
+                            javax.servlet.http.HttpServletRequest request) {
     model.addAttribute("error", ex.getMessage());
     return "result";
   }
