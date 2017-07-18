@@ -3,9 +3,11 @@ package com.hiddenite.controller;
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.model.checkout.Checkout;
+import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.TransactionsRepository;
+import com.hiddenite.service.CheckoutDataService;
 import com.hiddenite.service.ExchangeRateService;
 import com.hiddenite.service.StripeService;
 import com.hiddenite.service.TransactionService;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -25,19 +28,20 @@ public class ChargeController {
   private final CheckOutRepository checkOutRepository;
   private final TransactionsRepository transactionsRepository;
   private final TransactionService transactionService;
-
   private ExchangeRateService exchangeRateService;
+  private CheckoutDataService checkoutDataService;
 
   @Autowired
   public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository,
                           CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository,
-                          ExchangeRateService exchangeRateService, TransactionService transactionService) {
+                          ExchangeRateService exchangeRateService, TransactionService transactionService, CheckoutDataService checkoutDataService) {
     this.paymentsService = paymentsService;
     this.chargeRequestRepository = chargeRequestRepository;
     this.checkOutRepository = checkOutRepository;
     this.transactionsRepository = transactionsRepository;
     this.exchangeRateService = exchangeRateService;
     this.transactionService = transactionService;
+    this.checkoutDataService = checkoutDataService;
   }
 
   @PostMapping("/charge")
@@ -47,26 +51,22 @@ public class ChargeController {
                        javax.servlet.http.HttpServletRequest request)
           throws StripeException {
     chargeRequest.setCurrency(currency);
-    Charge charge = paymentsService.charge(chargeRequest);
-    model.addAttribute("id", charge.getId());
-    model.addAttribute("status", charge.getStatus());
-    model.addAttribute("chargeId", charge.getId());
-    model.addAttribute("balance_transaction", charge.getBalanceTransaction());
-    checkOutRepository.findOne(checkoutId);
+    ChargeController.addAttributes(model, paymentsService.charge(chargeRequest));
     try {
-      Checkout checkout = checkOutRepository.findOne(checkoutId);
-      checkout.getCheckoutData().getAttributes().setStatus("success");
-      Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
-              checkout.getCheckoutData().getAttributes().getCurrency().toString(),
-              checkout.getCheckoutData().getAttributes().getAmount());
-      transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
-      transactionsRepository.save(transaction);
-      checkOutRepository.save(checkOutRepository.findOne(checkoutId));
-    } catch (Exception e) {
+      checkoutDataService.proceedCheckout(checkOutRepository.findOne(checkoutId));
+    } catch (IllegalArgumentException e) {
       e.printStackTrace();
     }
     chargeRequestRepository.save(chargeRequest);
     return "result";
+  }
+
+  @ModelAttribute
+  public static void addAttributes(Model model, Charge charge) {
+    model.addAttribute("id", charge.getId());
+    model.addAttribute("status", charge.getStatus());
+    model.addAttribute("chargeId", charge.getId());
+    model.addAttribute("balance_transaction", charge.getBalanceTransaction());
   }
 
   @ExceptionHandler(StripeException.class)

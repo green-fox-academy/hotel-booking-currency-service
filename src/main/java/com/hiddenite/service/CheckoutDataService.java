@@ -2,12 +2,14 @@ package com.hiddenite.service;
 
 import com.hiddenite.model.ChargeRequest;
 import com.hiddenite.model.Checkouts;
+import com.hiddenite.model.Transaction;
 import com.hiddenite.model.checkout.Checkout;
 import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.model.checkout.CheckoutLinks;
 import com.hiddenite.model.error.NoIndexException;
 import com.hiddenite.repository.CheckOutRepository;
 import com.hiddenite.repository.CheckoutDataRepository;
+import com.hiddenite.repository.TransactionsRepository;
 import org.apache.commons.beanutils.BeanUtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,16 +25,21 @@ public class CheckoutDataService {
   private CheckoutDataRepository checkoutDataRepository;
   private CheckOutRepository checkOutRepository;
   private int totalPageNr;
+
   private final String BASIC_CHECKOUT_LINK = "https://your-hostname.com/api/checkouts";
   private final String CHECKOUT_WITH_QUERY_LINK = "https://your-hostname.com/api/checkouts?page=";
   private final int CHECKOUTS_PER_PAGE = 20;
-  private Checkout checkout;
+  private ExchangeRateService exchangeRateService;
+  private TransactionsRepository transactionsRepository;
+
 
   @Autowired
-  public CheckoutDataService(CheckoutDataRepository checkoutDataRepository, CheckOutRepository checkOutRepository) {
+  public CheckoutDataService(CheckoutDataRepository checkoutDataRepository, CheckOutRepository checkOutRepository, ExchangeRateService exchangeRateService, TransactionsRepository transactionsRepository) {
     this.checkoutDataRepository = checkoutDataRepository;
     this.checkOutRepository = checkOutRepository;
     totalPageNr = (int) checkoutDataRepository.count() / CHECKOUTS_PER_PAGE + 1;
+    this.exchangeRateService = exchangeRateService;
+    this.transactionsRepository = transactionsRepository;
   }
 
   private void addLinks(Checkouts checkouts, int actualPageNr) {
@@ -136,5 +143,15 @@ public class CheckoutDataService {
       return checkout;
     }
     throw new NoIndexException("NOT_FOUND", checkoutId);
+  }
+
+  public void proceedCheckout(Checkout checkout) {
+    checkout.getCheckoutData().getAttributes().setStatus("success");
+    Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
+            checkout.getCheckoutData().getAttributes().getCurrency().toString(),
+            checkout.getCheckoutData().getAttributes().getAmount());
+    transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
+    transactionsRepository.save(transaction);
+    checkOutRepository.save(checkout);
   }
 }
