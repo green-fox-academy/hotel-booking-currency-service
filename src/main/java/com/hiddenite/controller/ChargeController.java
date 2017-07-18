@@ -26,7 +26,6 @@ public class ChargeController {
   private final TransactionsRepository transactionsRepository;
   private final TransactionService transactionService;
 
-  @Autowired
   private ExchangeRateService exchangeRateService;
 
   @Autowired

@@ -1,10 +1,8 @@
 package com.hiddenite.service;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verify;
 
 import com.hiddenite.model.ExchangeRates;
-import com.hiddenite.model.Transaction;
 import com.hiddenite.repository.ExchangeRatesFromFixerRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
