@@ -85,17 +85,4 @@ public class CheckOutTrackRestControllerTest {
             .andExpect(status().is4xxClientError())
             .andExpect(content().contentType(contentType));
   }
-
-//  @Test
-//  public void responseToCheckoutWithMissingFieldsShouldReturnErrorMessage() throws Exception {
-//    checkOutRepository.deleteAll();
-//    mockMvc.perform(post("/api/checkouts")
-//            .contentType(MediaType.APPLICATION_JSON)
-//            .content(checkoutWithMissingField))
-//            .andExpect(content().contentType(contentType))
-//            .andExpect(status().is4xxClientError())
-//            .andExpect(content().json())
-//
-//
-//  }
 }
