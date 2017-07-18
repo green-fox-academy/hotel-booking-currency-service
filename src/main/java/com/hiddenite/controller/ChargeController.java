@@ -1,16 +1,10 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.ChargeRequest;
-import com.hiddenite.model.Transaction;
-import com.hiddenite.model.checkout.Checkout;
-import com.hiddenite.model.checkout.CheckoutData;
 import com.hiddenite.repository.ChargeRequestRepository;
 import com.hiddenite.repository.CheckOutRepository;
-import com.hiddenite.repository.TransactionsRepository;
 import com.hiddenite.service.CheckoutDataService;
-import com.hiddenite.service.ExchangeRateService;
 import com.hiddenite.service.StripeService;
-import com.hiddenite.service.TransactionService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Charge;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,21 +20,14 @@ public class ChargeController {
   private final StripeService paymentsService;
   private final ChargeRequestRepository chargeRequestRepository;
   private final CheckOutRepository checkOutRepository;
-  private final TransactionsRepository transactionsRepository;
-  private final TransactionService transactionService;
-  private ExchangeRateService exchangeRateService;
   private CheckoutDataService checkoutDataService;
 
   @Autowired
   public ChargeController(StripeService paymentsService, ChargeRequestRepository chargeRequestRepository,
-                          CheckOutRepository checkOutRepository, TransactionsRepository transactionsRepository,
-                          ExchangeRateService exchangeRateService, TransactionService transactionService, CheckoutDataService checkoutDataService) {
+                          CheckOutRepository checkOutRepository, CheckoutDataService checkoutDataService) {
     this.paymentsService = paymentsService;
     this.chargeRequestRepository = chargeRequestRepository;
     this.checkOutRepository = checkOutRepository;
-    this.transactionsRepository = transactionsRepository;
-    this.exchangeRateService = exchangeRateService;
-    this.transactionService = transactionService;
     this.checkoutDataService = checkoutDataService;
   }
 
