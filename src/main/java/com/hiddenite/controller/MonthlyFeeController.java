@@ -1,16 +1,10 @@
 package com.hiddenite.controller;
 
-import com.hiddenite.model.Checkouts;
-import com.hiddenite.model.HotelBalance;
-import com.hiddenite.model.MonthlyFee;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.hiddenite.model.monthlyFee.MonthlyFee;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 
 @RestController
 public class MonthlyFeeController {
