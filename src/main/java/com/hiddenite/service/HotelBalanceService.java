@@ -14,18 +14,21 @@ import java.util.List;
 public class HotelBalanceService {
   private TransactionsRepository transactionsRepository;
   private ExchangeRateService exchangeRateService;
+  private HotelBalanceData returnBalanceData;
+  private HotelBalance returnBalance;
   @Autowired
   private TransactionService transactionService;
 
   @Autowired
-  public HotelBalanceService(TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService) {
+  public HotelBalanceService(TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService,
+      HotelBalanceData returnBalanceData, HotelBalance returnBalance) {
     this.transactionsRepository = transactionsRepository;
     this.exchangeRateService = exchangeRateService;
+    this.returnBalanceData = returnBalanceData;
+    this.returnBalance = returnBalance;
   }
 
   public HotelBalance getHotelBalanceByCurrency(Long hotelID, Timestamp startDate, Timestamp endDate) {
-    HotelBalanceData returnBalanceData = new HotelBalanceData();
-    HotelBalance returnBalance = new HotelBalance();
     returnBalanceData.getAttributes().put("eur", getBalanceByCurrencies("eur", hotelID, startDate, endDate));
     returnBalanceData.getAttributes().put("huf", getBalanceByCurrencies("huf", hotelID, startDate, endDate));
     returnBalanceData.getAttributes().put("usd", getBalanceByCurrencies("usd", hotelID, startDate, endDate));
@@ -36,8 +39,6 @@ public class HotelBalanceService {
 
   public HotelBalance getHotelBalanceInOneCurrency(String currency, Long hotelID, Timestamp startDate, Timestamp
           endDate) {
-    HotelBalanceData returnBalanceData = new HotelBalanceData();
-    HotelBalance returnBalance = new HotelBalance();
     returnBalanceData.getAttributes().put(currency, getBalanceInOneCurrency(currency, hotelID, startDate, endDate));
     returnBalance.setData(returnBalanceData);
     returnBalance.setLinks("https://your-hostname.com/api/hotels/" + hotelID + "/balances");

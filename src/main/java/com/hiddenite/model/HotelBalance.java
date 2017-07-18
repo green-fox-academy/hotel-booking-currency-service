@@ -1,5 +1,8 @@
 package com.hiddenite.model;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class HotelBalance {
   private HotelBalanceData data;
   private String links;

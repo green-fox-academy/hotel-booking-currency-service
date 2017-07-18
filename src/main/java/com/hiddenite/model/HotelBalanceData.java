@@ -1,7 +1,9 @@
 package com.hiddenite.model;
 
 import java.util.HashMap;
+import org.springframework.stereotype.Component;
 
+@Component
 public class HotelBalanceData {
 
   private String type;
