@@ -13,8 +13,6 @@ public class CurrencyRestController {
 
   @Autowired
   EndPointService endPointService;
-  @Autowired
-  FeeService feeService;
 
   @GetMapping("/heartbeat")
   public Status getStatus(javax.servlet.http.HttpServletRequest request) throws Exception {

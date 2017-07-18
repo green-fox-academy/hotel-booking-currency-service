@@ -21,7 +21,7 @@ public class HotelBalanceService {
 
   @Autowired
   public HotelBalanceService(TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService,
-      HotelBalanceData returnBalanceData, HotelBalance returnBalance) {
+                             HotelBalanceData returnBalanceData, HotelBalance returnBalance) {
     this.transactionsRepository = transactionsRepository;
     this.exchangeRateService = exchangeRateService;
     this.returnBalanceData = returnBalanceData;
@@ -70,4 +70,5 @@ public class HotelBalanceService {
     }
     return balanceInOneCurrency;
   }
+
 }

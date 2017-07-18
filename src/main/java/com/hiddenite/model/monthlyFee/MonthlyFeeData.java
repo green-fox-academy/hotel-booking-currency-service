@@ -8,6 +8,7 @@ public class MonthlyFeeData {
 
   public MonthlyFeeData() {
     this.type = "fee";
+    this.attributes = new HashMap<>();
   }
 
   public String getType() {

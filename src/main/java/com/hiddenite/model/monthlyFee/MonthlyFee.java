@@ -1,14 +1,17 @@
 package com.hiddenite.model.monthlyFee;
 
+import java.util.HashMap;
+
 public class MonthlyFee {
-  private String links;
+  private HashMap<String, String> links;
   private MonthlyFeeData data;
 
-  public String getLinks() {
+
+  public HashMap<String, String> getLinks() {
     return links;
   }
 
-  public void setLinks(String links) {
+  public void setLinks(HashMap<String, String> links) {
     this.links = links;
   }
 
