@@ -53,21 +53,6 @@ public class HotelBalanceServiceTest {
         new Double(15000));
   }
 
-  @Test
-  public void testGetBalanceInOneCurrency() throws Exception {
-    hotelBalanceService.getBalanceInOneCurrency("EUR", 1l, timestamp, timestamp);
-    verify(hotelBalanceService).getBalanceInOneCurrency("EUR", 1l, timestamp, timestamp);
-  }
-
- /* public HotelBalance getHotelBalanceInOneCurrency(String currency, Long hotelID, Timestamp startDate, Timestamp
-      endDate) {
-    HotelBalanceData returnBalanceData = new HotelBalanceData();
-    HotelBalance returnBalance = new HotelBalance();
-    returnBalanceData.getAttributes().put(currency, getBalanceInOneCurrency(currency, hotelID, startDate, endDate));
-    returnBalance.setData(returnBalanceData);
-    returnBalance.setLinks("https://your-hostname.com/api/hotels/" + hotelID + "/balances");
-    return returnBalance;
-  }*/
 
 
 }
