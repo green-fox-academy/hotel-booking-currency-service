@@ -20,6 +20,8 @@ public class FeeService {
   private Gson gson;
   private TransactionsRepository transactionsRepository;
   private ExchangeRateService exchangeRateService;
+  private static final int PERCENTAGE_TO_DECIMAL = 100;
+  private static final double BASE_RATE = 0.05;
 
 
   @Autowired
@@ -61,13 +63,13 @@ public class FeeService {
 
   private Double getTresholdValue(Double amount) {
     Treshold treshold = gson.fromJson(System.getenv("FEE_TRESHOLD"), Treshold.class);
-    Double feePercentage = 0.05;
+    Double feePercentage = BASE_RATE;
     if (treshold != null) {
       if (amount >= treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
-        feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("min-amount")) / 100;
+        feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("min-amount")) / PERCENTAGE_TO_DECIMAL;
       }
       if (amount >= treshold.getTresholds().get(1).get("max-amount")) {
-        feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("max-amount")) / 100;
+        feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("max-amount")) / PERCENTAGE_TO_DECIMAL;
       }
     }
     return feePercentage;
