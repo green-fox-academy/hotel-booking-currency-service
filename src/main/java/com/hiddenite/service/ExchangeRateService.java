@@ -17,9 +17,9 @@ public class ExchangeRateService {
 
   @Autowired
   public ExchangeRateService(ExchangeRatesFromFixerRepository exchangeRateRepository,
-      RestTemplate restTemplate) {
+                             RestTemplate restTemplate) {
     this.exchangeRatesFromFixerRepository = exchangeRateRepository;
-    this.restTemplate =  restTemplate;
+    this.restTemplate = restTemplate;
   }
 
   public ExchangeRates getExchangeratesForGivenDates() {
@@ -28,9 +28,8 @@ public class ExchangeRateService {
     if (exchangeRatesFromFixerRepository.exists(today)) {
       return exchangeRatesFromFixerRepository.findOne(today);
     } else {
-      //RestTemplate restTemplate = new RestTemplate();
       ExchangeRates exchangeRate = restTemplate
-          .getForObject("http://api.fixer.io/latest", ExchangeRates.class);
+              .getForObject("http://api.fixer.io/latest", ExchangeRates.class);
       exchangeRatesFromFixerRepository.save(exchangeRate);
       return exchangeRate;
     }

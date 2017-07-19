@@ -38,7 +38,24 @@ public class FeeService {
     return monthlyFee;
   }
 
-  public Double getTresholdValue(Double amount) {
+  private double getFeeOfTransactions(String currencyToCalculate, Long hotelID, Timestamp startDate, Timestamp
+          endDate) {
+    List<Transaction> transactionList = transactionsRepository
+            .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
+    double feeOfEachTransactions = 0;
+    for (Transaction transaction : transactionList) {
+      double amountInEUR = transactionService.changeAmountToEUR(transaction);
+      double tresholdValue = getTresholdValue(amountInEUR);
+      if (currencyToCalculate.equalsIgnoreCase("EUR")) {
+        feeOfEachTransactions += amountInEUR * tresholdValue;
+      } else {
+        feeOfEachTransactions += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * tresholdValue;
+      }
+    }
+    return feeOfEachTransactions;
+  }
+
+  private Double getTresholdValue(Double amount) {
     Treshold treshold = gson.fromJson(System.getenv("FEE_TRESHOLD"), Treshold.class);
     Double feePercentage = 0.05;
     if (treshold != null) {
@@ -50,22 +67,6 @@ public class FeeService {
       }
     }
     return feePercentage;
-  }
-
-  public double getFeeOfTransactions(String currencyToCalculate, Long hotelID, Timestamp startDate, Timestamp
-          endDate) {
-    List<Transaction> transactionList = transactionsRepository
-            .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
-    double feeOfEachTransactions = 0;
-    for (Transaction transaction : transactionList) {
-      double amountInEUR = transactionService.changeAmountToEUR(transaction);
-      if (currencyToCalculate.equals("EUR")) {
-        feeOfEachTransactions += amountInEUR * getTresholdValue(amountInEUR);
-      } else {
-        feeOfEachTransactions += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * getTresholdValue(transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate));
-      }
-    }
-    return feeOfEachTransactions;
   }
 
 }
