@@ -1,6 +1,7 @@
 package com.hiddenite.service;
 
 import com.hiddenite.model.ExchangeRates;
+import com.hiddenite.model.Transaction;
 import com.hiddenite.repository.ExchangeRatesFromFixerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,18 @@ public class ExchangeRateService {
       exchangeRatesFromFixerRepository.save(exchangeRate);
       return exchangeRate;
     }
+  }
+
+  public double changeAmountToEUR(Transaction transaction) {
+    if (transaction.getCurrency().equalsIgnoreCase("EUR")) {
+      return transaction.getAmount();
+    } else {
+      return transaction.getAmount() / transaction.getExchangeRates().getRates().get(transaction.getCurrency());
+    }
+  }
+
+  public double changeFromEUR(Transaction transaction, double amountInEUR, String currencyToCalculate) {
+    return amountInEUR * transaction.getExchangeRates().getRates().get(currencyToCalculate);
   }
 
 }

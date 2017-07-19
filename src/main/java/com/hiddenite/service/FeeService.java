@@ -19,14 +19,14 @@ import java.util.List;
 public class FeeService {
   private Gson gson;
   private TransactionsRepository transactionsRepository;
-  private TransactionService transactionService;
+  private ExchangeRateService exchangeRateService;
 
 
   @Autowired
-  public FeeService(Gson gson, TransactionsRepository transactionsRepository, TransactionService transactionService) {
+  public FeeService(Gson gson, TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService) {
     this.gson = gson;
     this.transactionsRepository = transactionsRepository;
-    this.transactionService = transactionService;
+    this.exchangeRateService = exchangeRateService;
   }
 
   public MonthlyFee getMonthlyFee(String currency, Long hotelID) {
@@ -48,12 +48,12 @@ public class FeeService {
     }
     double sumOfTransactionsFee = 0;
     for (Transaction transaction : transactionList) {
-      double amountInEUR = transactionService.changeAmountToEUR(transaction);
+      double amountInEUR = exchangeRateService.changeAmountToEUR(transaction);
       double tresholdValue = getTresholdValue(amountInEUR);
       if (currencyToCalculate.equalsIgnoreCase("EUR")) {
         sumOfTransactionsFee += amountInEUR * tresholdValue;
       } else {
-        sumOfTransactionsFee += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * tresholdValue;
+        sumOfTransactionsFee += exchangeRateService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * tresholdValue;
       }
     }
     return sumOfTransactionsFee;
