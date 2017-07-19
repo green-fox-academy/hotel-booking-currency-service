@@ -3,6 +3,7 @@ package com.hiddenite.service;
 import com.google.gson.Gson;
 import com.hiddenite.model.Transaction;
 import com.hiddenite.model.Treshold;
+import com.hiddenite.model.error.NotValidCurrencyException;
 import com.hiddenite.model.monthlyFee.MonthlyFee;
 import com.hiddenite.model.monthlyFee.MonthlyFeeData;
 import com.hiddenite.repository.TransactionsRepository;
@@ -42,6 +43,9 @@ public class FeeService {
           endDate) {
     List<Transaction> transactionList = transactionsRepository
             .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
+    if (!transactionList.get(0).getExchangeRates().getRates().containsKey(currencyToCalculate)) {
+      throw new NotValidCurrencyException();
+    }
     double sumOfTransactionsFee = 0;
     for (Transaction transaction : transactionList) {
       double amountInEUR = transactionService.changeAmountToEUR(transaction);
