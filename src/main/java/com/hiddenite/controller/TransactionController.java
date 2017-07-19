@@ -66,7 +66,7 @@ public class TransactionController {
     if (currency == null) {
       return hotelBalanceService.getHotelBalanceByCurrency(hotelID, tsStart, tsEnd);
     } else {
-      return hotelBalanceService.getHotelBalanceInOneCurrency(currency, hotelID, tsStart, tsEnd);
+      return hotelBalanceService.getHotelBalanceInOneCurrency(currency.toUpperCase(), hotelID, tsStart, tsEnd);
     }
   }
 }

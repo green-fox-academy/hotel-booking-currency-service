@@ -21,6 +21,6 @@ public class MonthlyFeeController {
   public MonthlyFee getMonthlyFee(
           @PathVariable(name = "id") Long hotelID,
           @RequestParam(name = "currency") String currency) {
-    return feeService.getMonthlyFee(currency, hotelID);
+    return feeService.getMonthlyFee(currency.toUpperCase(), hotelID);
   }
 }

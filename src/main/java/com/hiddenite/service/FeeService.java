@@ -42,27 +42,27 @@ public class FeeService {
           endDate) {
     List<Transaction> transactionList = transactionsRepository
             .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
-    double feeOfEachTransactions = 0;
+    double sumOfTransactionsFee = 0;
     for (Transaction transaction : transactionList) {
       double amountInEUR = transactionService.changeAmountToEUR(transaction);
       double tresholdValue = getTresholdValue(amountInEUR);
       if (currencyToCalculate.equalsIgnoreCase("EUR")) {
-        feeOfEachTransactions += amountInEUR * tresholdValue;
+        sumOfTransactionsFee += amountInEUR * tresholdValue;
       } else {
-        feeOfEachTransactions += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * tresholdValue;
+        sumOfTransactionsFee += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * tresholdValue;
       }
     }
-    return feeOfEachTransactions;
+    return sumOfTransactionsFee;
   }
 
   private Double getTresholdValue(Double amount) {
     Treshold treshold = gson.fromJson(System.getenv("FEE_TRESHOLD"), Treshold.class);
     Double feePercentage = 0.05;
     if (treshold != null) {
-      if (amount > treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
+      if (amount >= treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
         feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("min-amount")) / 100;
       }
-      if (amount > treshold.getTresholds().get(1).get("max-amount")) {
+      if (amount >= treshold.getTresholds().get(1).get("max-amount")) {
         feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("max-amount")) / 100;
       }
     }
