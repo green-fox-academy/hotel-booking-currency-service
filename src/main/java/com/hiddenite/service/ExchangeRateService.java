@@ -23,7 +23,7 @@ public class ExchangeRateService {
     this.restTemplate = restTemplate;
   }
 
-  public ExchangeRates getExchangeratesForGivenDates() {
+  public ExchangeRates getLatestExchangerates() {
     DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     String today = format.format(LocalDate.now());
     if (exchangeRatesFromFixerRepository.exists(today)) {
