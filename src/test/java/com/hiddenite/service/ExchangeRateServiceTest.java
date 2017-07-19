@@ -71,4 +71,13 @@ public class ExchangeRateServiceTest {
     assertEquals(1250, exchangeRateService.changeAmountToEUR(mockTransaction), 0.0001);
   }
 
+  @Test
+  public void testChangeFromEURToUSD() throws Exception {
+    ratesHelper.put("USD", 0.8);
+    Mockito.when(mockTransaction.getCurrency()).thenReturn("EUR");
+    Mockito.when(mockExchangeRates.getRates()).thenReturn(ratesHelper);
+    assertEquals(800, exchangeRateService.changeFromEUR(mockTransaction, exchangeRateService.changeAmountToEUR
+                    (mockTransaction),"USD"),
+            0.0001);
+  }
 }
