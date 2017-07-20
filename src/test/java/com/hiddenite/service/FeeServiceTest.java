@@ -59,4 +59,4 @@ public class FeeServiceTest {
     assertEquals(0.05, feeService.getTresholdValue(1200.0), 0.00001);
   }
 
-}
+//}
