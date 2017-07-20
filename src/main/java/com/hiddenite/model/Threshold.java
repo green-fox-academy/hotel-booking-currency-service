@@ -3,13 +3,13 @@ package com.hiddenite.model;
 import java.util.HashMap;
 import java.util.List;
 
-public class Treshold {
+public class Threshold {
   private List<HashMap<String, Integer>> tresholds;
 
-  public Treshold() {
+  public Threshold() {
   }
 
-  public Treshold(List<HashMap<String, Integer>> tresholds) {
+  public Threshold(List<HashMap<String, Integer>> tresholds) {
     this.tresholds = tresholds;
   }
 

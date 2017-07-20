@@ -2,7 +2,7 @@ package com.hiddenite.service;
 
 import com.google.gson.Gson;
 import com.hiddenite.model.Transaction;
-import com.hiddenite.model.Treshold;
+import com.hiddenite.model.Threshold;
 import com.hiddenite.model.error.NotValidCurrencyException;
 import com.hiddenite.model.monthlyFee.MonthlyFee;
 import com.hiddenite.model.monthlyFee.MonthlyFeeData;
@@ -52,31 +52,31 @@ public class FeeService {
     double sumOfTransactionsFee = 0;
     for (Transaction transaction : transactionList) {
       double amountInEUR = exchangeRateService.changeAmountToEUR(transaction);
-      double tresholdValue = getTresholdValue(amountInEUR);
+      double thresholdValue = getThresholdValue(amountInEUR);
       if (currencyToCalculate.equalsIgnoreCase("EUR")) {
-        sumOfTransactionsFee += amountInEUR * tresholdValue;
+        sumOfTransactionsFee += amountInEUR * thresholdValue;
       } else {
-        sumOfTransactionsFee += exchangeRateService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * tresholdValue;
+        sumOfTransactionsFee += exchangeRateService.changeFromEUR(transaction, amountInEUR, currencyToCalculate) * thresholdValue;
       }
     }
     return sumOfTransactionsFee;
   }
 
-  public Double getTresholdValue(Double amount) {
-    Treshold treshold = gson.fromJson(System.getenv("FEE_TRESHOLD"), Treshold.class);
+  public Double getThresholdValue(Double amount) {
+    Threshold threshold = gson.fromJson(System.getenv("FEE_THRESHOLD"), Threshold.class);
     Double feePercentage = BASE_RATE;
-    if (treshold != null) {
-      feePercentage = setFeePercentageByTreshold(amount, treshold, feePercentage);
+    if (threshold != null) {
+      feePercentage = setFeePercentageByThreshold(amount, threshold, feePercentage);
     }
     return feePercentage;
   }
 
-  private Double setFeePercentageByTreshold(Double amount, Treshold treshold, Double feePercentage) {
-    if (amount >= treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
-      feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("percent")) / PERCENTAGE_TO_DECIMAL;
+  private Double setFeePercentageByThreshold(Double amount, Threshold threshold, Double feePercentage) {
+    if (amount >= threshold.getTresholds().get(0).get("min-amount") && amount < threshold.getTresholds().get(1).get("max-amount")) {
+      feePercentage = Double.valueOf(threshold.getTresholds().get(0).get("percent")) / PERCENTAGE_TO_DECIMAL;
     }
-    if (amount >= treshold.getTresholds().get(1).get("max-amount")) {
-      feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("percent")) / PERCENTAGE_TO_DECIMAL;
+    if (amount >= threshold.getTresholds().get(1).get("max-amount")) {
+      feePercentage = Double.valueOf(threshold.getTresholds().get(1).get("percent")) / PERCENTAGE_TO_DECIMAL;
     }
     return feePercentage;
   }

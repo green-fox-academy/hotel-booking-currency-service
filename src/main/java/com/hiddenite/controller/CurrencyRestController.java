@@ -1,9 +1,7 @@
 package com.hiddenite.controller;
 
 import com.hiddenite.model.Status;
-import com.hiddenite.model.Treshold;
 import com.hiddenite.service.EndPointService;
-import com.hiddenite.service.FeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
