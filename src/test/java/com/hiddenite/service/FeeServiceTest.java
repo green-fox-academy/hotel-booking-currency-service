@@ -1,7 +1,9 @@
 package com.hiddenite.service;
 
 import com.google.gson.Gson;
+import com.hiddenite.model.Transaction;
 import com.hiddenite.model.Treshold;
+import com.hiddenite.model.error.NotValidCurrencyException;
 import com.hiddenite.repository.TransactionsRepository;
 import org.junit.Before;
 import org.junit.Rule;
@@ -9,6 +11,9 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 import org.mockito.Mockito;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,4 +64,14 @@ public class FeeServiceTest {
     assertEquals(0.05, feeService.getTresholdValue(1200.0), 0.00001);
   }
 
+//  @Test(expected = NotValidCurrencyException.class)
+//  public void testNotValidCurrencyException() {
+//    Timestamp tsStart = Timestamp.valueOf(LocalDate.now().withDayOfMonth(1).atStartOfDay());
+//    Transaction transaction = new Transaction();
+//    List<Transaction> transactions = new ArrayList<>();
+//    transactions.add(transaction);
+//    Mockito.when(mockTransactionsRepository.findAllByHotelIDAndCreatedAtAfter(1L, tsStart)).thenReturn(transactions);
+//    feeService.getMonthlyFee("Not existing currency", 1L);
+//  }
 }
+

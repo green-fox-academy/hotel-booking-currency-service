@@ -10,16 +10,22 @@ import java.util.List;
 @Repository
 public interface TransactionsRepository extends CrudRepository<Transaction, Long> {
 
-   List<Transaction> findAll();
+  List<Transaction> findAll();
 
-   List<Transaction> findAllByHotelID(Long hotelID);
+  List<Transaction> findAllByHotelID(Long hotelID);
 
-   List<Transaction> findAllByCurrencyAndHotelIDAndCreatedAtBetween(String currency, Long HotelID, Timestamp
-           createdAtFrom, Timestamp createdAtTo);
-   List<Transaction> findAllByHotelIDAndCreatedAtBetween(Long HotelID, Timestamp
-           createdAtFrom, Timestamp createdAtTo);
-   List<Transaction> findAllByCurrencyAndHotelID(String currency, Long HotelID);
-   Transaction findByTransactionIDAndHotelID(Long id, Long HotelID);
+  List<Transaction> findAllByCurrencyAndHotelIDAndCreatedAtBetween(String currency, Long HotelID, Timestamp
+          createdAtFrom, Timestamp createdAtTo);
+
+  List<Transaction> findAllByHotelIDAndCreatedAtBetween(Long HotelID, Timestamp
+          createdAtFrom, Timestamp createdAtTo);
+
+  List<Transaction> findAllByHotelIDAndCreatedAtAfter(Long HotelID, Timestamp
+          createdAtFrom);
+
+  List<Transaction> findAllByCurrencyAndHotelID(String currency, Long HotelID);
+
+  Transaction findByTransactionIDAndHotelID(Long id, Long HotelID);
 
 
 }
