@@ -20,7 +20,7 @@ public class FeeService {
   private Gson gson;
   private TransactionsRepository transactionsRepository;
   private ExchangeRateService exchangeRateService;
-  private static final int PERCENTAGE_TO_DECIMAL = 100;
+  private static final double PERCENTAGE_TO_DECIMAL = 100.0;
   private static final double BASE_RATE = 0.05;
 
 
@@ -41,7 +41,7 @@ public class FeeService {
     return monthlyFee;
   }
 
-  private double getFeeOfTransactions(String currencyToCalculate, Long hotelID, Timestamp startDate, Timestamp
+  public double getFeeOfTransactions(String currencyToCalculate, Long hotelID, Timestamp startDate, Timestamp
           endDate) {
     List<Transaction> transactionList = transactionsRepository
             .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
@@ -61,15 +61,15 @@ public class FeeService {
     return sumOfTransactionsFee;
   }
 
-  private Double getTresholdValue(Double amount) {
+  public Double getTresholdValue(Double amount) {
     Treshold treshold = gson.fromJson(System.getenv("FEE_TRESHOLD"), Treshold.class);
     Double feePercentage = BASE_RATE;
     if (treshold != null) {
       if (amount >= treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
-        feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("min-amount")) / PERCENTAGE_TO_DECIMAL;
+        feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("percent")) / PERCENTAGE_TO_DECIMAL;
       }
       if (amount >= treshold.getTresholds().get(1).get("max-amount")) {
-        feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("max-amount")) / PERCENTAGE_TO_DECIMAL;
+        feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("percent")) / PERCENTAGE_TO_DECIMAL;
       }
     }
     return feePercentage;

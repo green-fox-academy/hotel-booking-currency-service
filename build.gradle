@@ -41,4 +41,5 @@ dependencies {
     compile group: 'org.aspectj', name: 'aspectjrt', version: '1.8.10'
     compile group: 'aopalliance', name: 'aopalliance', version: '1.0'
     compile group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.3'
+    testCompile 'com.github.stefanbirkner:system-rules:1.16.0'
 }
