@@ -65,12 +65,17 @@ public class FeeService {
     Treshold treshold = gson.fromJson(System.getenv("FEE_TRESHOLD"), Treshold.class);
     Double feePercentage = BASE_RATE;
     if (treshold != null) {
-      if (amount >= treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
-        feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("percent")) / PERCENTAGE_TO_DECIMAL;
-      }
-      if (amount >= treshold.getTresholds().get(1).get("max-amount")) {
-        feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("percent")) / PERCENTAGE_TO_DECIMAL;
-      }
+      feePercentage = setFeePercentageByTreshold(amount, treshold, feePercentage);
+    }
+    return feePercentage;
+  }
+
+  private Double setFeePercentageByTreshold(Double amount, Treshold treshold, Double feePercentage) {
+    if (amount >= treshold.getTresholds().get(0).get("min-amount") && amount < treshold.getTresholds().get(1).get("max-amount")) {
+      feePercentage = Double.valueOf(treshold.getTresholds().get(0).get("percent")) / PERCENTAGE_TO_DECIMAL;
+    }
+    if (amount >= treshold.getTresholds().get(1).get("max-amount")) {
+      feePercentage = Double.valueOf(treshold.getTresholds().get(1).get("percent")) / PERCENTAGE_TO_DECIMAL;
     }
     return feePercentage;
   }
