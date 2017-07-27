@@ -150,7 +150,7 @@ public class CheckoutDataService {
     Transaction transaction = new Transaction(checkout.getCheckoutData().getId(),
             checkout.getCheckoutData().getAttributes().getCurrency().toString(),
             checkout.getCheckoutData().getAttributes().getAmount());
-    transaction.setExchangeRates(exchangeRateService.getExchangeratesForGivenDates());
+    transaction.setExchangeRates(exchangeRateService.getLatestExchangerates());
     transactionsRepository.save(transaction);
     checkOutRepository.save(checkout);
   }

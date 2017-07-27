@@ -16,12 +16,10 @@ public class HotelBalanceService {
   private ExchangeRateService exchangeRateService;
   private HotelBalanceData returnBalanceData;
   private HotelBalance returnBalance;
-  @Autowired
-  private TransactionService transactionService;
 
   @Autowired
   public HotelBalanceService(TransactionsRepository transactionsRepository, ExchangeRateService exchangeRateService,
-      HotelBalanceData returnBalanceData, HotelBalance returnBalance) {
+                             HotelBalanceData returnBalanceData, HotelBalance returnBalance) {
     this.transactionsRepository = transactionsRepository;
     this.exchangeRateService = exchangeRateService;
     this.returnBalanceData = returnBalanceData;
@@ -61,13 +59,14 @@ public class HotelBalanceService {
             .findAllByHotelIDAndCreatedAtBetween(hotelID, startDate, endDate);
     double balanceInOneCurrency = 0;
     for (Transaction transaction : transactionList) {
-      double amountInEUR = transactionService.changeAmountToEUR(transaction);
+      double amountInEUR = exchangeRateService.changeAmountToEUR(transaction);
       if (currencyToCalculate.equals("EUR")) {
         balanceInOneCurrency += amountInEUR;
       } else {
-        balanceInOneCurrency += transactionService.changeFromEUR(transaction, amountInEUR, currencyToCalculate);
+        balanceInOneCurrency += exchangeRateService.changeFromEUR(transaction, amountInEUR, currencyToCalculate);
       }
     }
     return balanceInOneCurrency;
   }
+
 }

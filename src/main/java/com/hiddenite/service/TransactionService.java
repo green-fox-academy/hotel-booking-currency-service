@@ -40,15 +40,15 @@ public class TransactionService {
     return tsEnd;
   }
 
-  public double changeAmountToEUR(Transaction transaction) {
-    if (transaction.getCurrency().equals("EUR")) {
-      return transaction.getAmount();
-    } else {
-      return transaction.getAmount() / transaction.getExchangeRates().getRates().get(transaction.getCurrency());
-    }
-  }
-
-  public double changeFromEUR(Transaction transaction, double amountInEUR, String currencyToCalculate) {
-    return amountInEUR * transaction.getExchangeRates().getRates().get(currencyToCalculate);
-  }
+//  public double changeAmountToEUR(Transaction transaction) {
+//    if (transaction.getCurrency().equalsIgnoreCase("EUR")) {
+//      return transaction.getAmount();
+//    } else {
+//      return transaction.getAmount() / transaction.getExchangeRates().getRates().get(transaction.getCurrency());
+//    }
+//  }
+//
+//  public double changeFromEUR(Transaction transaction, double amountInEUR, String currencyToCalculate) {
+//    return amountInEUR * transaction.getExchangeRates().getRates().get(currencyToCalculate);
+//  }
 }

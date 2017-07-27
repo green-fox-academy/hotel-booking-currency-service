@@ -38,7 +38,7 @@ public class ChargeController {
                        javax.servlet.http.HttpServletRequest request)
           throws StripeException {
     chargeRequest.setCurrency(currency);
-    ChargeController.addAttributes(model, paymentsService.charge(chargeRequest));
+    addAttributes(model, paymentsService.charge(chargeRequest));
     try {
       checkoutDataService.proceedCheckout(checkOutRepository.findOne(checkoutId));
     } catch (IllegalArgumentException e) {
@@ -49,7 +49,7 @@ public class ChargeController {
   }
 
   @ModelAttribute
-  public static void addAttributes(Model model, Charge charge) {
+  public void addAttributes(Model model, Charge charge) {
     model.addAttribute("id", charge.getId());
     model.addAttribute("status", charge.getStatus());
     model.addAttribute("chargeId", charge.getId());
